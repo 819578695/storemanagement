@@ -11,18 +11,15 @@
 #### 项目简介
 eladmin基于 Spring Boot 2.1.0 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码，支持前端菜单动态路由
 
+|     |   后端源码  |   前端源码  |
+|---  |--- | --- |
+|  github   |  https://github.com/819578695/storemanagement   |  https://github.com/819578695/storemanagementhtml   |
+
 **开发文档**  [https://docs.auauz.net/](https://docs.auauz.net)
 
 **体验地址**  [https://auauz.net/](https://auauz.net/)
 
 **账号密码** ```admin/123456```(默认密码都是123456)
-
-#### 项目源码
-
-|     |   后端源码  |   前端源码  |
-|---  |--- | --- |
-|  github   |  https://github.com/elunez/eladmin   |  https://github.com/elunez/eladmin-qd   |
-|  码云   |  https://gitee.com/elunez/eladmin   |  https://gitee.com/elunez/eladmin-qt   |
 
 ####  系统功能
 - 用户管理：提供用户的相关配置，新增用户后，默认密码为123456
@@ -76,8 +73,3 @@ eladmin基于 Spring Boot 2.1.0 、 Jpa、 Spring Security、redis、Vue的前�
  <td><img src="https://i.loli.net/2019/05/18/5cdf78969adc389599.png"/></td>
     </tr>
 </table>
-
-#### 项目捐赠
-如果你用爽了，可以请作者喝杯咖啡表示支持 ☕️！ [Donate](https://docs.auauz.net/#/jz)
-#### 反馈交流
-- QQ交流群：891137268
