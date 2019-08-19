@@ -11,6 +11,10 @@
 #### 项目简介
 eladmin基于 Spring Boot 2.1.0 、 Jpa、 Spring Security、redis、Vue的前后端分离的后台管理系统， 权限控制的方式为RBAC，项目支持数据字典与数据权限管理，支持一键生成前后端代码，支持前端菜单动态路由
 
+|     |   后端源码  |   前端源码  |
+|---  |--- | --- |
+|  github   |  https://github.com/819578695/storemanagement   |  https://github.com/819578695/storemanagementhtml   |
+
 **开发文档**  [https://docs.auauz.net/](https://docs.auauz.net)
 
 **体验地址**  [https://auauz.net/](https://auauz.net/)
