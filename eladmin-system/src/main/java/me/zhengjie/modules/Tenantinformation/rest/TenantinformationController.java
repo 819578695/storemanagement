@@ -58,4 +58,5 @@ public class TenantinformationController {
         tenantinformationService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+    
 }
