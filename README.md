@@ -69,8 +69,3 @@ eladmin基于 Spring Boot 2.1.0 、 Jpa、 Spring Security、redis、Vue的前�
  <td><img src="https://i.loli.net/2019/05/18/5cdf78969adc389599.png"/></td>
     </tr>
 </table>
-
-#### 项目捐赠
-如果你用爽了，可以请作者喝杯咖啡表示支持 ☕️！ [Donate](https://docs.auauz.net/#/jz)
-#### 反馈交流
-- QQ交流群：891137268
