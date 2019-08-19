@@ -14,4 +14,5 @@ import org.mapstruct.ReportingPolicy;
 public interface LogErrorMapper extends EntityMapper<LogErrorDTO, Log> {
 
 
+
 }
