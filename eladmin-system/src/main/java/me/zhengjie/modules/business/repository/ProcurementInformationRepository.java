@@ -8,5 +8,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @author kang
 * @date 2019-08-20
 */
-public interface ProcurementInformationRepository extends JpaRepository<ProcurementInformation, Integer>, JpaSpecificationExecutor {
+public interface ProcurementInformationRepository extends JpaRepository<ProcurementInformation, Long>, JpaSpecificationExecutor {
+
 }

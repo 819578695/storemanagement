@@ -55,6 +55,7 @@ public class ProcurementInformationDTO implements Serializable {
     // 付款方式(关联)
     private Integer paymentType;
 
-    // 收付款账户
-    private Integer receiptPaymentAccountId;
+
+    private  String receiptPaymentAccountName;
+    private  Integer receiptPaymentAccountId;
 }

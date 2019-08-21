@@ -61,7 +61,7 @@ public class ProcurementInformationController {
     @ApiOperation(value = "删除ProcurementInformation")
     @DeleteMapping(value = "/procurementInformation/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTINFORMATION_ALL','PROCUREMENTINFORMATION_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity delete(@PathVariable Long id){
         procurementInformationService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }

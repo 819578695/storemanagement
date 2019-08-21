@@ -1,8 +1,8 @@
 package me.zhengjie.modules.business.service;
 
-import me.zhengjie.modules.business.domain.ProcurementInformation;
-import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
-import me.zhengjie.modules.business.service.dto.ProcurementInformationQueryCriteria;
+import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
+import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountQueryCriteria;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 
 /**
 * @author kang
-* @date 2019-08-20
+* @date 2019-08-21
 */
-//@CacheConfig(cacheNames = "procurementInformation")
-public interface ProcurementInformationService {
+//@CacheConfig(cacheNames = "receiptPaymentAccount")
+public interface ReceiptPaymentAccountService {
 
     /**
     * queryAll 分页
@@ -22,7 +22,7 @@ public interface ProcurementInformationService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(ProcurementInformationQueryCriteria criteria, Pageable pageable);
+    Object queryAll(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -30,7 +30,7 @@ public interface ProcurementInformationService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(ProcurementInformationQueryCriteria criteria);
+    public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria);
 
     /**
      * findById
@@ -38,7 +38,7 @@ public interface ProcurementInformationService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    ProcurementInformationDTO findById(Long id);
+    ReceiptPaymentAccountDTO findById(Long id);
 
     /**
      * create
@@ -46,14 +46,14 @@ public interface ProcurementInformationService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    ProcurementInformationDTO create(ProcurementInformation resources);
+    ReceiptPaymentAccountDTO create(ReceiptPaymentAccount resources);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(ProcurementInformation resources);
+    void update(ReceiptPaymentAccount resources);
 
     /**
      * delete

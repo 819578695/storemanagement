@@ -21,7 +21,7 @@ public class ProcurementInformation implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     // 项目编号
     @Column(name = "pno",nullable = false)
@@ -73,12 +73,15 @@ public class ProcurementInformation implements Serializable {
 
     // 付款方式(关联)
     @Column(name = "payment_type")
-    private Integer paymentType;
+    private Long paymentType;
 
-    // 收付款账户
+   /* // 收付款账户
     @Column(name = "receipt_payment_account_id")
-    private Integer receiptPaymentAccountId;
+    private Integer receiptPaymentAccountId;*/
 
+    @OneToOne
+    @JoinColumn(name = "receipt_payment_account_id")
+    private ReceiptPaymentAccount receiptPaymentAccount;
     public void copy(ProcurementInformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
