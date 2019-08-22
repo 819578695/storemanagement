@@ -17,9 +17,8 @@ public class ProcurementInformationQueryCriteria{
     @Query(type = Query.Type.INNER_LIKE)
     private String pno;
     @Query(type = Query.Type.GREATER_THAN)
-    private Date applicationsDateStart;
-    @Query(type = Query.Type.LESS_THAN)
-    private  Date applicationsDateEnd;
+    private String applicationsDate;
+
 
 
 }
