@@ -46,6 +46,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 user.getEmail(),
                 user.getPhone(),
                 Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getName).orElse(null),
+                Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getId).orElse(null),
                 Optional.ofNullable(user.getJob()).map(JobSmallDTO::getName).orElse(null),
                 permissionService.mapToGrantedAuthorities(user),
                 user.getEnabled(),
