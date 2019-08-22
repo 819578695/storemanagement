@@ -1,7 +1,10 @@
 package me.zhengjie.modules.Archivesmouthsmanagement.service.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+@Data
 public class ArchivesmouthsmanagementDTO implements Serializable {
 
     //id

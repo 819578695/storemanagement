@@ -3,9 +3,6 @@ package me.zhengjie.modules.Tenantinformation.service;
 import me.zhengjie.modules.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.Tenantinformation.service.dto.TenantinformationDTO;
 import me.zhengjie.modules.Tenantinformation.service.dto.TenantinformationQueryCriteria;
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
 /**
