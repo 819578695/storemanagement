@@ -37,7 +37,11 @@ public @interface Query {
         , GREATER_THAN
         /** Dong ZhaoYang 2017/8/7 小于等于 */
         , LESS_THAN
-        /** Dong ZhaoYang 2017/8/7 中模糊查询 */
+        /**Dong ZhaoYang 2017/8/7 中模糊查询 */
+        , GREATER_THAN_DATE
+        /** kang 2019/8/22 小于等于时间 */
+        , LESS_THAN_DATE
+        /** kang 2017/8/7 大于等于时间 */
         , INNER_LIKE
         /** Dong ZhaoYang 2017/8/7 左模糊查询 */
         , LEFT_LIKE

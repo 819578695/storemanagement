@@ -71,6 +71,15 @@ public class QueryHelp {
                             list.add(cb.lessThan(getExpression(attributeName,join,root)
                                     .as((Class<? extends Comparable>) fieldType), (Comparable) val));
                             break;
+                        case GREATER_THAN_DATE://startdate
+                            String s=attributeName.substring(0,(attributeName.lastIndexOf('e')+1));
+                            list.add(cb.greaterThanOrEqualTo(getExpression(attributeName.substring(0,(attributeName.lastIndexOf('e')+1)),join,root)
+                                    .as((Class<? extends Comparable>) fieldType), (Comparable) val));
+                            break;
+                        case LESS_THAN_DATE://enddate
+                            list.add(cb.lessThanOrEqualTo(getExpression(attributeName.substring(0,(attributeName.lastIndexOf('e')+1)),join,root)
+                                    .as((Class<? extends Comparable>) fieldType), (Comparable) val));
+                            break;
                         case INNER_LIKE:
                             list.add(cb.like(getExpression(attributeName,join,root)
                                     .as(String.class), "%" + val.toString() + "%"));
