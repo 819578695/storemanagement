@@ -9,4 +9,7 @@ import me.zhengjie.annotation.Query;
 */
 @Data
 public class ReceiptPaymentAccountQueryCriteria{
+    // 模糊
+    @Query(type = Query.Type.INNER_LIKE)
+    private String name;
 }
