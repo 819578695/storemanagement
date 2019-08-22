@@ -23,6 +23,12 @@ public interface ReceiptPaymentAccountService {
     */
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable);
+    /**
+     * queryAll
+     * @param pageable
+     * @return
+     */
+    Object queryAll(Pageable pageable);
 
     /**
     * queryAll 不分页

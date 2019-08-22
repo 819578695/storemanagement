@@ -32,6 +32,11 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     private ReceiptPaymentAccountMapper receiptPaymentAccountMapper;
 
     @Override
+    public Object queryAll(Pageable pageable) {
+        return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll(pageable).getContent());
+    }
+
+    @Override
     public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable){
         Page<ReceiptPaymentAccount> page = receiptPaymentAccountRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         return PageUtil.toPage(page.map(receiptPaymentAccountMapper::toDto));

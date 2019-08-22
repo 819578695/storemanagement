@@ -16,9 +16,12 @@ import me.zhengjie.annotation.Query;
 public class ProcurementInformationQueryCriteria{
     @Query(type = Query.Type.INNER_LIKE)
     private String pno;
-    @Query(type = Query.Type.GREATER_THAN)
-    private String applicationsDate;
-
+    @Query(type = Query.Type.INNER_LIKE)
+    private String supplierName;
+    @Query(type = Query.Type.GREATER_THAN_DATE)
+    private Date applicationsDateStart;
+    @Query(type = Query.Type.LESS_THAN_DATE)
+    private Date applicationsDateEnd;
 
 
 }

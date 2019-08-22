@@ -6,6 +6,8 @@ import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +26,20 @@ public class ReceiptPaymentAccountController {
 
     @Autowired
     private ReceiptPaymentAccountService receiptPaymentAccountService;
+
+
+
+    /**
+     * 返回全部的角色，新增用户时下拉选择
+     * @return
+     */
+    @Log("查询所有ReceiptPaymentAccount")
+    @ApiOperation(value = "查询所有ReceiptPaymentAccount")
+    @GetMapping(value = "/receiptPaymentAccount/all")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    public ResponseEntity getAll(@PageableDefault(value = 2000, direction = Sort.Direction.ASC) Pageable pageable){
+        return new ResponseEntity(receiptPaymentAccountService.queryAll(pageable),HttpStatus.OK);
+    }
 
     @Log("查询ReceiptPaymentAccount")
     @ApiOperation(value = "查询ReceiptPaymentAccount")
