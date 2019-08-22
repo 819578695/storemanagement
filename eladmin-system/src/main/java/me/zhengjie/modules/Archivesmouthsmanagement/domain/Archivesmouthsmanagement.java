@@ -25,7 +25,7 @@ public class Archivesmouthsmanagement implements Serializable {
 
     //门牌号
     @Column(name = "housenumber")
-    private Integer huosenumber;
+    private Integer housenumber;
 
     //面积
     @Column(name = "acreage")
