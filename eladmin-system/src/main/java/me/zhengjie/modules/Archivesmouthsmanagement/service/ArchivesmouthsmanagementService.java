@@ -31,7 +31,7 @@ public interface ArchivesmouthsmanagementService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    ArchivesmouthsmanagementDTO findById(Integer id);
+    ArchivesmouthsmanagementDTO findById(Long id);
 
     /**
      * create
@@ -53,6 +53,6 @@ public interface ArchivesmouthsmanagementService {
      * @param id
      */
     //@CacheEvict(allEntries = true)
-    void delete(Integer id);
+    void delete(Long id);
 
 }

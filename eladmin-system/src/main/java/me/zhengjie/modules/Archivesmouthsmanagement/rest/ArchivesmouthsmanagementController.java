@@ -50,7 +50,7 @@ public class ArchivesmouthsmanagementController {
     @ApiOperation(value = "删除Archivesmouthsmanagement")
     @DeleteMapping(value = "/archivesmouthsmanagement/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity delete(@PathVariable Long id){
         archivesmouthsmanagementService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }

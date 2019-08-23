@@ -8,10 +8,10 @@ import java.io.Serializable;
 public class ArchivesmouthsmanagementDTO implements Serializable {
 
     //id
-    private Integer id;
+    private Long id;
 
     //门牌号
-    private Integer housenumber;
+    private Long housenumber;
 
     //面积
     private String acreage;
