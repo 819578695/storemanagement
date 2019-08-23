@@ -1,6 +1,7 @@
 package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.business.service.ParkCostService;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,11 +34,17 @@ public class ParkCostServiceImpl implements ParkCostService {
 
     @Autowired
     private ParkCostMapper parkCostMapper;
+    @Autowired
+    private DeptRepository deptRepository;
 
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria, Pageable pageable){
         Page<ParkCost> page = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(parkCostMapper::toDto));
+        List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
+        for (ParkCost parkCost : page.getContent()) {
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findNameById(parkCost.getDept().getId())));
+        }
+        return PageUtil.toPage(parkCostDTOS,page.getTotalElements());
     }
     @Override
     public Object queryAll( Pageable pageable){

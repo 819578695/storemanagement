@@ -7,10 +7,8 @@ import me.zhengjie.annotation.Query;
 
 /**
 * @author kang
-* @date 2019-08-22
+* @date 2019-08-23
 */
 @Data
-public class ParkCostQueryCriteria{
-    @Query(propName = "name",joinName = "dept" ,type = Query.Type.INNER_LIKE)
-    private String deptName;
+public class ParkPevenueQueryCriteria{
 }

@@ -39,4 +39,10 @@ public class ParkCostDTO implements Serializable {
 
     // 创建时间
     private Timestamp createTime;
+
+    //部门名称
+    private String deptName;
+
+    //部门编号
+    private  Long deptId;
 }
