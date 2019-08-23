@@ -75,10 +75,6 @@ public class ProcurementInformation implements Serializable {
     @Column(name = "payment_type")
     private Long paymentType;
 
-   /* // 收付款账户
-    @Column(name = "receipt_payment_account_id")
-    private Integer receiptPaymentAccountId;*/
-
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
     private ReceiptPaymentAccount receiptPaymentAccount;

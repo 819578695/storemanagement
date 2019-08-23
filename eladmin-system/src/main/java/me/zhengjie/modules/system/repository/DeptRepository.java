@@ -25,4 +25,7 @@ public interface DeptRepository extends JpaRepository<Dept, Long>, JpaSpecificat
     String findNameById(Long id);
 
     Set<Dept> findByRoles_Id(Long id);
+
+    @Query(value = "select * from dept where id = ?1",nativeQuery = true)
+    Dept findAllById(Long id);
 }

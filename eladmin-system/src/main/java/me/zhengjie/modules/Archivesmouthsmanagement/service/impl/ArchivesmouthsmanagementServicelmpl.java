@@ -40,7 +40,7 @@ public class ArchivesmouthsmanagementServicelmpl implements Archivesmouthsmanage
     }
 
     @Override
-    public ArchivesmouthsmanagementDTO findById(Integer id) {
+    public ArchivesmouthsmanagementDTO findById(Long id) {
         Optional<Archivesmouthsmanagement> tenantinformation = archivesmouthsmanagementRepository.findById(id);
         ValidationUtil.isNull(tenantinformation,"Archivesmouthsmanagement","id",id);
         return archivesmouthsmanagementMapper.toDto(tenantinformation.get());
@@ -64,7 +64,7 @@ public class ArchivesmouthsmanagementServicelmpl implements Archivesmouthsmanage
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Integer id) {
+    public void delete(Long id) {
         archivesmouthsmanagementRepository.deleteById(id);
     }
 

@@ -13,7 +13,7 @@ import java.io.Serializable;
  * */
 @Entity
 @Data
-@Table(name="archivesmouthsmanagement")
+@Table(name="archives_mouths_management")
 public class Archivesmouthsmanagement implements Serializable {
 
 
@@ -21,11 +21,11 @@ public class Archivesmouthsmanagement implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private  Integer id;
+    private  Long id;
 
     //门牌号
     @Column(name = "housenumber")
-    private Integer huosenumber;
+    private Long housenumber;
 
     //面积
     @Column(name = "acreage")

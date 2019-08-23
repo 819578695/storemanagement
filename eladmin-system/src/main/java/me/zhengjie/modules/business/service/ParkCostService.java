@@ -1,8 +1,8 @@
 package me.zhengjie.modules.business.service;
 
-import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
-import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
-import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountQueryCriteria;
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.service.dto.ParkCostDTO;
+import me.zhengjie.modules.business.service.dto.ParkCostQueryCriteria;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
@@ -10,10 +10,10 @@ import org.springframework.data.domain.Pageable;
 
 /**
 * @author kang
-* @date 2019-08-21
+* @date 2019-08-22
 */
-//@CacheConfig(cacheNames = "receiptPaymentAccount")
-public interface ReceiptPaymentAccountService {
+//@CacheConfig(cacheNames = "parkCost")
+public interface ParkCostService {
 
     /**
     * queryAll 分页
@@ -22,13 +22,7 @@ public interface ReceiptPaymentAccountService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable);
-    /**
-     * queryAll
-     * @param pageable
-     * @return
-     */
-    Object queryAll(Pageable pageable);
+    Object queryAll(ParkCostQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -36,7 +30,14 @@ public interface ReceiptPaymentAccountService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria);
+    public Object queryAll(ParkCostQueryCriteria criteria);
+    /**
+     * queryAll 分页
+     * @param pageable
+     * @return
+     */
+    //@Cacheable(keyGenerator = "keyGenerator")
+    public Object queryAll(Pageable pageable);
 
     /**
      * findById
@@ -44,7 +45,7 @@ public interface ReceiptPaymentAccountService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    ReceiptPaymentAccountDTO findById(Long id);
+    ParkCostDTO findById(Long id);
 
     /**
      * create
@@ -52,14 +53,14 @@ public interface ReceiptPaymentAccountService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    ReceiptPaymentAccountDTO create(ReceiptPaymentAccount resources);
+    ParkCostDTO create(ParkCost resources);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(ReceiptPaymentAccount resources);
+    void update(ParkCost resources);
 
     /**
      * delete

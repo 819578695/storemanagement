@@ -1,7 +1,9 @@
 package me.zhengjie.modules.Archivesmouthsmanagement.service.dto;
 
+import lombok.Data;
 import me.zhengjie.annotation.Query;
 
+@Data
 public class ArchivesmouthsmanagementQueryCriteria {
 
     // 模糊
