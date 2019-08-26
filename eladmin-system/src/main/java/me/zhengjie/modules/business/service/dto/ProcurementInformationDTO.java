@@ -57,4 +57,7 @@ public class ProcurementInformationDTO implements Serializable {
     private  String receiptPaymentAccountName;
     //收付款类型id
     private  Long receiptPaymentAccountId;
+
+    //付款方式名称
+    private  String paymentTypeName;
 }

@@ -6,6 +6,7 @@ import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
 import me.zhengjie.modules.business.service.mapper.ReceiptPaymentAccountMapper;
 import me.zhengjie.modules.system.domain.Job;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ProcurementInformationRepository;
 import me.zhengjie.modules.business.service.ProcurementInformationService;
@@ -40,13 +41,15 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
     private ProcurementInformationMapper procurementInformationMapper;
     @Autowired
     private  ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
+    @Autowired
+    private DictDetailRepository dictDetailRepository;
 
     @Override
     public Object queryAll(ProcurementInformationQueryCriteria criteria, Pageable pageable){
         Page<ProcurementInformation> page = procurementInformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ProcurementInformationDTO> procurementInformationDTOS = new ArrayList<>();
         for (ProcurementInformation procurementInformation : page.getContent()) {
-            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId())));
+            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get()));
         }
         return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());
     }

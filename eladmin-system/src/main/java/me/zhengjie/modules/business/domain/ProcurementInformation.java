@@ -3,6 +3,8 @@ package me.zhengjie.modules.business.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.system.domain.DictDetail;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
@@ -72,8 +74,9 @@ public class ProcurementInformation implements Serializable {
     private Timestamp actualPaymentDate;
 
     // 付款方式(关联)
-    @Column(name = "payment_type")
-    private Long paymentType;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "payment_type")
+    private DictDetail dictDetail;
 
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")

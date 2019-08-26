@@ -2,6 +2,8 @@ package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.business.service.ParkCostService;
@@ -36,13 +38,15 @@ public class ParkCostServiceImpl implements ParkCostService {
     private ParkCostMapper parkCostMapper;
     @Autowired
     private DeptRepository deptRepository;
+    @Autowired
+    private DictDetailRepository dictDetailRepository;
 
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria, Pageable pageable){
         Page<ParkCost> page = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
         for (ParkCost parkCost : page.getContent()) {
-            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findNameById(parkCost.getDept().getId())));
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findAllById(parkCost.getDept().getId()),dictDetailRepository.findById(parkCost.getDictDetail().getId()).get()));
         }
         return PageUtil.toPage(parkCostDTOS,page.getTotalElements());
     }

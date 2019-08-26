@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -80,8 +81,9 @@ public class ParkPevenue implements Serializable {
     private BigDecimal arrersRent;
 
     // 付款方式(关联)
-    @Column(name = "payment_type")
-    private Long paymentType;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "payment_type")
+    private DictDetail dictDetail;
 
     // 创建时间
     @CreationTimestamp

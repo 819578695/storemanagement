@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -61,8 +62,9 @@ public class ParkCost implements Serializable {
     private BigDecimal otherRent;
 
     // 付款方式(关联)
-    @Column(name = "payment_type")
-    private Long paymentType;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "payment_type")
+    private DictDetail dictDetail;
 
     // 创建时间
     @CreationTimestamp

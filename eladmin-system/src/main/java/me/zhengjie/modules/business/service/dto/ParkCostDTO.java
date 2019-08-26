@@ -37,6 +37,9 @@ public class ParkCostDTO implements Serializable {
     // 其他费用
     private BigDecimal otherRent;
 
+    // 付款方式(关联)
+    private Long paymentType;
+
     // 创建时间
     private Timestamp createTime;
 
@@ -45,4 +48,8 @@ public class ParkCostDTO implements Serializable {
 
     //部门编号
     private  Long deptId;
+
+
+    //付款方式名称
+    private String paymentTypeName;
 }
