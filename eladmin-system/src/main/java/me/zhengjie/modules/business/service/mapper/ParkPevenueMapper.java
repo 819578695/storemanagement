@@ -1,8 +1,9 @@
 package me.zhengjie.modules.business.service.mapper;
 
 import me.zhengjie.mapper.EntityMapper;
-import me.zhengjie.modules.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
-import me.zhengjie.modules.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ProcurementInformation;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
@@ -31,5 +32,5 @@ public interface ParkPevenueMapper extends EntityMapper<ParkPevenueDTO, ParkPeve
             @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
             @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName")
     })
-    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept,ReceiptPaymentAccount receiptPaymentAccount);
+    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount);
 }

@@ -3,7 +3,7 @@ package me.zhengjie.modules.business.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
-import me.zhengjie.modules.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.system.domain.Dept;
 import org.hibernate.annotations.CreationTimestamp;
 
