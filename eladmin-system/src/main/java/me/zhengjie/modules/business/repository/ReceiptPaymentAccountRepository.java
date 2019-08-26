@@ -14,4 +14,6 @@ public interface ReceiptPaymentAccountRepository extends JpaRepository<ReceiptPa
     @Query(value = "select * from receipt_payment_account where id = ?1",nativeQuery = true)
     ReceiptPaymentAccount findAllById(Long id);
 
+    List<ReceiptPaymentAccount> findByDeptId(Long deptId);
+
 }

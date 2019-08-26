@@ -8,6 +8,7 @@ import me.zhengjie.modules.business.domain.ProcurementInformation;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
 import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
+import me.zhengjie.modules.system.domain.Dept;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -24,7 +25,11 @@ public interface ParkPevenueMapper extends EntityMapper<ParkPevenueDTO, ParkPeve
     @Mappings({
             @Mapping(source = "parkPevenue.id",target = "id"),
             @Mapping(source = "archivesmouthsmanagement.id",target = "archivesMouthsId"),
-            @Mapping(source = "archivesmouthsmanagement.housenumber",target = "houseNumber")
+            @Mapping(source = "archivesmouthsmanagement.housenumber",target = "houseNumber"),
+            @Mapping(source = "dept.name",target = "deptName"),
+            @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
+            @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName")
     })
-    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement);
+    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept,ReceiptPaymentAccount receiptPaymentAccount);
 }

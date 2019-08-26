@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.system.domain.Dept;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -30,13 +31,16 @@ public class ParkPevenue implements Serializable {
     @Column(name = "park_id")
     private Long parkId;
 
-    // 收付款信息
-    @Column(name = "receipt_payment_account_id")
-    private Long receiptPaymentAccountId;
+    @OneToOne
+    @JoinColumn(name = "receipt_payment_account_id")
+    private ReceiptPaymentAccount receiptPaymentAccount;
 
-    // 部门id
-    @Column(name = "dept_id")
-    private Long deptId;
+    /**
+     * 部门id
+     */
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     // 档口Id
     @ManyToOne(fetch=FetchType.LAZY)
@@ -74,6 +78,10 @@ public class ParkPevenue implements Serializable {
     // 欠款金额
     @Column(name = "arrers_rent")
     private BigDecimal arrersRent;
+
+    // 付款方式(关联)
+    @Column(name = "payment_type")
+    private Long paymentType;
 
     // 创建时间
     @CreationTimestamp

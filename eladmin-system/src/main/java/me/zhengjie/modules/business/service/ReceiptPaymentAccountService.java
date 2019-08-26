@@ -38,6 +38,8 @@ public interface ReceiptPaymentAccountService {
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria);
 
+    Object findByDeptId(Long deptId);
+
     /**
      * findById
      * @param id

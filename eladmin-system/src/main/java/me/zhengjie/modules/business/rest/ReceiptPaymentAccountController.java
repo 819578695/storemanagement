@@ -48,6 +48,21 @@ public class ReceiptPaymentAccountController {
     public ResponseEntity getReceiptPaymentAccounts(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(receiptPaymentAccountService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    @Log("根据部门查询ReceiptPaymentAccount")
+    @ApiOperation(value = "根据部门ReceiptPaymentAccount")
+    @GetMapping(value = "/receiptPaymentAccountByDeptId/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    public ResponseEntity receiptPaymentAccountByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(receiptPaymentAccountService.findByDeptId(deptId),HttpStatus.OK);
+    }
+
+    @Log("根据Id查询ReceiptPaymentAccount")
+    @ApiOperation(value = "根据Id查询ReceiptPaymentAccount")
+    @GetMapping(value = "/receiptPaymentAccountById/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    public ResponseEntity receiptPaymentAccountById(@PathVariable Long id){
+        return new ResponseEntity(receiptPaymentAccountService.findById(id),HttpStatus.OK);
+    }
 
     @Log("新增ReceiptPaymentAccount")
     @ApiOperation(value = "新增ReceiptPaymentAccount")

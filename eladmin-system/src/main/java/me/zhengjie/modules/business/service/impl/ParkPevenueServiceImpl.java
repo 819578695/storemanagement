@@ -3,6 +3,8 @@ package me.zhengjie.modules.business.service.impl;
 import me.zhengjie.modules.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.service.ParkPevenueService;
@@ -38,13 +40,17 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private ParkPevenueMapper parkPevenueMapper;
     @Autowired
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
+    @Autowired
+    private DeptRepository deptRepository;
+    @Autowired
+    private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
 
     @Override
     public Object queryAll(ParkPevenueQueryCriteria criteria, Pageable pageable){
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get()));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());

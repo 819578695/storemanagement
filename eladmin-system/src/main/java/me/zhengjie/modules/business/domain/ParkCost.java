@@ -60,6 +60,10 @@ public class ParkCost implements Serializable {
     @Column(name = "other_rent")
     private BigDecimal otherRent;
 
+    // 付款方式(关联)
+    @Column(name = "payment_type")
+    private Long paymentType;
+
     // 创建时间
     @CreationTimestamp
     @Column(name = "create_time")

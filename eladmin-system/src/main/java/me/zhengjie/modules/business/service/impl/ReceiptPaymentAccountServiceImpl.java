@@ -36,6 +36,7 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll(pageable).getContent());
     }
 
+
     @Override
     public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable){
         Page<ReceiptPaymentAccount> page = receiptPaymentAccountRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
@@ -46,7 +47,10 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria){
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
-
+    @Override
+    public Object findByDeptId(Long deptId) {
+            return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findByDeptId(deptId));
+    }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {
         Optional<ReceiptPaymentAccount> receiptPaymentAccount = receiptPaymentAccountRepository.findById(id);

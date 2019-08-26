@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class ProcurementInformationDTO implements Serializable {
 
     // 主键
-    private Integer id;
+    private Long id;
 
     // 项目编号
     private String pno;
@@ -51,11 +51,10 @@ public class ProcurementInformationDTO implements Serializable {
 
     // 实际付款日期
     private Timestamp actualPaymentDate;
-
     // 付款方式(关联)
-    private Integer paymentType;
-
-
+    private Long paymentType;
+    //收付款类型名称
     private  String receiptPaymentAccountName;
-    private  Integer receiptPaymentAccountId;
+    //收付款类型id
+    private  Long receiptPaymentAccountId;
 }

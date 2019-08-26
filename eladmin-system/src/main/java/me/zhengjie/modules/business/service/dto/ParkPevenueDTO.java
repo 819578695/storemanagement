@@ -58,5 +58,10 @@ public class ParkPevenueDTO implements Serializable {
     //门牌号
     private Long houseNumber;
 
+    //门牌号
+    private String deptName;
+
+    //收付款类型名称
+    private  String receiptPaymentAccountName;
 
 }
