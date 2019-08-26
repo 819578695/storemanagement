@@ -1,13 +1,10 @@
 package me.zhengjie.modules.business.service.mapper;
 
 import me.zhengjie.mapper.EntityMapper;
-import me.zhengjie.modules.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
-import me.zhengjie.modules.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.business.domain.ParkPevenue;
-import me.zhengjie.modules.business.domain.ProcurementInformation;
-import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
-import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
