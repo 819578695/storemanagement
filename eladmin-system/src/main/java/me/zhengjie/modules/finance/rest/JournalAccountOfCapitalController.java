@@ -54,7 +54,7 @@ public class JournalAccountOfCapitalController {
     @ApiOperation(value = "删除JournalAccountOfCapital")
     @DeleteMapping(value = "/journalAccountOfCapital/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_DELETE')")
-    public ResponseEntity delete(@PathVariable Integer id){
+    public ResponseEntity delete(@PathVariable Long id){
         journalAccountOfCapitalService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }

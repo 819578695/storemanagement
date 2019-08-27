@@ -38,7 +38,7 @@ public interface JournalAccountOfCapitalService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    JournalAccountOfCapitalDTO findById(Integer id);
+    JournalAccountOfCapitalDTO findById(Long id);
 
     /**
      * create
@@ -60,5 +60,5 @@ public interface JournalAccountOfCapitalService {
      * @param id
      */
     //@CacheEvict(allEntries = true)
-    void delete(Integer id);
+    void delete(Long id);
 }

@@ -13,19 +13,19 @@ import java.io.Serializable;
 @Data
 public class JournalAccountOfCapitalDTO implements Serializable {
 
-    private Integer id;
+    private Long id;
 
     // 交易日期
     private Timestamp tradDate;
 
     // 交易类型
-    private Integer tradTypeId;
+    private Long tradTypeId;
 
     // 金额
     private BigDecimal money;
 
     // 记账类型(房租,停车,地磅,采购,往来款,投资款)
-    private String tallyTypeId;
+    private Long tallyTypeId;
 
     // 当前账户余额
     private BigDecimal urrentBalance;
@@ -34,11 +34,23 @@ public class JournalAccountOfCapitalDTO implements Serializable {
     private String receiptPaymentName;
 
     // 类型(收入,支出)
-    private Integer type;
+    private Long typeId;
 
     // 银行账号
-    private Integer backNum;
+    private String backNum;
 
     // 银行户名
     private String backAccount;
+
+    //部门id
+    private Long deptId;
+
+    //交易类型label
+    private String dictDetailLabel;
+
+    //记账类型
+    private String tallyTypeIdLabel;
+
+    //类型
+    private String typeLabel;
 }
