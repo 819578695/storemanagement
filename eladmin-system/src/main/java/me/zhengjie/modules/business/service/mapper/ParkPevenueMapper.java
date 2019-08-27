@@ -4,6 +4,7 @@ import me.zhengjie.mapper.EntityMapper;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ProcurementInformation;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
@@ -33,8 +34,10 @@ public interface ParkPevenueMapper extends EntityMapper<ParkPevenueDTO, ParkPeve
             @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
             @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName"),
             @Mapping(source = "dictDetail.id",target = "paymentType"),
-            @Mapping(source = "dictDetail.label",target = "paymentTypeName")
-
+            @Mapping(source = "dictDetail.label",target = "paymentTypeName"),
+            @Mapping(source = "parkPevenue.createTime",target = "createTime"),
+            @Mapping(source = "basicsPark.id",target = "parkId"),
+            @Mapping(source = "basicsPark.garden",target = "basicsParkName")
     })
-    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail);
+    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail, BasicsPark basicsPark);
 }

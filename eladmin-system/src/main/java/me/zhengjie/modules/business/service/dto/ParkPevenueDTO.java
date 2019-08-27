@@ -53,7 +53,7 @@ public class ParkPevenueDTO implements Serializable {
     private BigDecimal arrersRent;
 
     // 创建时间
-    private Timestamp creaeTime;
+    private Timestamp createTime;
 
     //门牌号
     private Long houseNumber;
@@ -69,5 +69,9 @@ public class ParkPevenueDTO implements Serializable {
 
     //付款方式名称
     private String paymentTypeName;
+
+    //园区名称
+    private String basicsParkName;
+
 
 }

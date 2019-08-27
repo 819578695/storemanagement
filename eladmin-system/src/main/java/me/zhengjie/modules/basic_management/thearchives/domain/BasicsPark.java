@@ -21,6 +21,9 @@ public class BasicsPark implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+    // 部门id关联
+    @Column(name = "dept_id")
+    private Long deptId;
 
     // 园区
     @Column(name = "garden")

@@ -29,6 +29,22 @@ public class ArchivesmouthsmanagementController {
         return new ResponseEntity(archivesmouthsmanagementService.queryAll(criteria,pageable), HttpStatus.OK);
     }
 
+    @Log("查询Archivesmouthsmanagement")
+    @ApiOperation(value = "查询Archivesmouthsmanagement")
+    @GetMapping("/archivesmouthsmanagement/all")
+    @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
+    public ResponseEntity getArchivesmouthsmanagementAll(ArchivesmouthsmanagementQueryCriteria criteria){
+        return new ResponseEntity(archivesmouthsmanagementService.queryAll(criteria), HttpStatus.OK);
+    }
+
+    @Log("根据部门查询Archivesmouthsmanagement")
+    @ApiOperation(value = "根据部门Archivesmouthsmanagement")
+    @GetMapping(value = "/archivesmouthsmanagementByDeptId/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
+    public ResponseEntity archivesmouthsmanagementByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(archivesmouthsmanagementService.findByDeptId(deptId),HttpStatus.OK);
+    }
+
     @Log("新增Archivesmouthsmanagement")
     @ApiOperation(value = "新增Archivesmouthsmanagement")
     @PostMapping(value = "/archivesmouthsmanagement")

@@ -4,5 +4,8 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Arch
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archivesmouthsmanagement, Long>, JpaSpecificationExecutor {
+    List<Archivesmouthsmanagement> findByDeptId(Long deptId);
 }

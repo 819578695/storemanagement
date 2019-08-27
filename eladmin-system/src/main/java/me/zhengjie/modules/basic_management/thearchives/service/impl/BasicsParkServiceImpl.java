@@ -38,6 +38,11 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     }
 
     @Override
+    public Object findByDeptId(Long deptId) {
+        return basicsParkMapper.toDto(basicsParkRepository.findByDeptId(deptId));
+    }
+
+    @Override
     public Object queryAll(BasicsParkQueryCriteria criteria){
         return basicsParkMapper.toDto(basicsParkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }

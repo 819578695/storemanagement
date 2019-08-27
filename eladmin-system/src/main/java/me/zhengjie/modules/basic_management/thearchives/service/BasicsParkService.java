@@ -23,7 +23,7 @@ public interface BasicsParkService {
     */
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(BasicsParkQueryCriteria criteria, Pageable pageable);
-
+    Object findByDeptId(Long deptId);
     /**
     * queryAll 不分页
     * @param criteria

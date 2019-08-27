@@ -17,7 +17,7 @@ public class ParkPevenueQueryCriteria{
     @Query(type = Query.Type.GREATER_THAN_DATE)
     private Date createTimeStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
-    private Date createDateEnd;
+    private Date createTimeEnd;
 
 
 }

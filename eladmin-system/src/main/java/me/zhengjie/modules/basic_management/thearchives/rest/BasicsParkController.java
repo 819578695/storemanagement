@@ -32,6 +32,13 @@ public class BasicsParkController {
     public ResponseEntity getBasicsParks(BasicsParkQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(basicsParkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    @Log("根据部门查询BasicsPark")
+    @ApiOperation(value = "根据部门BasicsPark")
+    @GetMapping(value = "/basicsParkByDeptId/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_CREATE')")
+    public ResponseEntity basicsParkByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(basicsParkService.findByDeptId(deptId),HttpStatus.OK);
+    }
 
     @Log("新增BasicsPark")
     @ApiOperation(value = "新增BasicsPark")

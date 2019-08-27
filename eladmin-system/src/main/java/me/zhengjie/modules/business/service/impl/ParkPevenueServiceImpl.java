@@ -1,6 +1,8 @@
 package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
+import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
@@ -45,13 +47,16 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
     @Autowired
     private DictDetailRepository dictDetailRepository;
+    @Autowired
+    private BasicsParkRepository basicsParkRepository;
+
 
     @Override
     public Object queryAll(ParkPevenueQueryCriteria criteria, Pageable pageable){
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),basicsParkRepository.findById(parkPevenue.getBasicsPark().getId()).get()));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());

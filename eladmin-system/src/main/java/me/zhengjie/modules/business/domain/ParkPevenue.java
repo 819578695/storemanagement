@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,8 +30,10 @@ public class ParkPevenue implements Serializable {
     private Long id;
 
     // 园区id
-    @Column(name = "park_id")
-    private Long parkId;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "park_id")
+    private BasicsPark  basicsPark;
+
 
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
@@ -87,8 +90,8 @@ public class ParkPevenue implements Serializable {
 
     // 创建时间
     @CreationTimestamp
-    @Column(name = "creae_time")
-    private Timestamp creaeTime;
+    @Column(name = "create_time")
+    private Timestamp createTime;
 
     public void copy(ParkPevenue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

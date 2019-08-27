@@ -45,6 +45,10 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         ValidationUtil.isNull(tenantinformation,"Archivesmouthsmanagement","id",id);
         return archivesmouthsmanagementMapper.toDto(tenantinformation.get());
     }
+    @Override
+    public Object findByDeptId(Long deptId) {
+        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.findByDeptId(deptId));
+    }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
