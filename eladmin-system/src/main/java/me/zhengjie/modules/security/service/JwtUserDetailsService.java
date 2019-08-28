@@ -2,6 +2,8 @@ package me.zhengjie.modules.security.service;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.security.security.JwtUser;
+import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.service.UserService;
 import me.zhengjie.modules.system.service.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     @Autowired
     private JwtPermissionService permissionService;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username){
 
@@ -38,6 +43,7 @@ public class JwtUserDetailsService implements UserDetailsService {
     }
 
     public UserDetails createJwtUser(UserDTO user) {
+        Dept dept = deptRepository.findById(user.getDept().getId()).get();
         return new JwtUser(
                 user.getId(),
                 user.getUsername(),
@@ -47,6 +53,7 @@ public class JwtUserDetailsService implements UserDetailsService {
                 user.getPhone(),
                 Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getName).orElse(null),
                 Optional.ofNullable(user.getDept()).map(DeptSmallDTO::getId).orElse(null),
+                dept.getPid(),
                 Optional.ofNullable(user.getJob()).map(JobSmallDTO::getName).orElse(null),
                 permissionService.mapToGrantedAuthorities(user),
                 user.getEnabled(),

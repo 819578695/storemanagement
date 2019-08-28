@@ -43,5 +43,5 @@ public class UserDTO implements Serializable {
 
     private DeptSmallDTO dept;
 
-    private Long deptId;
+
 }
