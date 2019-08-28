@@ -1,6 +1,10 @@
 package me.zhengjie.modules.finance.service.impl;
 
+import me.zhengjie.modules.business.domain.ProcurementInformation;
+import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
+import me.zhengjie.modules.system.domain.DictDetail;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.JournalAccountOfCapitalRepository;
 import me.zhengjie.modules.finance.service.JournalAccountOfCapitalService;
@@ -11,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +38,16 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
     @Autowired
     private JournalAccountOfCapitalMapper journalAccountOfCapitalMapper;
 
+    @Autowired
+    private  DictDetailRepository dictDetailRepository;
     @Override
     public Object queryAll(JournalAccountOfCapitalQueryCriteria criteria, Pageable pageable){
         Page<JournalAccountOfCapital> page = journalAccountOfCapitalRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(journalAccountOfCapitalMapper::toDto));
+        List<JournalAccountOfCapitalDTO> procurementInformationDTOS = new ArrayList<>();
+        for (JournalAccountOfCapital journalAccountOfCapital : page.getContent()) {
+            procurementInformationDTOS.add(journalAccountOfCapitalMapper.toDTO(journalAccountOfCapital , dictDetailRepository.findById(journalAccountOfCapital.getDictDetail().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTallyType().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTypeDict().getId()).get()));
+        }
+        return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());
     }
 
     @Override
@@ -43,7 +56,7 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
     }
 
     @Override
-    public JournalAccountOfCapitalDTO findById(Integer id) {
+    public JournalAccountOfCapitalDTO findById(Long id) {
         Optional<JournalAccountOfCapital> journalAccountOfCapital = journalAccountOfCapitalRepository.findById(id);
         ValidationUtil.isNull(journalAccountOfCapital,"JournalAccountOfCapital","id",id);
         return journalAccountOfCapitalMapper.toDto(journalAccountOfCapital.get());
@@ -67,7 +80,7 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void delete(Integer id) {
+    public void delete(Long id) {
         journalAccountOfCapitalRepository.deleteById(id);
     }
 }
