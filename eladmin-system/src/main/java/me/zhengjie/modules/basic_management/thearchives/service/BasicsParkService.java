@@ -7,6 +7,7 @@ import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQu
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author zlk
@@ -54,6 +55,13 @@ public interface BasicsParkService {
      */
     //@CacheEvict(allEntries = true)
     void update(BasicsPark resources);
+
+    /**
+     * update
+     * @param
+     */
+    //@CacheEvict(allEntries = true)
+    BasicsPark updatesc(MultipartFile file);
 
     /**
      * delete
