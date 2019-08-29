@@ -59,7 +59,7 @@ public class Tenantinformation implements Serializable {
 
     // 部门id
     @Column(name = "dept_id")
-    private Long dept_id;
+    private Long deptId;
 
     public void copy(Tenantinformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

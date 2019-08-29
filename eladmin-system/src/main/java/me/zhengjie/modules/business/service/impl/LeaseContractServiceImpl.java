@@ -1,6 +1,10 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
+import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.business.domain.LeaseContract;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.service.LeaseContractService;
@@ -11,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +38,25 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Autowired
     private LeaseContractMapper leaseContractMapper;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
+    @Autowired
+    private TenantinformationRepository tenantinformationRepository;
+
+    @Autowired
+    private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
+
+
+
     @Override
     public Object queryAll(LeaseContractQueryCriteria criteria, Pageable pageable){
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(leaseContractMapper::toDto));
+        List<LeaseContractDTO> leaseContractDTOS = new ArrayList<>();
+        for (LeaseContract leaseContract : page.getContent()) {
+            leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get()));
+        }
+        return PageUtil.toPage(leaseContractDTOS,page.getTotalElements());
     }
 
     @Override

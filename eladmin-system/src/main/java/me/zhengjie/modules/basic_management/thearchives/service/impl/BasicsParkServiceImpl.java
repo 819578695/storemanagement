@@ -52,7 +52,7 @@ public class BasicsParkServiceImpl implements BasicsParkService {
 
     @Override
     public Object findByDeptId(Long deptId) {
-        return basicsParkMapper.toDto(basicsParkRepository.findByDeptId(deptId));
+        return basicsParkMapper.toDto(deptId==0?basicsParkRepository.findAll():basicsParkRepository.findByDeptId(deptId));
     }
 
     @Override

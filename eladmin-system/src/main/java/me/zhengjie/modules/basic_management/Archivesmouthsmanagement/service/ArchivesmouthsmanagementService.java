@@ -24,6 +24,7 @@ public interface ArchivesmouthsmanagementService {
      */
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria);
+
     Object findByDeptId(Long deptId);
     /**
      * findById

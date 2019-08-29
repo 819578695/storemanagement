@@ -47,7 +47,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
     @Override
     public Object findByDeptId(Long deptId) {
-        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.findByDeptId(deptId));
+        return archivesmouthsmanagementMapper.toDto(deptId==0?archivesmouthsmanagementRepository.findAll():archivesmouthsmanagementRepository.findByDeptId(deptId));
     }
 
     @Override

@@ -58,7 +58,7 @@ public class ParkPevenueDTO implements Serializable {
     //门牌号
     private Long houseNumber;
 
-    //门牌号
+    //部门名称
     private String deptName;
 
     // 付款方式(关联)
@@ -72,6 +72,8 @@ public class ParkPevenueDTO implements Serializable {
 
     //园区名称
     private String basicsParkName;
+
+
 
 
 }

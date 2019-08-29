@@ -29,6 +29,8 @@ public interface TenantinformationService {
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(TenantinformationQueryCriteria criteria);
 
+    Object findByDeptId(Long deptId);
+
     /**
      * findById
      * @param id

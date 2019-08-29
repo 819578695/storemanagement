@@ -45,7 +45,7 @@ public class RentContractServiceImpl implements RentContractService {
         for (RentContract rentContract : page.getContent()) {
             rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId())));
         }
-        return PageUtil.toPage(page.map(rentContractMapper::toDto));
+        return PageUtil.toPage(rentContractDTOS,page.getTotalElements());
     }
 
     @Override

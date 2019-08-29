@@ -3,6 +3,10 @@ package me.zhengjie.modules.business.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
+import me.zhengjie.modules.system.domain.Dept;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
@@ -28,16 +32,21 @@ public class LeaseContract implements Serializable {
     private String contractNo;
 
     // 租户id
-    @Column(name = "tenement_id")
-    private Long tenementId;
+    @OneToOne()
+    @JoinColumn(name = "tenement_id")
+    private Tenantinformation tenantinformation;
 
-    // 部门id
-    @Column(name = "dept_id")
-    private Long deptId;
+    /**
+     * 部门id
+     */
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
-    // 档口id
-    @Column(name = "stall_id")
-    private Long stallId;
+    // 档口Id
+    @OneToOne()
+    @JoinColumn(name = "stall_id")
+    private Archivesmouthsmanagement archivesmouthsmanagement;
 
     // 合同名称
     @Column(name = "contract_name")
