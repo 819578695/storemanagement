@@ -1,9 +1,11 @@
 package me.zhengjie.modules.basic_management.thearchives.rest;
 
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.domain.Picture;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkService;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
+import me.zhengjie.service.PictureService;
 import me.zhengjie.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -69,10 +71,10 @@ public class BasicsParkController {
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_EDIT')")
     public ResponseEntity updatesc(@RequestParam MultipartFile file){
         String userName = SecurityUtils.getUsername();
-        BasicsPark basicsPark = basicsParkService.updatesc(file);
+        Picture picture = basicsParkService.updatesc(file,userName);
         Map map = new HashMap(3);
         map.put("errno",0);
-        map.put("data",new String[]{basicsPark.getImageUpload()});
+        map.put("data",new String[]{picture.getUrl()});
         return new ResponseEntity(map,HttpStatus.OK);
     }
 
