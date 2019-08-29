@@ -69,7 +69,7 @@ public class JournalAccountOfCapital implements Serializable {
      */
     @OneToOne
     @JoinColumn(name = "trad_type_id")
-    private DictDetail dictDetail;
+    private DictDetail tradType;
 
     /**
      * 记账类型

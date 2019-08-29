@@ -18,12 +18,12 @@ public interface JournalAccountOfCapitalMapper extends EntityMapper<JournalAccou
 
     @Mappings({
             @Mapping(source = "journalAccountOfCapital.id" , target = "id"),
-            @Mapping(source = "dictDetail.id",target = "tradTypeId"),
-            @Mapping(source = "dictDetail.label",target = "dictDetailLabel"),
+            @Mapping(source = "tradType.id",target = "tradTypeId"),
+            @Mapping(source = "tradType.label",target = "tradTypeLabel"),
             @Mapping(source = "tallyType.id",target = "tallyTypeId"),
             @Mapping(source = "tallyType.label",target = "tallyTypeIdLabel"),
             @Mapping(source = "typeDict.id",target = "typeId"),
             @Mapping(source = "typeDict.label",target = "typeLabel")
     })
-    JournalAccountOfCapitalDTO toDTO (JournalAccountOfCapital journalAccountOfCapital , DictDetail dictDetail , DictDetail tallyType , DictDetail typeDict);
+    JournalAccountOfCapitalDTO toDTO (JournalAccountOfCapital journalAccountOfCapital , DictDetail tradType , DictDetail tallyType , DictDetail typeDict);
 }
