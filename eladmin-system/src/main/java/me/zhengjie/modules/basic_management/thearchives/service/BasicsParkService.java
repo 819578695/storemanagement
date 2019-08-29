@@ -1,5 +1,6 @@
 package me.zhengjie.modules.basic_management.thearchives.service;
 
+import me.zhengjie.domain.Picture;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
@@ -61,7 +62,7 @@ public interface BasicsParkService {
      * @param
      */
     //@CacheEvict(allEntries = true)
-    BasicsPark updatesc(MultipartFile file);
+    Picture updatesc(MultipartFile file,String username);
 
     /**
      * delete

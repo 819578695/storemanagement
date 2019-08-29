@@ -6,6 +6,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
+import java.util.List;
 
 /**
 * @author zlk
