@@ -18,6 +18,8 @@ public class ParkPevenueQueryCriteria{
     private Date createTimeStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
     private Date createTimeEnd;
+    @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
+    private Long deptId;
 
 
 }

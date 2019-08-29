@@ -46,7 +46,7 @@ public class JournalAccountOfCapitalDTO implements Serializable {
     private Long deptId;
 
     //交易类型label
-    private String dictDetailLabel;
+    private String tradTypeLabel;
 
     //记账类型
     private String tallyTypeIdLabel;

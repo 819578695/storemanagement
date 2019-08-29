@@ -52,4 +52,7 @@ public class ParkCostDTO implements Serializable {
 
     //付款方式名称
     private String paymentTypeName;
+
+    //园区名称
+    private String basicsParkName;
 }

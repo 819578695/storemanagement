@@ -3,7 +3,9 @@ package me.zhengjie.modules.business.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -24,6 +26,13 @@ public class ProcurementInformation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    /**
+     * 部门id
+     */
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     // 项目编号
     @Column(name = "pno",nullable = false)
@@ -58,6 +67,7 @@ public class ProcurementInformation implements Serializable {
     private BigDecimal applicationsAmount;
 
     // 申请时间
+    @CreationTimestamp
     @Column(name = "applications_date")
     private Timestamp applicationsDate;
 
@@ -77,6 +87,11 @@ public class ProcurementInformation implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
     private DictDetail dictDetail;
+
+    // 创建时间
+    @CreationTimestamp
+    @Column(name = "create_time")
+    private Timestamp createTime;
 
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
