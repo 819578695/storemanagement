@@ -1,7 +1,12 @@
 package me.zhengjie.modules.basic_management.thearchives.service.impl;
 
+import cn.hutool.http.HttpUtil;
+import cn.hutool.json.JSONObject;
+import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.*;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkService;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkDTO;
@@ -11,11 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.util.HashMap;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
 * @author zlk
@@ -30,6 +37,12 @@ public class BasicsParkServiceImpl implements BasicsParkService {
 
     @Autowired
     private BasicsParkMapper basicsParkMapper;
+
+    public static final String SUCCESS = "success";
+
+    public static final String CODE = "code";
+
+    public static final String MSG = "msg";
 
     @Override
     public Object queryAll(BasicsParkQueryCriteria criteria, Pageable pageable){
@@ -68,6 +81,29 @@ public class BasicsParkServiceImpl implements BasicsParkService {
         BasicsPark basicsPark = optionalBasicsPark.get();
         basicsPark.copy(resources);
         basicsParkRepository.save(basicsPark);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Throwable.class)
+    public BasicsPark updatesc(MultipartFile multipartFile) {
+        File file = FileUtil.toFile(multipartFile);
+
+        HashMap<String, Object> paramMap = new HashMap<>(1);
+
+        paramMap.put("smfile", file);
+        String result= HttpUtil.post(ElAdminConstant.Url.SM_MS_URL, paramMap);
+
+        JSONObject jsonObject = JSONUtil.parseObj(result);
+        BasicsPark basicsPark = null;
+        if(!jsonObject.get(CODE).toString().equals(SUCCESS)){
+            throw new BadRequestException(jsonObject.get(MSG).toString());
+        }
+        //转成实体类
+        basicsPark = JSON.parseObject(jsonObject.get("data").toString(), BasicsPark.class);
+        basicsParkRepository.save(basicsPark);
+        //删除临时文件
+        FileUtil.deleteFile(file);
+        return basicsPark;
     }
 
     @Override

@@ -22,6 +22,8 @@ public class ProcurementInformationQueryCriteria{
     private Date applicationsDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
     private Date applicationsDateEnd;
+    @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
+    private Long deptId;
 
 
 }

@@ -4,6 +4,7 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkService;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
+import me.zhengjie.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
 * @author zlk
@@ -55,6 +60,20 @@ public class BasicsParkController {
     public ResponseEntity update(@Validated @RequestBody BasicsPark resources){
         basicsParkService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
+    @Log("修改BasicsPark")
+    @ApiOperation(value = "修改BasicsPark")
+    @PostMapping(value = "/basicsParksc")
+    @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_EDIT')")
+    public ResponseEntity updatesc(@RequestParam MultipartFile file){
+        String userName = SecurityUtils.getUsername();
+        BasicsPark basicsPark = basicsParkService.updatesc(file);
+        Map map = new HashMap(3);
+        map.put("errno",0);
+        map.put("data",new String[]{basicsPark.getImageUpload()});
+        return new ResponseEntity(map,HttpStatus.OK);
     }
 
     @Log("删除BasicsPark")
