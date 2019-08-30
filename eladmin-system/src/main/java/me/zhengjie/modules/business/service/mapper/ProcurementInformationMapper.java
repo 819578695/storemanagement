@@ -4,6 +4,7 @@ import me.zhengjie.mapper.EntityMapper;
 import me.zhengjie.modules.business.domain.ProcurementInformation;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -24,7 +25,9 @@ public interface ProcurementInformationMapper extends EntityMapper<ProcurementIn
           @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
           @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName"),
           @Mapping(source = "dictDetail.id",target = "paymentType"),
-          @Mapping(source = "dictDetail.label",target = "paymentTypeName")
+          @Mapping(source = "dictDetail.label",target = "paymentTypeName"),
+          @Mapping(source = "dept.name",target = "deptName"),
+          @Mapping(source = "dept.id",target = "deptId"),
   })
-    ProcurementInformationDTO toDto(ProcurementInformation procurementInformation, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail);
+    ProcurementInformationDTO toDto(ProcurementInformation procurementInformation, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail, Dept dept);
 }

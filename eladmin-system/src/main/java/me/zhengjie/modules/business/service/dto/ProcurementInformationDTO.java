@@ -60,4 +60,10 @@ public class ProcurementInformationDTO implements Serializable {
 
     //付款方式名称
     private  String paymentTypeName;
+
+    //部门名称
+    private String deptName;
+
+    // 部门id
+    private Long deptId;
 }

@@ -43,7 +43,7 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     }
     @Override
     public Object findByDeptId(Long deptId) {
-        return tenantinformationMapper.toDto(deptId==0?tenantinformationRepository.findAll():tenantinformationRepository.findByDeptId(deptId));
+        return tenantinformationMapper.toDto(deptId==1?tenantinformationRepository.findAll():tenantinformationRepository.findByDeptId(deptId));
     }
     @Override
     public TenantinformationDTO findById(Long id) {

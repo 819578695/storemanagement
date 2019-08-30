@@ -52,6 +52,12 @@ public class ParkPevenueDTO implements Serializable {
     // 欠款金额
     private BigDecimal arrersRent;
 
+    //管理费
+    private BigDecimal managementRent;
+
+    //停车费
+    private BigDecimal parkingRent;
+
     // 创建时间
     private Timestamp createTime;
 
@@ -72,7 +78,6 @@ public class ParkPevenueDTO implements Serializable {
 
     //园区名称
     private String basicsParkName;
-
 
 
 

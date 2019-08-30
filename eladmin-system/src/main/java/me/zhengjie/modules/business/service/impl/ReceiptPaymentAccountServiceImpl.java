@@ -49,7 +49,7 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     }
     @Override
     public Object findByDeptId(Long deptId) {
-            return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findByDeptId(deptId));
+            return receiptPaymentAccountMapper.toDto(deptId==1?receiptPaymentAccountRepository.findAll():receiptPaymentAccountRepository.findByDeptId(deptId));
     }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {
