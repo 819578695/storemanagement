@@ -39,6 +39,13 @@ public class BasicsParkController {
     public ResponseEntity getBasicsParks(BasicsParkQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(basicsParkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    @Log("查询BasicsPark")
+    @ApiOperation(value = "查询BasicsPark")
+    @GetMapping(value = "/procurementInformationAll")
+    @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_SELECT')")
+    public ResponseEntity procurementInformationAll(BasicsParkQueryCriteria criteria){
+        return new ResponseEntity(basicsParkService.queryAll(criteria),HttpStatus.OK);
+    }
     @Log("根据部门查询BasicsPark")
     @ApiOperation(value = "根据部门BasicsPark")
     @GetMapping(value = "/basicsParkByDeptId/{deptId}")

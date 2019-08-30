@@ -28,6 +28,13 @@ public class ArchivesmouthsmanagementController {
     public ResponseEntity getArchivesmouthsmanagement(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(archivesmouthsmanagementService.queryAll(criteria,pageable), HttpStatus.OK);
     }
+    @Log("查询Archivesmouthsmanagement")
+    @ApiOperation(value = "查询Archivesmouthsmanagement")
+    @GetMapping("/getarchivesmouthsmanagementAll")
+    @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
+    public ResponseEntity getarchivesmouthsmanagementAll(ArchivesmouthsmanagementQueryCriteria criteria){
+        return new ResponseEntity(archivesmouthsmanagementService.queryAll(criteria), HttpStatus.OK);
+    }
 
     @Log("查询Archivesmouthsmanagement")
     @ApiOperation(value = "查询Archivesmouthsmanagement")
