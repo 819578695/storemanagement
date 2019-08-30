@@ -41,9 +41,9 @@ public class BasicsParkController {
     }
     @Log("查询BasicsPark")
     @ApiOperation(value = "查询BasicsPark")
-    @GetMapping(value = "/procurementInformationAll")
+    @GetMapping(value = "/gettenantinformationAll")
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_SELECT')")
-    public ResponseEntity procurementInformationAll(BasicsParkQueryCriteria criteria){
+    public ResponseEntity gettenantinformationAll(BasicsParkQueryCriteria criteria){
         return new ResponseEntity(basicsParkService.queryAll(criteria),HttpStatus.OK);
     }
     @Log("根据部门查询BasicsPark")
