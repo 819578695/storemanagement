@@ -83,6 +83,14 @@ public class ParkPevenue implements Serializable {
     @Column(name = "arrers_rent")
     private BigDecimal arrersRent;
 
+    //管理费
+    @Column(name = "management_rent")
+    private BigDecimal managementRent;
+
+    //停车费
+    @Column(name = "parking_rent")
+    private BigDecimal parkingRent;
+
     // 付款方式(关联)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
