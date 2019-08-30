@@ -3,9 +3,11 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
  * @author zlk
@@ -53,6 +55,11 @@ public class Archivesmouthsmanagement implements Serializable {
     //图片查看
     @Column(name = "picturetoview")
     private String picturetoview;
+
+    //创建时间
+    @CreationTimestamp
+    @Column(name = "stall_date")
+    private Timestamp stalldate;
 
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

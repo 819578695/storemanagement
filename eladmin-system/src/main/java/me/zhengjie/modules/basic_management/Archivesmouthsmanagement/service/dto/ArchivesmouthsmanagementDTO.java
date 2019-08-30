@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dt
 import lombok.Data;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Data
 public class ArchivesmouthsmanagementDTO implements Serializable {
@@ -30,5 +31,8 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
 
     //图片查看
     private String picturetoview;
+
+    //图片查看
+    private Timestamp stalldate;
 
 }

@@ -44,4 +44,7 @@ public class BasicsParkDTO implements Serializable {
 
     // 图片上传
     private String imageUpload;
+
+    // 图片上传
+    private Timestamp parkdate;
 }

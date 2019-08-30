@@ -3,8 +3,11 @@ package me.zhengjie.modules.basic_management.Tenantinformation.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 /**
 * @author zlk
@@ -60,6 +63,11 @@ public class Tenantinformation implements Serializable {
     // 部门id
     @Column(name = "dept_id")
     private Long deptId;
+
+    // 创建时间
+    @CreationTimestamp
+    @Column(name = "tenement_date")
+    private Timestamp tenementdate;
 
     public void copy(Tenantinformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

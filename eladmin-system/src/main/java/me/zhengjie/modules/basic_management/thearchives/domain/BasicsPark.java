@@ -3,6 +3,8 @@ package me.zhengjie.modules.basic_management.thearchives.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.io.Serializable;
@@ -65,6 +67,11 @@ public class BasicsPark implements Serializable {
     // 图片上传
     @Column(name = "image_upload")
     private String imageUpload;
+
+    // 创建时间
+    @CreationTimestamp
+    @Column(name = "park_date")
+    private Timestamp parkdate;
 
     public void copy(BasicsPark source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
