@@ -79,6 +79,11 @@ public class ParkPevenueDTO implements Serializable {
     //园区名称
     private String basicsParkName;
 
+    //合同名称
+    private String leaseContractName;
+
+    //合同id
+    private Long leaseContractId;
 
 
 }

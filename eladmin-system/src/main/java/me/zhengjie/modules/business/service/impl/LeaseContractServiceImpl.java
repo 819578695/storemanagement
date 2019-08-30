@@ -65,6 +65,11 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     }
 
     @Override
+    public Object findByDeptId(Long deptId) {
+        return leaseContractMapper.toDto(deptId==1?leaseContractRepository.findAll():leaseContractRepository.findByDeptId(deptId));
+    }
+
+    @Override
     public LeaseContractDTO findById(Long id) {
         Optional<LeaseContract> leaseContract = leaseContractRepository.findById(id);
         ValidationUtil.isNull(leaseContract,"LeaseContract","id",id);

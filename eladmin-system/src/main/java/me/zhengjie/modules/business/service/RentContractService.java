@@ -32,6 +32,9 @@ public interface RentContractService {
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(RentContractQueryCriteria criteria);
 
+
+    Object findByDeptId(Long deptId);
+
     /**
      * findById
      * @param id

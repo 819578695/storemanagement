@@ -4,6 +4,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
@@ -49,6 +50,8 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private DictDetailRepository dictDetailRepository;
     @Autowired
     private BasicsParkRepository basicsParkRepository;
+    @Autowired
+    private LeaseContractRepository leaseContractRepository;
 
 
     @Override
@@ -56,7 +59,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),basicsParkRepository.findById(parkPevenue.getBasicsPark().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),basicsParkRepository.findById(parkPevenue.getBasicsPark().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get()));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());

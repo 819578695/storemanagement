@@ -96,6 +96,11 @@ public class ParkPevenue implements Serializable {
     @JoinColumn(name = "payment_type")
     private DictDetail dictDetail;
 
+    // 合同
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "lease_contract_id")
+    private LeaseContract leaseContract;
+
     // 创建时间
     @CreationTimestamp
     @Column(name = "create_time")

@@ -55,4 +55,10 @@ public class ParkCostDTO implements Serializable {
 
     //园区名称
     private String basicsParkName;
+
+    //合同名称
+    private String rentContractName;
+
+    //合同id
+    private Long rentContractId;
 }

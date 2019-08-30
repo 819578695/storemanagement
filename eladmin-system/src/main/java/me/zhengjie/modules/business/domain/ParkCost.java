@@ -73,6 +73,11 @@ public class ParkCost implements Serializable {
     @Column(name = "create_time")
     private Timestamp createTime;
 
+    // 合同
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "rent_contract_id")
+    private RentContract rentContract;
+
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
