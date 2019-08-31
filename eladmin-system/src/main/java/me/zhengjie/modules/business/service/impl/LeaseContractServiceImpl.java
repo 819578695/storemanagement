@@ -4,6 +4,8 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Arch
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.business.domain.LeaseContract;
+import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +50,9 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Autowired
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
 
+    @Autowired
+    private ParkPevenueRepository parkPevenueRepository;
+
 
 
     @Override
@@ -54,7 +60,16 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<LeaseContractDTO> leaseContractDTOS = new ArrayList<>();
         for (LeaseContract leaseContract : page.getContent()) {
+            List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractId(leaseContract.getId());
+            BigDecimal totalMoney = new BigDecimal(0);
+            for(ParkPevenue parkPevenue : parkPevenues){
+                //bigdecimal 求和(未缴费用)
+                totalMoney = totalMoney.add(parkPevenue.getHouseRent());
+                leaseContract.setPaymentedExpenses(totalMoney);
+
+            }
             leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get()));
+
         }
         return PageUtil.toPage(leaseContractDTOS,page.getTotalElements());
     }

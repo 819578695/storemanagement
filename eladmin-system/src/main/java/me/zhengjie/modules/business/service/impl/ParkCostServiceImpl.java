@@ -4,9 +4,16 @@ import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRep
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.RentContractRepository;
+import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
+import me.zhengjie.modules.finance.repository.JournalAccountOfCapitalRepository;
+import me.zhengjie.modules.finance.service.JournalAccountOfCapitalService;
+import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.Dict;
+import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.business.service.ParkCostService;
@@ -18,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +55,12 @@ public class ParkCostServiceImpl implements ParkCostService {
     private BasicsParkRepository basicsParkRepository;
     @Autowired
     private RentContractRepository rentContractRepository;
+    @Autowired
+    private JournalAccountOfCapitalRepository journalAccountOfCapitalRepository;
+    @Autowired
+    private  DictRepository dictRepository;
+    @Autowired
+    private JournalAccountOfCapitalService journalAccountOfCapitalService;
 
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria, Pageable pageable){
@@ -78,7 +92,45 @@ public class ParkCostServiceImpl implements ParkCostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ParkCostDTO create(ParkCost resources) {
-        return parkCostMapper.toDto(parkCostRepository.save(resources));
+
+      ParkCost p = parkCostRepository.save(resources);
+        //房租
+        if ( resources.getSiteRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+            journalAccountOfCapitalService.createByPostCost(p,"1",resources.getSiteRent());
+            }
+        }
+        //水费
+         if (resources.getWaterRent()!=null ){
+             if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+            journalAccountOfCapitalService.createByPostCost(p,"7",resources.getWaterRent());
+            }
+         }
+        //电费
+         if (resources.getElectricityRent()!=null){
+             if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+             journalAccountOfCapitalService.createByPostCost(p,"8",resources.getElectricityRent());
+        }
+         }
+        //物业费
+        if (resources.getPropertyRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+            journalAccountOfCapitalService.createByPostCost(p,"10",resources.getPropertyRent());
+        }
+        }
+        //税赋成本
+        if (resources.getTaxCost()!=null) {
+            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+                journalAccountOfCapitalService.createByPostCost(p, "11", resources.getTaxCost());
+            }
+        }
+        //其他费用
+       if (resources.getOtherRent()!=null){
+           if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+               journalAccountOfCapitalService.createByPostCost(p, "9", resources.getOtherRent());
+           }
+        }
+        return parkCostMapper.toDto(p);
     }
 
     @Override
@@ -88,6 +140,46 @@ public class ParkCostServiceImpl implements ParkCostService {
         ValidationUtil.isNull( optionalParkCost,"ParkCost","id",resources.getId());
         ParkCost parkCost = optionalParkCost.get();
         parkCost.copy(resources);
+        if ( resources.getSiteRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+                        journalAccountOfCapitalService.createByPostCost(parkCost,"1",resources.getSiteRent());
+            }
+        }
+        //水费
+        if (resources.getWaterRent()!=null ){
+            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+                    journalAccountOfCapitalService.createByPostCost(parkCost,"7",resources.getWaterRent());
+
+            }
+        }
+        //电费
+        if (resources.getElectricityRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+                    journalAccountOfCapitalService.createByPostCost(parkCost,"8",resources.getElectricityRent());
+
+            }
+        }
+        //物业费
+        if (resources.getPropertyRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+                    journalAccountOfCapitalService.createByPostCost(parkCost,"10",resources.getPropertyRent());
+
+            }
+        }
+        //税赋成本
+        if (resources.getTaxCost()!=null) {
+            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+                    journalAccountOfCapitalService.createByPostCost(parkCost,"11",resources.getTaxCost());
+
+            }
+        }
+        //其他费用
+        if (resources.getOtherRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+                    journalAccountOfCapitalService.createByPostCost(parkCost,"9",resources.getOtherRent());
+
+            }
+        }
         parkCostRepository.save(parkCost);
     }
 
