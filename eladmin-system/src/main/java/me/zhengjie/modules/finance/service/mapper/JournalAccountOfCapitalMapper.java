@@ -3,6 +3,7 @@ package me.zhengjie.modules.finance.service.mapper;
 import me.zhengjie.mapper.EntityMapper;
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
 import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -23,7 +24,9 @@ public interface JournalAccountOfCapitalMapper extends EntityMapper<JournalAccou
             @Mapping(source = "tallyType.id",target = "tallyTypeId"),
             @Mapping(source = "tallyType.label",target = "tallyTypeIdLabel"),
             @Mapping(source = "typeDict.id",target = "typeId"),
-            @Mapping(source = "typeDict.label",target = "typeLabel")
+            @Mapping(source = "typeDict.label",target = "typeLabel"),
+            @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "dept.name",target = "deptName"),
     })
-    JournalAccountOfCapitalDTO toDTO (JournalAccountOfCapital journalAccountOfCapital , DictDetail tradType , DictDetail tallyType , DictDetail typeDict);
+    JournalAccountOfCapitalDTO toDTO (JournalAccountOfCapital journalAccountOfCapital , DictDetail tradType , DictDetail tallyType , DictDetail typeDict, Dept dept);
 }

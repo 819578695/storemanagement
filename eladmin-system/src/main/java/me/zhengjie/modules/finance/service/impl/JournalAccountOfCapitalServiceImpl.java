@@ -1,6 +1,7 @@
 package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.JournalAccountOfCapitalRepository;
@@ -37,12 +38,16 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
 
     @Autowired
     private  DictDetailRepository dictDetailRepository;
+
+    @Autowired
+    private DeptRepository deptRepository;
+
     @Override
     public Object queryAll(JournalAccountOfCapitalQueryCriteria criteria, Pageable pageable){
         Page<JournalAccountOfCapital> page = journalAccountOfCapitalRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<JournalAccountOfCapitalDTO> procurementInformationDTOS = new ArrayList<>();
         for (JournalAccountOfCapital journalAccountOfCapital : page.getContent()) {
-            procurementInformationDTOS.add(journalAccountOfCapitalMapper.toDTO(journalAccountOfCapital , dictDetailRepository.findById(journalAccountOfCapital.getTradType().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTallyType().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTypeDict().getId()).get()));
+            procurementInformationDTOS.add(journalAccountOfCapitalMapper.toDTO(journalAccountOfCapital , dictDetailRepository.findById(journalAccountOfCapital.getTradType().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTallyType().getId()).get() , dictDetailRepository.findById(journalAccountOfCapital.getTypeDict().getId()).get() , deptRepository.findById(journalAccountOfCapital.getDept().getId()).get() ));
         }
         return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());
     }

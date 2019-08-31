@@ -61,8 +61,9 @@ public class JournalAccountOfCapital implements Serializable {
     /**
      * 部门ID
      */
-    @Column(name = "dept_id",nullable = false)
-    private Long deptId;
+    @OneToOne
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     /**
      * 交易类型

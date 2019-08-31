@@ -24,9 +24,9 @@ public class FinanceMaintarinDetail implements Serializable {
     private Long id;
 
     // 交易账户类型
-    //@OneToOne
-    @Column(name = "trad_type_id")
-    private Long tradTypeId;
+    @OneToOne
+    @JoinColumn(name = "trad_type_id")
+    private DictDetail tradType;
 
     // 账户维护关联
     @Column(name = "maintain_id")

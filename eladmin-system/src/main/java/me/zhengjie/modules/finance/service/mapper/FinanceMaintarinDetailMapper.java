@@ -18,10 +18,10 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface FinanceMaintarinDetailMapper extends EntityMapper<FinanceMaintarinDetailDTO, FinanceMaintarinDetail> {
 
-//    @Mappings({
-//            @Mapping(source = "financeMaintarinDetail.id",target = "id"),
-//            @Mapping(source = "tradType.id",target = "tradtypeId"),
-//            @Mapping(source = "tradType.label",target = "tradTypeLabel")
-//    })
-//    FinanceMaintarinDetailDTO toDTO (FinanceMaintarinDetail financeMaintarinDetail , DictDetail tradType);
+    @Mappings({
+            @Mapping(source = "financeMaintarinDetail.id",target = "id"),
+            @Mapping(source = "tradType.id",target = "tradTypeId"),
+            @Mapping(source = "tradType.label",target = "tradTypeLabel")
+    })
+    FinanceMaintarinDetailDTO toDTO (FinanceMaintarinDetail financeMaintarinDetail , DictDetail tradType);
 }
