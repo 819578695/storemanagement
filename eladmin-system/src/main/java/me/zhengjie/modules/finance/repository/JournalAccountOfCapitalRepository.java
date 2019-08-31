@@ -12,4 +12,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 */
 public interface JournalAccountOfCapitalRepository extends JpaRepository<JournalAccountOfCapital, Long>, JpaSpecificationExecutor {
 
+    JournalAccountOfCapital findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(Long tallyTypeId,Long typeDictId,Long parkCostPevenueId);
 }

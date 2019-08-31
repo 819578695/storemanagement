@@ -6,8 +6,10 @@ import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRep
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.finance.service.JournalAccountOfCapitalService;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.service.ParkPevenueService;
@@ -52,6 +54,8 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private BasicsParkRepository basicsParkRepository;
     @Autowired
     private LeaseContractRepository leaseContractRepository;
+    @Autowired
+    private JournalAccountOfCapitalService journalAccountOfCapitalService;
 
 
     @Override
@@ -80,7 +84,68 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ParkPevenueDTO create(ParkPevenue resources) {
-        return parkPevenueMapper.toDto(parkPevenueRepository.save(resources));
+        ParkPevenue p =parkPevenueRepository.save(resources);
+        //房租
+        if ( resources.getHouseRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getHouseRent())){
+                journalAccountOfCapitalService.createByPostPevenue(p,"1",resources.getHouseRent());
+            }
+        }
+        //水费
+        if (resources.getWaterRent()!=null ){
+            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+                journalAccountOfCapitalService.createByPostPevenue(p,"7",resources.getWaterRent());
+            }
+        }
+        //电费
+        if (resources.getElectricityRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+                journalAccountOfCapitalService.createByPostPevenue(p,"8",resources.getElectricityRent());
+            }
+        }
+        //物业费
+        if (resources.getPropertyRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+                journalAccountOfCapitalService.createByPostPevenue(p,"10",resources.getPropertyRent());
+            }
+        }
+        //卫生费
+        if (resources.getSanitationRent()!=null) {
+            if (StringUtils.iseqBigDecimal(resources.getSanitationRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "15", resources.getSanitationRent());
+            }
+        }
+        //违约金
+        if (resources.getLiquidatedRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getLiquidatedRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "12", resources.getLiquidatedRent());
+            }
+        }
+        //滞纳金
+        if (resources.getLateRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getLateRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "14", resources.getLateRent());
+            }
+        }
+        //地磅费
+        if (resources.getGroundPoundRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getGroundPoundRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "3", resources.getGroundPoundRent());
+            }
+        }
+        //管理费
+        if (resources.getManagementRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getManagementRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "13", resources.getManagementRent());
+            }
+        }
+        //停车费
+        if (resources.getParkingRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getParkingRent())) {
+                journalAccountOfCapitalService.createByPostPevenue(p, "2", resources.getParkingRent());
+            }
+        }
+        return parkPevenueMapper.toDto(p);
     }
 
     @Override

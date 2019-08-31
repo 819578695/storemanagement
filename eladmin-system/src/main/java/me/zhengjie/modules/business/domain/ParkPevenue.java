@@ -59,9 +59,13 @@ public class ParkPevenue implements Serializable {
     @Column(name = "property_rent")
     private BigDecimal propertyRent;
 
-    // 水电费
-    @Column(name = "water_electricity_rent")
-    private BigDecimal waterElectricityRent;
+    // 水费
+    @Column(name = "water_rent")
+    private BigDecimal waterRent;
+
+    // 电费
+    @Column(name = "electricity_rent")
+    private BigDecimal electricityRent;
 
     // 卫生费
     @Column(name = "sanitation_rent")

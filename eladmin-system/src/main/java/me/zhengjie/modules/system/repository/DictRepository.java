@@ -9,4 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 * @date 2019-04-10
 */
 public interface DictRepository extends JpaRepository<Dict, Long>, JpaSpecificationExecutor {
+
+    Dict findByName(String name);
+
 }

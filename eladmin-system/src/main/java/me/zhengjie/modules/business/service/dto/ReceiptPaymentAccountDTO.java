@@ -23,7 +23,7 @@ public class ReceiptPaymentAccountDTO implements Serializable {
     private String paymentAccount;
 
     // 付款账号
-    private Integer paymentAccountNum;
+    private String paymentAccountNum;
 
     // 付款开户行
     private String paymentBank;
@@ -32,7 +32,7 @@ public class ReceiptPaymentAccountDTO implements Serializable {
     private String receiptAccount;
 
     // 收款账号
-    private Integer receiptAccountNum;
+    private String receiptAccountNum;
 
     // 收款开户行
     private String receiptBank;

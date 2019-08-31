@@ -51,9 +51,8 @@ public class RentContractServiceImpl implements RentContractService {
             List<ParkCost> parkCosts = parkCostRepository.findByRentContractId(rentContract.getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for (ParkCost parkCost :parkCosts) {
-                System.err.println(parkCost.getSiteRent());
+                //bigdecimal 求和(未缴费用)
                 totalMoney = totalMoney.add(parkCost.getSiteRent());
-               /* amout.add(parkCost.getSiteRent());*/
                 rentContract.setPaymentedExpenses(totalMoney);
             }
             rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId())));
