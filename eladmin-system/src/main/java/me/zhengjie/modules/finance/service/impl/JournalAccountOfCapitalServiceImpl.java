@@ -2,6 +2,8 @@ package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -50,6 +52,9 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
 
     @Autowired
     private DictRepository dictRepository;
+
+    @Autowired
+    private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
 
     @Override
     public Object queryAll(JournalAccountOfCapitalQueryCriteria criteria, Pageable pageable){
@@ -113,9 +118,10 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0");//收入
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);
         JournalAccountOfCapital journalAccountOfCapital = new JournalAccountOfCapital();
-        journalAccountOfCapital.setReceiptPaymentName(resources.getReceiptPaymentAccount().getReceiptAccount());//收付款信息
-        journalAccountOfCapital.setBackAccount(resources.getReceiptPaymentAccount().getReceiptAccountNum());//银行账号
-        journalAccountOfCapital.setBackNum(resources.getReceiptPaymentAccount().getReceiptBank());//开户名
+        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
+        journalAccountOfCapital.setReceiptPaymentName(receiptPaymentAccount.getReceiptAccount());//收付款信息
+        journalAccountOfCapital.setBackAccount(receiptPaymentAccount.getReceiptAccountNum());//银行账号
+        journalAccountOfCapital.setBackNum(receiptPaymentAccount.getReceiptBank());//开户名
         journalAccountOfCapital.setDept(dept);//部门
         journalAccountOfCapital.setParkCostPevenueId(resources.getId());//成本收入id
         journalAccountOfCapital.setMoney(money);//交易金额
