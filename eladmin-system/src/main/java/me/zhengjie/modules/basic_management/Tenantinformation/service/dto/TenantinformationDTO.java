@@ -43,7 +43,7 @@ public class TenantinformationDTO implements Serializable {
     private String thecontractdetails;
 
     // 部门id
-    private Long dept_id;
+    private Long deptId;
 
     // 部门id
     private Timestamp tenementdate;
