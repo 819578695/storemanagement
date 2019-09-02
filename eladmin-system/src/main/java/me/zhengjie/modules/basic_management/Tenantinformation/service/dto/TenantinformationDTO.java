@@ -45,6 +45,6 @@ public class TenantinformationDTO implements Serializable {
     // 部门id
     private Long deptId;
 
-    // 部门id
+    // 创建时间
     private Timestamp tenementdate;
 }

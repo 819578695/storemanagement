@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.thearchives.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.system.domain.Dept;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,9 +25,12 @@ public class BasicsPark implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    // 部门id关联
-    @Column(name = "dept_id")
-    private Long deptId;
+
+    // 部门id
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
+
 
     // 园区
     @Column(name = "garden")

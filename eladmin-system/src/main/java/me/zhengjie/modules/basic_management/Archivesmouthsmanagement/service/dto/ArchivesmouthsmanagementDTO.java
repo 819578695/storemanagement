@@ -32,7 +32,10 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
     //图片查看
     private String picturetoview;
 
-    //图片查看
+    //创建日期
     private Timestamp stalldate;
+
+    // 部门id
+    private Long deptId;
 
 }

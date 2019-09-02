@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.TenantinformationMapper;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +35,17 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Autowired
     private TenantinformationMapper tenantinformationMapper;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
     @Override
     public Object queryAll(TenantinformationQueryCriteria criteria, Pageable pageable){
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(tenantinformationMapper::toDto));
+        List<TenantinformationDTO> tenantinformations = new ArrayList<>();
+        for (Tenantinformation tenantinformation : page.getContent()){
+            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get()));
+        }
+        return PageUtil.toPage(tenantinformations,page.getTotalElements());
     }
 
     @Override

@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON;
 import me.zhengjie.domain.Picture;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.*;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkService;
@@ -19,7 +20,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +42,9 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     @Autowired
     private BasicsParkMapper basicsParkMapper;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
     public static final String SUCCESS = "success";
 
     public static final String CODE = "code";
@@ -48,7 +54,11 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     @Override
     public Object queryAll(BasicsParkQueryCriteria criteria, Pageable pageable){
         Page<BasicsPark> page = basicsParkRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(basicsParkMapper::toDto));
+        List<BasicsParkDTO> basicsParkDTOS = new ArrayList<>();
+        for (BasicsPark basicsPark : page.getContent()){
+            basicsParkDTOS.add(basicsParkMapper.toDto(basicsPark,deptRepository.findById(basicsPark.getDept().getId()).get()));
+        }
+        return PageUtil.toPage(basicsParkDTOS,page.getTotalElements());
     }
 
     @Override

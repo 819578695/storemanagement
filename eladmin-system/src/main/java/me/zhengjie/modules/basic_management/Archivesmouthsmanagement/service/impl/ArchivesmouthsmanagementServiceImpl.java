@@ -6,6 +6,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.Arc
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,10 +31,17 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Autowired
     private ArchivesmouthsmanagementMapper archivesmouthsmanagementMapper;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
     @Override
     public  Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
         Page<Archivesmouthsmanagement> page = archivesmouthsmanagementRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(archivesmouthsmanagementMapper::toDto));
+        List<ArchivesmouthsmanagementDTO> archivesmouthsmanagementDTOS = new ArrayList<>();
+        for (Archivesmouthsmanagement tenantinformation : page.getContent()){
+            archivesmouthsmanagementDTOS.add(archivesmouthsmanagementMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get()));
+        }
+        return PageUtil.toPage(archivesmouthsmanagementDTOS,page.getTotalElements());
     }
 
     @Override

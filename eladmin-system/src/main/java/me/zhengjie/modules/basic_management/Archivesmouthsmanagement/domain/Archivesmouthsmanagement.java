@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
+import me.zhengjie.modules.system.domain.Dept;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -24,9 +25,12 @@ public class Archivesmouthsmanagement implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private  Long id;
-    // 部门id关联
-    @Column(name = "dept_id")
-    private Long deptId;
+
+    // 部门id
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
+
 
     //门牌号
     @Column(name = "housenumber")

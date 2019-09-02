@@ -62,6 +62,7 @@ public class Tenantinformation implements Serializable {
     private String thecontractdetails;
 
     // 部门id
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
