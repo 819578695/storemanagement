@@ -94,42 +94,42 @@ public class ParkCostServiceImpl implements ParkCostService {
     public ParkCostDTO create(ParkCost resources) {
 
       ParkCost p = parkCostRepository.save(resources);
-        //房租
-        if ( resources.getSiteRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
-            journalAccountOfCapitalService.createByPostCost(p,"1",resources.getSiteRent());
-            }
-        }
-        //水费
-         if (resources.getWaterRent()!=null ){
-             if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
-            journalAccountOfCapitalService.createByPostCost(p,"7",resources.getWaterRent());
-            }
-         }
-        //电费
-         if (resources.getElectricityRent()!=null){
-             if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-             journalAccountOfCapitalService.createByPostCost(p,"8",resources.getElectricityRent());
-        }
-         }
-        //物业费
-        if (resources.getPropertyRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
-            journalAccountOfCapitalService.createByPostCost(p,"10",resources.getPropertyRent());
-        }
-        }
-        //税赋成本
-        if (resources.getTaxCost()!=null) {
-            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
-                journalAccountOfCapitalService.createByPostCost(p, "11", resources.getTaxCost());
-            }
-        }
-        //其他费用
-       if (resources.getOtherRent()!=null){
-           if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
-               journalAccountOfCapitalService.createByPostCost(p, "9", resources.getOtherRent());
-           }
-        }
+//        //房租
+//        if ( resources.getSiteRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+//            journalAccountOfCapitalService.createByPostCost(p,"1",resources.getSiteRent());
+//            }
+//        }
+//        //水费
+//         if (resources.getWaterRent()!=null ){
+//             if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+//            journalAccountOfCapitalService.createByPostCost(p,"7",resources.getWaterRent());
+//            }
+//         }
+//        //电费
+//         if (resources.getElectricityRent()!=null){
+//             if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+//             journalAccountOfCapitalService.createByPostCost(p,"8",resources.getElectricityRent());
+//        }
+//         }
+//        //物业费
+//        if (resources.getPropertyRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+//            journalAccountOfCapitalService.createByPostCost(p,"10",resources.getPropertyRent());
+//        }
+//        }
+//        //税赋成本
+//        if (resources.getTaxCost()!=null) {
+//            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+//                journalAccountOfCapitalService.createByPostCost(p, "11", resources.getTaxCost());
+//            }
+//        }
+//        //其他费用
+//       if (resources.getOtherRent()!=null){
+//           if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+//               journalAccountOfCapitalService.createByPostCost(p, "9", resources.getOtherRent());
+//           }
+//        }
         return parkCostMapper.toDto(p);
     }
 
@@ -140,46 +140,46 @@ public class ParkCostServiceImpl implements ParkCostService {
         ValidationUtil.isNull( optionalParkCost,"ParkCost","id",resources.getId());
         ParkCost parkCost = optionalParkCost.get();
         parkCost.copy(resources);
-        if ( resources.getSiteRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
-                        journalAccountOfCapitalService.createByPostCost(parkCost,"1",resources.getSiteRent());
-            }
-        }
-        //水费
-        if (resources.getWaterRent()!=null ){
-            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"7",resources.getWaterRent());
-
-            }
-        }
-        //电费
-        if (resources.getElectricityRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"8",resources.getElectricityRent());
-
-            }
-        }
-        //物业费
-        if (resources.getPropertyRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"10",resources.getPropertyRent());
-
-            }
-        }
-        //税赋成本
-        if (resources.getTaxCost()!=null) {
-            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"11",resources.getTaxCost());
-
-            }
-        }
-        //其他费用
-        if (resources.getOtherRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"9",resources.getOtherRent());
-
-            }
-        }
+//        if ( resources.getSiteRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+//                        journalAccountOfCapitalService.createByPostCost(parkCost,"1",resources.getSiteRent());
+//            }
+//        }
+//        //水费
+//        if (resources.getWaterRent()!=null ){
+//            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+//                    journalAccountOfCapitalService.createByPostCost(parkCost,"7",resources.getWaterRent());
+//
+//            }
+//        }
+//        //电费
+//        if (resources.getElectricityRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+//                    journalAccountOfCapitalService.createByPostCost(parkCost,"8",resources.getElectricityRent());
+//
+//            }
+//        }
+//        //物业费
+//        if (resources.getPropertyRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+//                    journalAccountOfCapitalService.createByPostCost(parkCost,"10",resources.getPropertyRent());
+//
+//            }
+//        }
+//        //税赋成本
+//        if (resources.getTaxCost()!=null) {
+//            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+//                    journalAccountOfCapitalService.createByPostCost(parkCost,"11",resources.getTaxCost());
+//
+//            }
+//        }
+//        //其他费用
+//        if (resources.getOtherRent()!=null){
+//            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+//                    journalAccountOfCapitalService.createByPostCost(parkCost,"9",resources.getOtherRent());
+//
+//            }
+//        }
         parkCostRepository.save(parkCost);
     }
 

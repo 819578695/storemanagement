@@ -1,21 +1,25 @@
 package me.zhengjie.modules.finance.service.impl;
 
-import me.zhengjie.modules.finance.domain.FinaceMargin;
-import me.zhengjie.utils.ValidationUtil;
-import me.zhengjie.modules.finance.repository.FinaceMarginRepository;
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.repository.ParkCostRepository;
+import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.finance.service.FinaceMarginService;
-import me.zhengjie.modules.finance.service.dto.FinaceMarginDTO;
-import me.zhengjie.modules.finance.service.dto.FinaceMarginQueryCriteria;
-import me.zhengjie.modules.finance.service.mapper.FinaceMarginMapper;
+import me.zhengjie.modules.finance.service.dto.MarginCostDTO;
+import me.zhengjie.modules.finance.service.dto.MarginPevenueDTO;
+import me.zhengjie.utils.QueryHelp;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
-import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
 * @author nmk
@@ -26,48 +30,33 @@ import me.zhengjie.utils.QueryHelp;
 public class FinaceMarginServiceImpl implements FinaceMarginService {
 
     @Autowired
-    private FinaceMarginRepository finaceMarginRepository;
-
+    private ParkPevenueRepository parkPevenueRepository;
     @Autowired
-    private FinaceMarginMapper finaceMarginMapper;
-
+    private ParkCostRepository parkCostRepository;
     @Override
-    public Object queryAll(FinaceMarginQueryCriteria criteria, Pageable pageable){
-        Page<FinaceMargin> page = finaceMarginRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(finaceMarginMapper::toDto));
+    public Object queryAll(Object criteria, Pageable pageable){
+        Page<ParkPevenue> pevenues = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder),pageable);
+        List costDTOS = new ArrayList<>();
+        //园区收入
+        for (ParkCost cost : costs.getContent()) {
+            MarginCostDTO marginCostDTO = new MarginCostDTO();
+            BeanUtils.copyProperties(cost, marginCostDTO);
+            costDTOS.add(marginCostDTO);
+        }
+        List parkPevenueDTOS = new ArrayList<>();
+        //园区成本
+        for (ParkPevenue pevenue : pevenues.getContent()){
+            MarginPevenueDTO marginPevenueDTO = new MarginPevenueDTO();
+            BeanUtils.copyProperties(pevenue, marginPevenueDTO);
+            parkPevenueDTOS.add(marginPevenueDTO);
+        }
+        HashMap map = new HashMap();
+        map.put("costs",costDTOS);
+        map.put("costsTotal",costs.getTotalElements());
+        map.put("pevenues",parkPevenueDTOS);
+        map.put("pevenuesTotal",pevenues.getTotalElements());
+        return map;
     }
 
-    @Override
-    public Object queryAll(FinaceMarginQueryCriteria criteria){
-        return finaceMarginMapper.toDto(finaceMarginRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
-    }
-
-    @Override
-    public FinaceMarginDTO findById(Long id) {
-        Optional<FinaceMargin> finaceMargin = finaceMarginRepository.findById(id);
-        ValidationUtil.isNull(finaceMargin,"FinaceMargin","id",id);
-        return finaceMarginMapper.toDto(finaceMargin.get());
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public FinaceMarginDTO create(FinaceMargin resources) {
-        return finaceMarginMapper.toDto(finaceMarginRepository.save(resources));
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void update(FinaceMargin resources) {
-        Optional<FinaceMargin> optionalFinaceMargin = finaceMarginRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalFinaceMargin,"FinaceMargin","id",resources.getId());
-        FinaceMargin finaceMargin = optionalFinaceMargin.get();
-        finaceMargin.copy(resources);
-        finaceMarginRepository.save(finaceMargin);
-    }
-
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void delete(Long id) {
-        finaceMarginRepository.deleteById(id);
-    }
 }
