@@ -34,7 +34,7 @@ public class ReceiptPaymentAccount implements Serializable {
 
     // 付款账号
     @Column(name = "payment_account_num")
-    private Integer paymentAccountNum;
+    private String paymentAccountNum;
 
     // 付款开户行
     @Column(name = "payment_bank")
@@ -46,7 +46,7 @@ public class ReceiptPaymentAccount implements Serializable {
 
     // 收款账号
     @Column(name = "receipt_account_num")
-    private Integer receiptAccountNum;
+    private String receiptAccountNum;
 
     // 收款开户行
     @Column(name = "receipt_bank")

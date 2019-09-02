@@ -20,13 +20,14 @@ import java.io.Serializable;
 public class FinanceMaintarinDetail implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
     // 交易账户类型
-    //@OneToOne
-    @Column(name = "trad_type_id")
-    private Long tradTypeId;
+    @OneToOne
+    @JoinColumn(name = "trad_type_id")
+    private DictDetail tradType;
 
     // 账户维护关联
     @Column(name = "maintain_id")

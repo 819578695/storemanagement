@@ -13,5 +13,5 @@ public class FinanceMaintainQueryCriteria{
 
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
-    private Long parkId;
+    private Long deptId;
 }

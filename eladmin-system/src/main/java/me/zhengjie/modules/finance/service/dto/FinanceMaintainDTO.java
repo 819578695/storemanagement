@@ -29,12 +29,18 @@ public class FinanceMaintainDTO implements Serializable {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long id;
 
-    // 园区id
-    private Long parkId;
+    // 部门id
+    private Long deptId;
+    //部门名称
+    private String deptName;
 
     // 余额
     private BigDecimal remaining;
 
     // 详情id
     private Long maintainDetail;
+
+
+
+
 }

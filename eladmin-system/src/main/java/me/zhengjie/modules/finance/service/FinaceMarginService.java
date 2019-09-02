@@ -1,19 +1,19 @@
-package me.zhengjie.modules.business.service;
+package me.zhengjie.modules.finance.service;
 
-import me.zhengjie.modules.business.domain.RentContract;
-import me.zhengjie.modules.business.service.dto.RentContractDTO;
-import me.zhengjie.modules.business.service.dto.RentContractQueryCriteria;
+import me.zhengjie.modules.finance.domain.FinaceMargin;
+import me.zhengjie.modules.finance.service.dto.FinaceMarginDTO;
+import me.zhengjie.modules.finance.service.dto.FinaceMarginQueryCriteria;
 //import org.springframework.cache.annotation.CacheConfig;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
 /**
-* @author kang
-* @date 2019-08-28
+* @author nmk
+* @date 2019-08-29
 */
-//@CacheConfig(cacheNames = "rentContract")
-public interface RentContractService {
+//@CacheConfig(cacheNames = "finaceMargin")
+public interface FinaceMarginService {
 
     /**
     * queryAll 分页
@@ -22,7 +22,7 @@ public interface RentContractService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(RentContractQueryCriteria criteria, Pageable pageable);
+    Object queryAll(FinaceMarginQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -30,10 +30,7 @@ public interface RentContractService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(RentContractQueryCriteria criteria);
-
-
-    Object findByDeptId(Long deptId);
+    public Object queryAll(FinaceMarginQueryCriteria criteria);
 
     /**
      * findById
@@ -41,7 +38,7 @@ public interface RentContractService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    RentContractDTO findById(Long id);
+    FinaceMarginDTO findById(Long id);
 
     /**
      * create
@@ -49,14 +46,14 @@ public interface RentContractService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    RentContractDTO create(RentContract resources);
+    FinaceMarginDTO create(FinaceMargin resources);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(RentContract resources);
+    void update(FinaceMargin resources);
 
     /**
      * delete

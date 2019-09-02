@@ -1,6 +1,9 @@
 package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.finance.domain.FinanceMaintain;
+import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
+import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
+import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FinanceMaintainRepository;
 import me.zhengjie.modules.finance.service.FinanceMaintainService;
@@ -11,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
@@ -33,10 +39,17 @@ public class FinanceMaintainServiceImpl implements FinanceMaintainService {
     @Autowired
     private FinanceMaintainMapper financeMaintainMapper;
 
+    @Autowired
+    private DeptRepository deptRepository;
+
     @Override
     public Object queryAll(FinanceMaintainQueryCriteria criteria, Pageable pageable){
         Page<FinanceMaintain> page = financeMaintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(financeMaintainMapper::toDto));
+        List<FinanceMaintainDTO> FinanceMaintainDTOs = new ArrayList<>();
+        for (FinanceMaintain financeMaintain : page.getContent()) {
+            FinanceMaintainDTOs.add(financeMaintainMapper.toDTO(financeMaintain , deptRepository.findById(financeMaintain.getDept().getId()).get()));
+        }
+        return PageUtil.toPage(FinanceMaintainDTOs,page.getTotalElements());
     }
 
     @Override
@@ -55,7 +68,7 @@ public class FinanceMaintainServiceImpl implements FinanceMaintainService {
     @Transactional(rollbackFor = Exception.class)
     public FinanceMaintainDTO create(FinanceMaintain resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId()); 
+        resources.setId(snowflake.nextId());
         return financeMaintainMapper.toDto(financeMaintainRepository.save(resources));
     }
 

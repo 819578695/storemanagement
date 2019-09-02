@@ -34,8 +34,11 @@ public class ParkPevenueDTO implements Serializable {
     // 物业费
     private BigDecimal propertyRent;
 
-    // 水电费
-    private BigDecimal waterElectricityRent;
+    // 水费
+    private BigDecimal waterRent;
+
+    //电费
+    private BigDecimal electricityRent;
 
     // 卫生费
     private BigDecimal sanitationRent;
@@ -79,6 +82,11 @@ public class ParkPevenueDTO implements Serializable {
     //园区名称
     private String basicsParkName;
 
+    //合同名称
+    private String leaseContractName;
+
+    //合同id
+    private Long leaseContractId;
 
 
 }

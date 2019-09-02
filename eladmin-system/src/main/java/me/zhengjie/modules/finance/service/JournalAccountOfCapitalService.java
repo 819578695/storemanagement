@@ -1,5 +1,7 @@
 package me.zhengjie.modules.finance.service;
 
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
 import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
 import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalQueryCriteria;
@@ -7,6 +9,8 @@ import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalQueryCrite
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+
+import java.math.BigDecimal;
 
 /**
 * @author nmk
@@ -49,11 +53,41 @@ public interface JournalAccountOfCapitalService {
     JournalAccountOfCapitalDTO create(JournalAccountOfCapital resources);
 
     /**
+     * create
+     * @param resources
+     * @return
+     */
+    //@CacheEvict(allEntries = true)新增成本
+    JournalAccountOfCapitalDTO createByPostCost(ParkCost resources, String value, BigDecimal money);
+
+    /**
+     * create
+     * @param resources
+     * @return
+     */
+    //@CacheEvict(allEntries = true)新增收入
+    JournalAccountOfCapitalDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money);
+
+    /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
     void update(JournalAccountOfCapital resources);
+
+    /**
+     * update
+     * @param resources
+     */
+    //@CacheEvict(allEntries = true)
+    void updateByPostCost(ParkCost resources, String value, BigDecimal money);
+
+    /**
+     * update
+     * @param resources
+     */
+    //@CacheEvict(allEntries = true)
+    void updateByPostPevenue(ParkPevenue resources, String value, BigDecimal money);
 
     /**
      * delete

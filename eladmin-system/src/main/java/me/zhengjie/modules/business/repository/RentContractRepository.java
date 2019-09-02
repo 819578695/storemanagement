@@ -4,9 +4,13 @@ import me.zhengjie.modules.business.domain.RentContract;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
+import java.util.List;
+
 /**
 * @author kang
 * @date 2019-08-28
 */
 public interface RentContractRepository extends JpaRepository<RentContract, Long>, JpaSpecificationExecutor {
+
+    List<RentContract> findByDeptId(Long deptId);
 }

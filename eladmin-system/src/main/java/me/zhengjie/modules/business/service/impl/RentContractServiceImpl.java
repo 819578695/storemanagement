@@ -1,6 +1,8 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
+import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.service.mapper.DeptMapper;
 import me.zhengjie.utils.ValidationUtil;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,12 +40,21 @@ public class RentContractServiceImpl implements RentContractService {
     private RentContractMapper rentContractMapper;
     @Autowired
     private DeptRepository deptRepository;
+    @Autowired
+    private ParkCostRepository parkCostRepository;
 
     @Override
     public Object queryAll(RentContractQueryCriteria criteria, Pageable pageable){
         Page<RentContract> page = rentContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<RentContractDTO> rentContractDTOS = new ArrayList<>();
         for (RentContract rentContract : page.getContent()) {
+            List<ParkCost> parkCosts = parkCostRepository.findByRentContractId(rentContract.getId());
+            BigDecimal totalMoney = new BigDecimal(0);
+            for (ParkCost parkCost :parkCosts) {
+                //bigdecimal 求和(未缴费用)
+                totalMoney = totalMoney.add(parkCost.getSiteRent());
+                rentContract.setPaymentedExpenses(totalMoney);
+            }
             rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId())));
         }
         return PageUtil.toPage(rentContractDTOS,page.getTotalElements());
@@ -51,6 +63,11 @@ public class RentContractServiceImpl implements RentContractService {
     @Override
     public Object queryAll(RentContractQueryCriteria criteria){
         return rentContractMapper.toDto(rentContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    }
+
+    @Override
+    public Object findByDeptId(Long deptId) {
+        return rentContractMapper.toDto(deptId==1?rentContractRepository.findAll():rentContractRepository.findByDeptId(deptId));
     }
 
     @Override

@@ -33,6 +33,14 @@ public class LeaseContractController {
         return new ResponseEntity(leaseContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @Log("根据部门查询RentContract")
+    @ApiOperation(value = "根据部门RentContract")
+    @GetMapping(value = "/leaseContractByDeptId/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','LEASECONTRACT_ALL','LEASECONTRACT_SELECT')")
+    public ResponseEntity leaseContractByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(leaseContractService.findByDeptId(deptId),HttpStatus.OK);
+    }
+
     @Log("新增LeaseContract")
     @ApiOperation(value = "新增LeaseContract")
     @PostMapping(value = "/leaseContract")

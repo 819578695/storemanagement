@@ -33,6 +33,15 @@ public class RentContractController {
         return new ResponseEntity(rentContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @Log("根据部门查询RentContract")
+    @ApiOperation(value = "根据部门RentContract")
+    @GetMapping(value = "/rentContractByDeptId/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_SELECT')")
+    public ResponseEntity rentContractByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(rentContractService.findByDeptId(deptId),HttpStatus.OK);
+    }
+
+
     @Log("新增RentContract")
     @ApiOperation(value = "新增RentContract")
     @PostMapping(value = "/rentContract")

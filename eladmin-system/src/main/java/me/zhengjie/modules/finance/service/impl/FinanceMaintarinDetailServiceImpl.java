@@ -1,6 +1,7 @@
 package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.finance.domain.FinanceMaintarinDetail;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FinanceMaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.FinanceMaintarinDetailService;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
@@ -33,10 +37,17 @@ public class FinanceMaintarinDetailServiceImpl implements FinanceMaintarinDetail
     @Autowired
     private FinanceMaintarinDetailMapper financeMaintarinDetailMapper;
 
+    @Autowired
+    private DictDetailRepository dictDetailRepository;
+
     @Override
     public Object queryAll(FinanceMaintarinDetailQueryCriteria criteria, Pageable pageable){
         Page<FinanceMaintarinDetail> page = financeMaintarinDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        return PageUtil.toPage(page.map(financeMaintarinDetailMapper::toDto));
+        List<FinanceMaintarinDetailDTO> financeMaintarinDetailDTOS = new ArrayList<>();
+        for (FinanceMaintarinDetail financeMaintarinDetail : page.getContent()) {
+            financeMaintarinDetailDTOS.add(financeMaintarinDetailMapper.toDTO(financeMaintarinDetail , dictDetailRepository.findById(financeMaintarinDetail.getTradType().getId()).get()));
+        }
+        return PageUtil.toPage(financeMaintarinDetailDTOS,page.getTotalElements());
     }
 
     @Override
@@ -55,7 +66,7 @@ public class FinanceMaintarinDetailServiceImpl implements FinanceMaintarinDetail
     @Transactional(rollbackFor = Exception.class)
     public FinanceMaintarinDetailDTO create(FinanceMaintarinDetail resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId()); 
+        resources.setId(snowflake.nextId());
         return financeMaintarinDetailMapper.toDto(financeMaintarinDetailRepository.save(resources));
     }
 

@@ -6,6 +6,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.service.dto.DeptDTO;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -27,6 +28,7 @@ public class JournalAccountOfCapital implements Serializable {
     private Long id;
 
     // 交易日期
+    @CreationTimestamp
     @Column(name = "trad_date",nullable = false)
     private Timestamp tradDate;
 
@@ -61,8 +63,9 @@ public class JournalAccountOfCapital implements Serializable {
     /**
      * 部门ID
      */
-    @Column(name = "dept_id",nullable = false)
-    private Long deptId;
+    @OneToOne
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     /**
      * 交易类型
@@ -77,6 +80,10 @@ public class JournalAccountOfCapital implements Serializable {
     @OneToOne
     @JoinColumn(name = "tally_type_id")
     private DictDetail tallyType;
+
+    @Column(name = "park_cost_pevenue_id")
+    private Long parkCostPevenueId;
+
 
     /**
      * 类型

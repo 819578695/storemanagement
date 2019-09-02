@@ -21,6 +21,8 @@ public class FinanceMaintarinDetailDTO implements Serializable {
 
     // 交易账户类型
     private Long tradTypeId;
+    //交易账户名称
+    private String tradTypeLabel;
 
     // 账户维护关联
     private Long maintainId;
@@ -30,7 +32,4 @@ public class FinanceMaintarinDetailDTO implements Serializable {
 
     // 最近交易日期
     private Timestamp transactionDate;
-
-    //交易类型label
-//    private String tradTypeLabel;
 }
