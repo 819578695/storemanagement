@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.system.domain.Dept;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -61,8 +62,8 @@ public class Tenantinformation implements Serializable {
     private String thecontractdetails;
 
     // 部门id
-    @Column(name = "dept_id")
-    private Long deptId;
+    @JoinColumn(name = "dept_id")
+    private Dept dept;
 
     // 创建时间
     @CreationTimestamp
