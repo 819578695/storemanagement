@@ -2,6 +2,7 @@ package me.zhengjie.utils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -148,5 +149,15 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
             w = 0;
         }
         return weekDays[w];
+    }
+
+    /**
+     * 获得当天是周几
+     */
+    public static Boolean iseqBigDecimal(BigDecimal bigDecimal){
+       if(bigDecimal.compareTo(BigDecimal.ZERO)!=0){
+           return true;
+       }
+        return false;
     }
 }
