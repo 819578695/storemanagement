@@ -78,6 +78,11 @@ public class ParkCost implements Serializable {
     @JoinColumn(name = "rent_contract_id")
     private RentContract rentContract;
 
+    //收付款信息
+    @OneToOne
+    @JoinColumn(name = "receipt_payment_account_id")
+    private ReceiptPaymentAccount receiptPaymentAccount;
+
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
