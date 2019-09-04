@@ -61,4 +61,10 @@ public class ParkCostDTO implements Serializable {
 
     //合同id
     private Long rentContractId;
+
+    // 收付款信息
+    private Long receiptPaymentAccountId;
+
+    //收付款类型名称
+    private  String receiptPaymentAccountName;
 }
