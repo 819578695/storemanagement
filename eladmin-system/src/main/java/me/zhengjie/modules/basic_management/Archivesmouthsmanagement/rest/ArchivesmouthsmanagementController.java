@@ -4,6 +4,9 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.ResponseModel;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.wechat;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+
+import java.util.Map;
 
 @Api(tags = "Tenantinformation管理")
 @RestController
@@ -77,5 +82,31 @@ public class ArchivesmouthsmanagementController {
         archivesmouthsmanagementService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    /*@GetMapping(value = "/index")
+    public ResponseModel index(String iv, String encryptedData, String code) {
+        if (StringUtils.isEmpty(encryptedData) || StringUtils.isEmpty(iv)|| StringUtils.isEmpty(code)) {
+            return ResponseModel.error("参数错误");
+        }
+        // 获取sessionKey
+        Map<Object, Object> map = wechat.getInfo(code);
+        if (map == null) {
+            return ResponseModel.error("获取sessionKey失败");
+        }
+        String sessionKey = map.get("sessionKey").toString();
+        Map<String, Object> childMap = wechat.getUserInfo(encryptedData, iv, sessionKey);
+        Archivesmouthsmanagement record = new Archivesmouthsmanagement();
+        if(StringUtils.isNotEmpty(childMap.get("contacts").toString())) {
+            record.setContacts(childMap.get("contacts").toString());
+        }
+        if(StringUtils.isNotEmpty(childMap.get("leasetype").toString())) {
+            record.setLeasetype(childMap.get("leasetype").toString());
+        }
+        if(StringUtils.isNotEmpty(childMap.get("picturetoview").toString())) {
+            record.setPicturetoview(childMap.get("picturetoview").toString());
+        }
+        archivesmouthsmanagementService.publicQuery(record);
+        return ResponseModel.success(childMap);
+    }*/
 
 }

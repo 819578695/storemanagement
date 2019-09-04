@@ -17,6 +17,8 @@ public interface ArchivesmouthsmanagementService {
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable);
 
+    Object publicQuery(ArchivesmouthsmanagementQueryCriteria criteria);
+
     /**
      * queryAll 不分页
      * @param criteria

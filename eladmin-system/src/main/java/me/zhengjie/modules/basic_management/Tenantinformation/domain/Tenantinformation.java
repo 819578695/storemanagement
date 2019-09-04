@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -30,8 +31,9 @@ public class Tenantinformation implements Serializable {
     private String area;
 
     // 档口/电商楼
-    @Column(name = "stall")
-    private String stall;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "stall_type")
+    private DictDetail dictDetail;
 
     // 房号(门牌号)
     @Column(name = "roomnumber")

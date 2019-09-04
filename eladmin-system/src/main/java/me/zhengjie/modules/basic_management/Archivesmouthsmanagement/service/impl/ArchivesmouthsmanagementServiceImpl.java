@@ -7,6 +7,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
@@ -32,16 +33,25 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private ArchivesmouthsmanagementMapper archivesmouthsmanagementMapper;
 
     @Autowired
+    private DictDetailRepository dictDetailRepository;
+
+    @Autowired
     private DeptRepository deptRepository;
 
     @Override
     public  Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
         Page<Archivesmouthsmanagement> page = archivesmouthsmanagementRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ArchivesmouthsmanagementDTO> archivesmouthsmanagementDTOS = new ArrayList<>();
-        for (Archivesmouthsmanagement tenantinformation : page.getContent()){
-            archivesmouthsmanagementDTOS.add(archivesmouthsmanagementMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get()));
+        for (Archivesmouthsmanagement archivesmouthsmanagement : page.getContent()){
+            archivesmouthsmanagementDTOS.add(archivesmouthsmanagementMapper.toDto(archivesmouthsmanagement,deptRepository.findById(archivesmouthsmanagement.getDept().getId()).get(),dictDetailRepository.findById(archivesmouthsmanagement.getDictDetail().getId()).get()));
         }
         return PageUtil.toPage(archivesmouthsmanagementDTOS,page.getTotalElements());
+    }
+
+    @Override
+    public  Object publicQuery(ArchivesmouthsmanagementQueryCriteria criteria){
+        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+
     }
 
     @Override
