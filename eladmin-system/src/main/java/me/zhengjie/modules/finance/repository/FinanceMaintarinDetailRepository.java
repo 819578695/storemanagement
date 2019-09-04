@@ -13,4 +13,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface FinanceMaintarinDetailRepository extends JpaRepository<FinanceMaintarinDetail, Long>, JpaSpecificationExecutor {
     @Query(value = "select id from finance_maintarin_detail f where f.trad_type_id= ? AND f.maintain_id= ?" , nativeQuery = true)
     Long  getDetailByDeptAndAndMaintainId(long tardTypeId , Long maintainId);
+    FinanceMaintarinDetail findByTradTypeIdAndDeptId(Long typeId,Long deptId);
 }
