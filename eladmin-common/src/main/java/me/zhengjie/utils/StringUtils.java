@@ -152,12 +152,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     }
 
     /**
-     * 获得当天是周几
+     * 判断bigdecimal类型是否为0
      */
     public static Boolean iseqBigDecimal(BigDecimal bigDecimal){
        if(bigDecimal.compareTo(BigDecimal.ZERO)!=0){
            return true;
        }
         return false;
+    }
+
+    /**
+     * 判断bigdecimal类型是否为空转为double计算
+     */
+    public static Double isNotNullBigDecimal(BigDecimal bigDecimal){
+        if(bigDecimal==null){
+            return 0.00;
+        }
+        return bigDecimal.doubleValue();
     }
 }
