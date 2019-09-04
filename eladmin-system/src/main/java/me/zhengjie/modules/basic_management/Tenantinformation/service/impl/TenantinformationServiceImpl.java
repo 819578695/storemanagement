@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.TenantinformationMapper;
 import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
@@ -36,6 +37,9 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     private TenantinformationMapper tenantinformationMapper;
 
     @Autowired
+    private DictDetailRepository dictDetailRepository;
+
+    @Autowired
     private DeptRepository deptRepository;
 
     @Override
@@ -43,7 +47,7 @@ public class TenantinformationServiceImpl implements TenantinformationService {
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<TenantinformationDTO> tenantinformations = new ArrayList<>();
         for (Tenantinformation tenantinformation : page.getContent()){
-            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get()));
+            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get()));
         }
         return PageUtil.toPage(tenantinformations,page.getTotalElements());
     }

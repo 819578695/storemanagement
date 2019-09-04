@@ -19,7 +19,10 @@ public class TenantinformationDTO implements Serializable {
     private String area;
 
     // 档口/电商楼
-    private String stall;
+    private Long stalltype;
+
+    //档口名称
+    private String stalltypeName;
 
     // 房号(门牌号)
     private Long roomnumber;

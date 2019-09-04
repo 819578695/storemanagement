@@ -27,7 +27,10 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
     private String contacts;
 
     //租用类型
-    private String leasetype;
+    private Long stalltype;
+
+    //档口名称
+    private String stalltypeName;
 
     //图片查看
     private String picturetoview;

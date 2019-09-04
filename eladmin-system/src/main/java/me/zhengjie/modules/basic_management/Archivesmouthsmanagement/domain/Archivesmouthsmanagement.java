@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -53,8 +54,9 @@ public class Archivesmouthsmanagement implements Serializable {
     private String contacts;
 
     //租用类型
-    @Column(name = "leasetype")
-    private String leasetype;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "stall_type")
+    private DictDetail dictDetail;
 
     //图片查看
     @Column(name = "picturetoview")
