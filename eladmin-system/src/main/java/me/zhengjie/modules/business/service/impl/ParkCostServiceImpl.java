@@ -1,5 +1,6 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
@@ -106,15 +107,16 @@ public class ParkCostServiceImpl implements ParkCostService {
 
 
 
-      ParkCost p = parkCostRepository.save(resources);
-      if (p!=null){
+      ParkCost p =resources ;
+      if (resources!=null){
            //根据支付方式和部门查询账户详情
             FinanceMaintarinDetail financeMaintarinDetails =financeMaintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
             //修改账户详情的余额
-          BigDecimal totalMoney = new BigDecimal(0);
-          financeMaintarinDetails.setRemaining(new BigDecimal(financeMaintarinDetails.getRemaining().doubleValue()+p.getElectricityRent().doubleValue()+p.getTaxCost().doubleValue()));
-            financeMaintainDetailRepository.save(financeMaintarinDetails);
+          Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
 
+          financeMaintarinDetails.setRemaining(new BigDecimal(financeMaintarinDetails.getRemaining().doubleValue()+price));
+          parkCostRepository.save(resources);
+          financeMaintainDetailRepository.save(financeMaintarinDetails);
       //房租
         if ( resources.getSiteRent()!=null){
             if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
@@ -177,51 +179,58 @@ public class ParkCostServiceImpl implements ParkCostService {
                     //修改账户详情的余额
                     financeMaintarinDetails.setRemaining(Difference);
                     financeMaintainDetailRepository.save(financeMaintarinDetails);
+                    parkCost.copy(resources);
+                    parkCostRepository.save(parkCost);
+                    //修改资金流水
+                    if ( resources.getSiteRent()!=null){
+                        if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"1",resources.getSiteRent());
+                        }
+                    }
+                    //水费
+                    if (resources.getWaterRent()!=null ){
+                        if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"7",resources.getWaterRent());
+
+                        }
+                    }
+                    //电费
+                    if (resources.getElectricityRent()!=null){
+                        if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"8",resources.getElectricityRent());
+
+                        }
+                    }
+                    //物业费
+                    if (resources.getPropertyRent()!=null){
+                        if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"10",resources.getPropertyRent());
+
+                        }
+                    }
+                    //税赋成本
+                    if (resources.getTaxCost()!=null) {
+                        if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"11",resources.getTaxCost());
+
+                        }
+                    }
+                    //其他费用
+                    if (resources.getOtherRent()!=null){
+                        if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+                            journalAccountOfCapitalService.createByPostCost(parkCost,"9",resources.getOtherRent());
+
+                        }
+                    }
+
                 }
-            }
+                else{
+                    throw new BadRequestException("账户余额不足");
 
-            parkCost.copy(resources);
-       if ( resources.getSiteRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
-                        journalAccountOfCapitalService.createByPostCost(parkCost,"1",resources.getSiteRent());
-            }
-        }
-        //水费
-        if (resources.getWaterRent()!=null ){
-            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"7",resources.getWaterRent());
+                }
 
             }
-        }
-        //电费
-        if (resources.getElectricityRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"8",resources.getElectricityRent());
 
-            }
-        }
-        //物业费
-        if (resources.getPropertyRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"10",resources.getPropertyRent());
-
-            }
-        }
-        //税赋成本
-        if (resources.getTaxCost()!=null) {
-            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"11",resources.getTaxCost());
-
-            }
-        }
-       //其他费用
-        if (resources.getOtherRent()!=null){
-            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
-                    journalAccountOfCapitalService.createByPostCost(parkCost,"9",resources.getOtherRent());
-
-           }
-         }
-            parkCostRepository.save(parkCost);
         }
 
     }
