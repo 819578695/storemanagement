@@ -12,6 +12,6 @@ import java.util.List;
 */
 public interface ParkCostRepository extends JpaRepository<ParkCost, Long>, JpaSpecificationExecutor {
 
-    List<ParkCost> findByRentContractId(Long id);
+    List<ParkCost> findByRentContractIdAndDeptId(Long id,Long deptId);
 
 }

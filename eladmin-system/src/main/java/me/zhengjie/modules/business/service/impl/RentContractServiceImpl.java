@@ -48,7 +48,7 @@ public class RentContractServiceImpl implements RentContractService {
         Page<RentContract> page = rentContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<RentContractDTO> rentContractDTOS = new ArrayList<>();
         for (RentContract rentContract : page.getContent()) {
-            List<ParkCost> parkCosts = parkCostRepository.findByRentContractId(rentContract.getId());
+            List<ParkCost> parkCosts = parkCostRepository.findByRentContractIdAndDeptId(rentContract.getId(),rentContract.getDept().getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for (ParkCost parkCost :parkCosts) {
                 //bigdecimal 求和(未缴费用)

@@ -60,7 +60,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<LeaseContractDTO> leaseContractDTOS = new ArrayList<>();
         for (LeaseContract leaseContract : page.getContent()) {
-            List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractId(leaseContract.getId());
+            List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractIdAndDeptId(leaseContract.getId(),leaseContract.getDept().getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for(ParkPevenue parkPevenue : parkPevenues){
                 //bigdecimal 求和(未缴费用)

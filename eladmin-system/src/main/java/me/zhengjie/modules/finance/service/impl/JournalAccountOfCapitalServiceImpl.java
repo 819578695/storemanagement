@@ -1,10 +1,13 @@
 package me.zhengjie.modules.finance.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.finance.domain.FinanceMaintarinDetail;
 import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
+import me.zhengjie.modules.finance.repository.FinanceMaintarinDetailRepository;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
@@ -55,6 +58,8 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
 
     @Autowired
     private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
+    @Autowired
+    private FinanceMaintarinDetailRepository financeMaintarinDetailRepository;
 
     @Override
     public Object queryAll(JournalAccountOfCapitalQueryCriteria criteria, Pageable pageable){
@@ -91,23 +96,39 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
         DictDetail TradType = resources.getDictDetail();//支付方式
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1");//支出
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//支出
-
-        //根据交易类型以及成本id查询是否有对应费用
-        JournalAccountOfCapital journalAccountOfCapital=journalAccountOfCapitalRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId(),resources.getId());
-        //如果为空则添加
-        if (journalAccountOfCapital==null){
-              journalAccountOfCapital=new JournalAccountOfCapital();
-          }
-        journalAccountOfCapital.setDept(dept);//部门
-        journalAccountOfCapital.setParkCostPevenueId(resources.getId());//成本收入id
-        journalAccountOfCapital.setMoney(money);//交易金额
-        journalAccountOfCapital.setTradType(TradType);//支付方式
-        journalAccountOfCapital.setTypeDict(typeDict);//交易类型
-        journalAccountOfCapital.setTallyType(tallyType);//收入支出项
-        journalAccountOfCapitalRepository.save(journalAccountOfCapital);
-
-
-
+        //根据部门id和支付方式查询账户金额
+        FinanceMaintarinDetail financeMaintarinDetail=financeMaintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+        JournalAccountOfCapital journalAccountOfCapital=journalAccountOfCapitalRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"2").getId(),resources.getId());
+        if (financeMaintarinDetail!=null)
+        {
+            //账户余额和支出金额判断
+            if (financeMaintarinDetail.getRemaining().doubleValue()>=money.doubleValue())
+                {
+                    //根据交易类型以及成本id查询是否有对应费用
+                    //如果为空则添加
+                    if (journalAccountOfCapital==null){
+                        journalAccountOfCapital=new JournalAccountOfCapital();
+                    }
+                    //查询收付款信息
+                    ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
+                    journalAccountOfCapital.setUrrentBalance(financeMaintarinDetail.getRemaining().subtract(money));//发生交易后的金额
+                    journalAccountOfCapital.setDept(dept);//部门
+                    journalAccountOfCapital.setParkCostPevenueId(resources.getId());//成本收入id
+                    journalAccountOfCapital.setMoney(money);//交易金额
+                    journalAccountOfCapital.setTradType(TradType);//支付方式
+                    journalAccountOfCapital.setTypeDict(typeDict);//交易类型
+                    journalAccountOfCapital.setTallyType(tallyType);//收入支出项
+                    journalAccountOfCapital.setReceiptPaymentName(receiptPaymentAccount.getPaymentAccount());//付款信息
+                    journalAccountOfCapital.setBackAccount(receiptPaymentAccount.getPaymentAccountNum());//银行账号
+                    journalAccountOfCapital.setBackNum(receiptPaymentAccount.getPaymentAccount());//开户名
+                }
+            else{
+                throw new BadRequestException("账户余额不足,无法操作");
+            }
+        }
+        else{
+            throw new BadRequestException("请先新建账户余额");
+        }
         return journalAccountOfCapitalMapper.toDto(journalAccountOfCapitalRepository.save(journalAccountOfCapital));
     }
 
@@ -117,18 +138,34 @@ public class JournalAccountOfCapitalServiceImpl implements JournalAccountOfCapit
         DictDetail TradType = resources.getDictDetail();//支付方式
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0");//收入
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);
-        JournalAccountOfCapital journalAccountOfCapital = new JournalAccountOfCapital();
-        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
-        journalAccountOfCapital.setReceiptPaymentName(receiptPaymentAccount.getReceiptAccount());//收付款信息
-        journalAccountOfCapital.setBackAccount(receiptPaymentAccount.getReceiptAccountNum());//银行账号
-        journalAccountOfCapital.setBackNum(receiptPaymentAccount.getReceiptBank());//开户名
-        journalAccountOfCapital.setDept(dept);//部门
-        journalAccountOfCapital.setParkCostPevenueId(resources.getId());//成本收入id
-        journalAccountOfCapital.setMoney(money);//交易金额
-        journalAccountOfCapital.setTradType(TradType);//支付方式
-        journalAccountOfCapital.setTypeDict(typeDict);//交易类型
-        journalAccountOfCapital.setTallyType(tallyType);//收入支出项
-        journalAccountOfCapitalRepository.save(journalAccountOfCapital);
+        //根据部门id和支付方式查询账户金额
+        FinanceMaintarinDetail financeMaintarinDetail=financeMaintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+        //根据交易类型以及收入id查询是否有对应费用
+        JournalAccountOfCapital journalAccountOfCapital=journalAccountOfCapitalRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId(),resources.getId());
+        if (financeMaintarinDetail!=null){
+            //默认修改(根据资金流水里的金额和修改之后的金额并修改后的账户余额)
+            BigDecimal a= journalAccountOfCapital.getMoney().subtract(money).add(journalAccountOfCapital.getUrrentBalance());
+            //如果为空则添加
+            if (journalAccountOfCapital==null){
+                a = financeMaintarinDetail.getRemaining().add(money);
+                journalAccountOfCapital=new JournalAccountOfCapital();
+            }
+            ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
+            journalAccountOfCapital.setReceiptPaymentName(receiptPaymentAccount.getReceiptAccount());//收付款信息
+            journalAccountOfCapital.setBackAccount(receiptPaymentAccount.getReceiptAccountNum());//银行账号
+            journalAccountOfCapital.setBackNum(receiptPaymentAccount.getReceiptBank());//开户名
+
+            journalAccountOfCapital.setUrrentBalance(a);//发生交易后的金额
+            journalAccountOfCapital.setDept(dept);//部门
+            journalAccountOfCapital.setParkCostPevenueId(resources.getId());//成本收入id
+            journalAccountOfCapital.setMoney(money);//交易金额
+            journalAccountOfCapital.setTradType(TradType);//支付方式
+            journalAccountOfCapital.setTypeDict(typeDict);//交易类型
+            journalAccountOfCapital.setTallyType(tallyType);//收入支出项
+        }
+        else{
+            throw new BadRequestException("请先新建账户余额");
+        }
 
         return journalAccountOfCapitalMapper.toDto(journalAccountOfCapitalRepository.save(journalAccountOfCapital));
     }
