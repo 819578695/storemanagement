@@ -42,12 +42,21 @@ public class FinanceMaintarinDetailServiceImpl implements FinanceMaintarinDetail
 
     @Override
     public Object queryAll(FinanceMaintarinDetailQueryCriteria criteria, Pageable pageable){
-        Page<FinanceMaintarinDetail> page = financeMaintarinDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+        Page<FinanceMaintarinDetail> page = financeMaintarinDetailRepository.findAllByDept(criteria.getDeptId(),pageable);
         List<FinanceMaintarinDetailDTO> financeMaintarinDetailDTOS = new ArrayList<>();
         for (FinanceMaintarinDetail financeMaintarinDetail : page.getContent()) {
-            financeMaintarinDetailDTOS.add(financeMaintarinDetailMapper.toDTO(financeMaintarinDetail , dictDetailRepository.findById(financeMaintarinDetail.getTradType().getId()).get()));
+            FinanceMaintarinDetailDTO dto = financeMaintarinDetailMapper.toDTO(financeMaintarinDetail, dictDetailRepository.findById(financeMaintarinDetail.getTradType().getId()).get());
+            dto.setDeptId(financeMaintarinDetail.getDept().getId());
+            dto.setDeptName(financeMaintarinDetail.getDept().getName());
+            financeMaintarinDetailDTOS.add(dto);
         }
         return PageUtil.toPage(financeMaintarinDetailDTOS,page.getTotalElements());
+//        Page<FinanceMaintarinDetail> page = financeMaintarinDetailRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
+//        List<FinanceMaintarinDetailDTO> financeMaintarinDetailDTOS = new ArrayList<>();
+//        for (FinanceMaintarinDetail financeMaintarinDetail : page.getContent()) {
+//            financeMaintarinDetailDTOS.add(financeMaintarinDetailMapper.toDTO(financeMaintarinDetail , dictDetailRepository.findById(financeMaintarinDetail.getTradType().getId()).get()));
+//        }
+//        return PageUtil.toPage(financeMaintarinDetailDTOS,page.getTotalElements());
     }
 
     @Override
@@ -66,8 +75,11 @@ public class FinanceMaintarinDetailServiceImpl implements FinanceMaintarinDetail
     @Transactional(rollbackFor = Exception.class)
     public FinanceMaintarinDetailDTO create(FinanceMaintarinDetail resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
-        resources.setId(snowflake.nextId());
-        return financeMaintarinDetailMapper.toDto(financeMaintarinDetailRepository.save(resources));
+        if (queryExist(resources)){
+            resources.setId(snowflake.nextId());
+            return financeMaintarinDetailMapper.toDto(financeMaintarinDetailRepository.save(resources));
+        }
+        return new FinanceMaintarinDetailDTO();
     }
 
     @Override
@@ -80,9 +92,20 @@ public class FinanceMaintarinDetailServiceImpl implements FinanceMaintarinDetail
         financeMaintarinDetailRepository.save(financeMaintarinDetail);
     }
 
+    //校验是否存在
+    public boolean queryExist(FinanceMaintarinDetail resources){
+        Boolean b = false;
+        if (financeMaintarinDetailRepository.getDetailByDeptAndAndMaintainId(resources.getTradType().getId(),resources.getMaintainId()) != null){
+            b=true;
+        }
+        return b;
+    };
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         financeMaintarinDetailRepository.deleteById(id);
     }
 }
+
+

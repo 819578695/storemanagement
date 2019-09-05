@@ -1,8 +1,6 @@
 package me.zhengjie.modules.finance.service.dto;
 
 import lombok.Data;
-import java.sql.Timestamp;
-import java.math.BigDecimal;
 import me.zhengjie.annotation.Query;
 
 /**
@@ -11,4 +9,6 @@ import me.zhengjie.annotation.Query;
 */
 @Data
 public class FinanceMaintarinDetailQueryCriteria{
+    @Query(type = Query.Type.EQUAL)
+    private Long deptId;
 }

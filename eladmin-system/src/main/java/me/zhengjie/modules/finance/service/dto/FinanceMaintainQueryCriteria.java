@@ -1,7 +1,6 @@
 package me.zhengjie.modules.finance.service.dto;
 
 import lombok.Data;
-import java.math.BigDecimal;
 import me.zhengjie.annotation.Query;
 
 /**
@@ -11,7 +10,6 @@ import me.zhengjie.annotation.Query;
 @Data
 public class FinanceMaintainQueryCriteria{
 
-    // 模糊
-    @Query(type = Query.Type.INNER_LIKE)
+    @Query(type = Query.Type.EQUAL)
     private Long deptId;
 }

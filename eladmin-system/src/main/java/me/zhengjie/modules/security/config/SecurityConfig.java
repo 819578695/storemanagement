@@ -105,7 +105,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // swagger end
 
                 // 接口限流测试
-                .antMatchers("/test/**").anonymous()
+                .antMatchers("/testMaintain/**").anonymous()
                 .antMatchers(HttpMethod.OPTIONS, "/**").anonymous()
 
                 .antMatchers("/druid/**").anonymous()

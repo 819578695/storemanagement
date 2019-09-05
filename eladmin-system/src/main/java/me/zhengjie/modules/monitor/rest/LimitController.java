@@ -19,7 +19,7 @@ public class LimitController {
     /**
      * 测试限流注解，下面配置说明该接口 60秒内最多只能访问 10次，保存到redis的键名为 limit_test，
      */
-    @Limit(key = "test", period = 60, count = 10, name = "testLimit", prefix = "limit")
+    @Limit(key = "testMaintain", period = 60, count = 10, name = "testLimit", prefix = "limit")
     @GetMapping("/limit")
     public int testLimit() {
         return ATOMIC_INTEGER.incrementAndGet();

@@ -3,9 +3,6 @@ package me.zhengjie.modules.finance.service;
 import me.zhengjie.modules.finance.domain.FinanceMaintain;
 import me.zhengjie.modules.finance.service.dto.FinanceMaintainDTO;
 import me.zhengjie.modules.finance.service.dto.FinanceMaintainQueryCriteria;
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -39,6 +36,7 @@ public interface FinanceMaintainService {
      */
     //@Cacheable(key = "#p0")
     FinanceMaintainDTO findById(Long id);
+
 
     /**
      * create

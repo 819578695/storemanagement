@@ -32,4 +32,8 @@ public class FinanceMaintarinDetailDTO implements Serializable {
 
     // 最近交易日期
     private Timestamp transactionDate;
+
+    //园区名称
+    private String deptName;
+    private Long deptId;
 }

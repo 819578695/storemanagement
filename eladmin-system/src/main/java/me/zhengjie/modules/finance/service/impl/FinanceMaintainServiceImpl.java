@@ -1,9 +1,7 @@
 package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.finance.domain.FinanceMaintain;
-import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
-import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
-import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.finance.repository.FinanceMaintarinDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FinanceMaintainRepository;
 import me.zhengjie.modules.finance.service.FinanceMaintainService;
@@ -15,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,16 +39,19 @@ public class FinanceMaintainServiceImpl implements FinanceMaintainService {
     private FinanceMaintainMapper financeMaintainMapper;
 
     @Autowired
-    private DeptRepository deptRepository;
+    private FinanceMaintarinDetailRepository financeMaintarinDetailRepository;
 
     @Override
     public Object queryAll(FinanceMaintainQueryCriteria criteria, Pageable pageable){
         Page<FinanceMaintain> page = financeMaintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<FinanceMaintainDTO> FinanceMaintainDTOs = new ArrayList<>();
-        for (FinanceMaintain financeMaintain : page.getContent()) {
-            FinanceMaintainDTOs.add(financeMaintainMapper.toDTO(financeMaintain , deptRepository.findById(financeMaintain.getDept().getId()).get()));
-        }
-        return PageUtil.toPage(FinanceMaintainDTOs,page.getTotalElements());
+            for (FinanceMaintain financeMaintain : page.getContent()) {
+                FinanceMaintainDTO dto = financeMaintainMapper.toDTO(financeMaintain, financeMaintain.getDept());
+                BigDecimal maintainSum = financeMaintarinDetailRepository.findByMaintainId(dto.getId());
+                dto.setRemaining(maintainSum);
+                FinanceMaintainDTOs.add(dto);
+            }
+            return PageUtil.toPage(FinanceMaintainDTOs,page.getTotalElements());
     }
 
     @Override
@@ -87,4 +89,6 @@ public class FinanceMaintainServiceImpl implements FinanceMaintainService {
     public void delete(Long id) {
         financeMaintainRepository.deleteById(id);
     }
+
+
 }
