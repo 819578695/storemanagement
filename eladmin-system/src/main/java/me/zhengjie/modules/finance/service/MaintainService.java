@@ -1,8 +1,8 @@
 package me.zhengjie.modules.finance.service;
 
-import me.zhengjie.modules.finance.domain.FinanceMaintain;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintainDTO;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintainQueryCriteria;
+import me.zhengjie.modules.finance.domain.Maintain;
+import me.zhengjie.modules.finance.service.dto.MaintainDTO;
+import me.zhengjie.modules.finance.service.dto.MaintainQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 * @date 2019-08-29
 */
 //@CacheConfig(cacheNames = "financeMaintain")
-public interface FinanceMaintainService {
+public interface MaintainService {
 
     /**
     * queryAll 分页
@@ -19,7 +19,7 @@ public interface FinanceMaintainService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(FinanceMaintainQueryCriteria criteria, Pageable pageable);
+    Object queryAll(MaintainQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -27,7 +27,7 @@ public interface FinanceMaintainService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(FinanceMaintainQueryCriteria criteria);
+    public Object queryAll(MaintainQueryCriteria criteria);
 
     /**
      * findById
@@ -35,7 +35,7 @@ public interface FinanceMaintainService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    FinanceMaintainDTO findById(Long id);
+    MaintainDTO findById(Long id);
 
 
     /**
@@ -44,14 +44,14 @@ public interface FinanceMaintainService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    FinanceMaintainDTO create(FinanceMaintain resources);
+    MaintainDTO create(Maintain resources);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(FinanceMaintain resources);
+    void update(Maintain resources);
 
     /**
      * delete

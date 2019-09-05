@@ -12,11 +12,15 @@ import me.zhengjie.annotation.Query;
 * @date 2019-08-22
 */
 @Data
-public class JournalAccountOfCapitalQueryCriteria{
+public class FundFlowingQueryCriteria {
     @Query(type = Query.Type.GREATER_THAN_DATE)
     private Date tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
     private Date tradDateEnd;
+
+    @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
+    private Long deptId;
+
 
     @Query(propName = "id",joinName = "tradType" ,type = Query.Type.EQUAL)
     private Long tradType;

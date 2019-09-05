@@ -17,8 +17,8 @@ import java.io.Serializable;
 */
 @Entity
 @Data
-@Table(name="finance_maintarin_detail")
-public class FinanceMaintarinDetail implements Serializable {
+@Table(name="fund_maintarin_detail")
+public class MaintarinDetail implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class FinanceMaintarinDetail implements Serializable {
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
-    public void copy(FinanceMaintarinDetail source){
+    public void copy(MaintarinDetail source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

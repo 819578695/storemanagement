@@ -4,7 +4,7 @@ import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
-import me.zhengjie.modules.finance.service.FinaceMarginService;
+import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.MarginCostDTO;
 import me.zhengjie.modules.finance.service.dto.MarginPevenueDTO;
 import me.zhengjie.utils.QueryHelp;
@@ -27,7 +27,7 @@ import java.util.List;
 */
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
-public class FinaceMarginServiceImpl implements FinaceMarginService {
+public class MarginServiceImpl implements MarginService {
 
     @Autowired
     private ParkPevenueRepository parkPevenueRepository;
@@ -36,7 +36,8 @@ public class FinaceMarginServiceImpl implements FinaceMarginService {
     @Override
     public Object queryAll(Object criteria, Pageable pageable){
         Page<ParkPevenue> pevenues = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder),pageable);
+//        Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder),pageable);
+        Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List costDTOS = new ArrayList<>();
         //园区收入
         for (ParkCost cost : costs.getContent()) {

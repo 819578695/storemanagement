@@ -15,8 +15,8 @@ import java.io.Serializable;
 */
 @Entity
 @Data
-@Table(name="finance_maintain")
-public class FinanceMaintain implements Serializable {
+@Table(name="fund_maintain")
+public class Maintain implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -31,7 +31,7 @@ public class FinanceMaintain implements Serializable {
     @Column(name = "remaining")
     private BigDecimal remaining;
 
-    public void copy(FinanceMaintain source){
+    public void copy(Maintain source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

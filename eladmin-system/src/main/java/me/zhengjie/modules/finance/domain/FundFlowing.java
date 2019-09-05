@@ -5,7 +5,6 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
-import me.zhengjie.modules.system.service.dto.DeptDTO;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -19,8 +18,8 @@ import java.io.Serializable;
 */
 @Entity
 @Data
-@Table(name="journal_account_of_capital")
-public class JournalAccountOfCapital implements Serializable {
+@Table(name="fund_flowing")
+public class FundFlowing implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -92,7 +91,7 @@ public class JournalAccountOfCapital implements Serializable {
     @JoinColumn(name = "type_id")
     private DictDetail typeDict;
 
-    public void copy(JournalAccountOfCapital source){
+    public void copy(FundFlowing source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
 }

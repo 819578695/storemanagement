@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 * @date 2019-08-29
 */
 //@CacheConfig(cacheNames = "finaceMargin")
-public interface FinaceMarginService {
+public interface MarginService {
 
     /**
     * queryAll 分页

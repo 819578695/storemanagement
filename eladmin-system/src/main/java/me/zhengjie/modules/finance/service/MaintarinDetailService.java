@@ -1,11 +1,8 @@
 package me.zhengjie.modules.finance.service;
 
-import me.zhengjie.modules.finance.domain.FinanceMaintarinDetail;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintarinDetailDTO;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintarinDetailQueryCriteria;
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.service.dto.MaintarinDetailDTO;
+import me.zhengjie.modules.finance.service.dto.MaintarinDetailQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -13,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 * @date 2019-08-29
 */
 //@CacheConfig(cacheNames = "financeMaintarinDetail")
-public interface FinanceMaintarinDetailService {
+public interface MaintarinDetailService {
 
     /**
     * queryAll 分页
@@ -22,7 +19,7 @@ public interface FinanceMaintarinDetailService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(FinanceMaintarinDetailQueryCriteria criteria, Pageable pageable);
+    Object queryAll(MaintarinDetailQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -30,7 +27,7 @@ public interface FinanceMaintarinDetailService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(FinanceMaintarinDetailQueryCriteria criteria);
+    public Object queryAll(MaintarinDetailQueryCriteria criteria);
 
     /**
      * findById
@@ -38,7 +35,7 @@ public interface FinanceMaintarinDetailService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    FinanceMaintarinDetailDTO findById(Long id);
+    MaintarinDetailDTO findById(Long id);
 
     /**
      * create
@@ -46,14 +43,14 @@ public interface FinanceMaintarinDetailService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    FinanceMaintarinDetailDTO create(FinanceMaintarinDetail resources);
+    MaintarinDetailDTO create(MaintarinDetail resources);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(FinanceMaintarinDetail resources);
+    void update(MaintarinDetail resources);
 
     /**
      * delete

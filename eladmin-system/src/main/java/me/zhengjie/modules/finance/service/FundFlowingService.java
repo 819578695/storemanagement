@@ -2,12 +2,9 @@ package me.zhengjie.modules.finance.service;
 
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
-import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
-import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
-import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalQueryCriteria;
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
+import me.zhengjie.modules.finance.domain.FundFlowing;
+import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
+import me.zhengjie.modules.finance.service.dto.FundFlowingQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
@@ -17,7 +14,7 @@ import java.math.BigDecimal;
 * @date 2019-08-22
 */
 //@CacheConfig(cacheNames = "journalAccountOfCapital")
-public interface JournalAccountOfCapitalService {
+public interface FundFlowingService {
 
     /**
     * queryAll 分页
@@ -26,7 +23,7 @@ public interface JournalAccountOfCapitalService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(JournalAccountOfCapitalQueryCriteria criteria, Pageable pageable);
+    Object queryAll(FundFlowingQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
@@ -34,7 +31,7 @@ public interface JournalAccountOfCapitalService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    public Object queryAll(JournalAccountOfCapitalQueryCriteria criteria);
+    public Object queryAll(FundFlowingQueryCriteria criteria);
 
     /**
      * findById
@@ -42,7 +39,7 @@ public interface JournalAccountOfCapitalService {
      * @return
      */
     //@Cacheable(key = "#p0")
-    JournalAccountOfCapitalDTO findById(Long id);
+    FundFlowingDTO findById(Long id);
 
     /**
      * create
@@ -50,7 +47,7 @@ public interface JournalAccountOfCapitalService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    JournalAccountOfCapitalDTO create(JournalAccountOfCapital resources);
+    FundFlowingDTO create(FundFlowing resources);
 
     /**
      * create
@@ -58,7 +55,7 @@ public interface JournalAccountOfCapitalService {
      * @return
      */
     //@CacheEvict(allEntries = true)新增成本
-    JournalAccountOfCapitalDTO createByPostCost(ParkCost resources, String value, BigDecimal money);
+    FundFlowingDTO createByPostCost(ParkCost resources, String value, BigDecimal money);
 
     /**
      * create
@@ -66,14 +63,14 @@ public interface JournalAccountOfCapitalService {
      * @return
      */
     //@CacheEvict(allEntries = true)新增收入
-    JournalAccountOfCapitalDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money);
+    FundFlowingDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money);
 
     /**
      * update
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void update(JournalAccountOfCapital resources);
+    void update(FundFlowing resources);
 
     /**
      * update

@@ -1,6 +1,8 @@
 package me.zhengjie.modules.business.service.dto;
 
 import lombok.Data;
+
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import me.zhengjie.annotation.Query;
@@ -15,4 +17,9 @@ public class ParkCostQueryCriteria{
     private String deptName;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
+
+    @Query(type = Query.Type.GREATER_THAN_DATE)
+    private Date tradDateStart;
+    @Query(type = Query.Type.LESS_THAN_DATE)
+    private Date tradDateEnd;
 }

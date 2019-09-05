@@ -1,8 +1,8 @@
 package me.zhengjie.modules.finance.service.mapper;
 
 import me.zhengjie.mapper.EntityMapper;
-import me.zhengjie.modules.finance.domain.JournalAccountOfCapital;
-import me.zhengjie.modules.finance.service.dto.JournalAccountOfCapitalDTO;
+import me.zhengjie.modules.finance.domain.FundFlowing;
+import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.mapstruct.Mapper;
@@ -15,10 +15,10 @@ import org.mapstruct.ReportingPolicy;
 * @date 2019-08-22
 */
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface JournalAccountOfCapitalMapper extends EntityMapper<JournalAccountOfCapitalDTO, JournalAccountOfCapital> {
+public interface FundFlowingMapper extends EntityMapper<FundFlowingDTO, FundFlowing> {
 
     @Mappings({
-            @Mapping(source = "journalAccountOfCapital.id" , target = "id"),
+            @Mapping(source = "fundFlowing.id" , target = "id"),
             @Mapping(source = "tradType.id",target = "tradTypeId"),
             @Mapping(source = "tradType.label",target = "tradTypeLabel"),
             @Mapping(source = "tallyType.id",target = "tallyTypeId"),
@@ -28,5 +28,5 @@ public interface JournalAccountOfCapitalMapper extends EntityMapper<JournalAccou
             @Mapping(source = "dept.id",target = "deptId"),
             @Mapping(source = "dept.name",target = "deptName"),
     })
-    JournalAccountOfCapitalDTO toDTO (JournalAccountOfCapital journalAccountOfCapital , DictDetail tradType , DictDetail tallyType , DictDetail typeDict, Dept dept);
+    FundFlowingDTO toDTO (FundFlowing fundFlowing , DictDetail tradType , DictDetail tallyType , DictDetail typeDict, Dept dept);
 }

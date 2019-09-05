@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 * @date 2019-08-29
 */
 @Data
-public class FinanceMaintainDTO implements Serializable {
+public class MaintainDTO implements Serializable {
 
     // 处理精度丢失问题
     @Id

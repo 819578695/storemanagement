@@ -8,7 +8,7 @@ import me.zhengjie.annotation.Query;
 * @date 2019-08-29
 */
 @Data
-public class FinanceMaintainQueryCriteria{
+public class MaintainQueryCriteria{
 
     @Query(type = Query.Type.EQUAL)
     private Long deptId;

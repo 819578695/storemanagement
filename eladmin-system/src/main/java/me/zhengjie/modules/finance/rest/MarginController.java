@@ -1,7 +1,7 @@
 package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.finance.service.FinaceMarginService;
+import me.zhengjie.modules.finance.service.MarginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -14,20 +14,20 @@ import io.swagger.annotations.*;
 * @author nmk
 * @date 2019-08-29
 */
-@Api(tags = "FinaceMargin管理")
+@Api(tags = "Margin管理")
 @RestController
 @RequestMapping("api")
-public class FinaceMarginController {
+public class MarginController {
 
     @Autowired
-    private FinaceMarginService finaceMarginService;
+    private MarginService marginService;
 
-    @Log("查询FinaceMargin")
-    @ApiOperation(value = "查询FinaceMargin")
-    @GetMapping(value = "/finaceMargin")
+    @Log("查询Margin")
+    @ApiOperation(value = "查询Margin")
+    @GetMapping(value = "/margin")
     @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
     public ResponseEntity getFinaceMargins( Object criteria, Pageable pageable){
-        return new ResponseEntity(finaceMarginService.queryAll(criteria,pageable),HttpStatus.OK);
+        return new ResponseEntity(marginService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
 }

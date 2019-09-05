@@ -1,9 +1,9 @@
 package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.finance.domain.FinanceMaintain;
-import me.zhengjie.modules.finance.service.FinanceMaintainService;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintainQueryCriteria;
+import me.zhengjie.modules.finance.domain.Maintain;
+import me.zhengjie.modules.finance.service.MaintainService;
+import me.zhengjie.modules.finance.service.dto.MaintainQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,42 +20,42 @@ import io.swagger.annotations.*;
 @Api(tags = "FinanceMaintain管理")
 @RestController
 @RequestMapping("api")
-public class FinanceMaintainController {
+public class MaintainController {
 
     @Autowired
-    private FinanceMaintainService financeMaintainService;
+    private MaintainService maintainService;
 
     @Log("查询FinanceMaintain")
     @ApiOperation(value = "查询FinanceMaintain")
-    @GetMapping(value = "/financeMaintain")
+    @GetMapping(value = "/maintain")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_SELECT')")
-    public ResponseEntity getFinanceMaintains(FinanceMaintainQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(financeMaintainService.queryAll(criteria,pageable),HttpStatus.OK);
+    public ResponseEntity getFinanceMaintains(MaintainQueryCriteria criteria, Pageable pageable){
+        return new ResponseEntity(maintainService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("新增FinanceMaintain")
     @ApiOperation(value = "新增FinanceMaintain")
-    @PostMapping(value = "/financeMaintain")
+    @PostMapping(value = "/maintain")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_CREATE')")
-    public ResponseEntity create(@Validated @RequestBody FinanceMaintain resources){
-        return new ResponseEntity(financeMaintainService.create(resources),HttpStatus.CREATED);
+    public ResponseEntity create(@Validated @RequestBody Maintain resources){
+        return new ResponseEntity(maintainService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改FinanceMaintain")
     @ApiOperation(value = "修改FinanceMaintain")
-    @PutMapping(value = "/financeMaintain")
+    @PutMapping(value = "/maintain")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_EDIT')")
-    public ResponseEntity update(@Validated @RequestBody FinanceMaintain resources){
-        financeMaintainService.update(resources);
+    public ResponseEntity update(@Validated @RequestBody Maintain resources){
+        maintainService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除FinanceMaintain")
     @ApiOperation(value = "删除FinanceMaintain")
-    @DeleteMapping(value = "/financeMaintain/{id}")
+    @DeleteMapping(value = "/maintain/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
-        financeMaintainService.delete(id);
+        maintainService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

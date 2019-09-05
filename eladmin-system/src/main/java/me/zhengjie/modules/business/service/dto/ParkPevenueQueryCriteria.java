@@ -22,4 +22,8 @@ public class ParkPevenueQueryCriteria{
     private Long deptId;
 
 
+    @Query(type = Query.Type.GREATER_THAN_DATE)
+    private Date tradDateStart;
+    @Query(type = Query.Type.LESS_THAN_DATE)
+    private Date tradDateEnd;
 }

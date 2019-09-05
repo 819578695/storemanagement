@@ -11,7 +11,7 @@ import java.io.Serializable;
 * @date 2019-08-22
 */
 @Data
-public class JournalAccountOfCapitalDTO implements Serializable {
+public class FundFlowingDTO implements Serializable {
 
     private Long id;
 

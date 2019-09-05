@@ -1,9 +1,9 @@
 package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.finance.domain.FinanceMaintarinDetail;
-import me.zhengjie.modules.finance.service.FinanceMaintarinDetailService;
-import me.zhengjie.modules.finance.service.dto.FinanceMaintarinDetailQueryCriteria;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.service.MaintarinDetailService;
+import me.zhengjie.modules.finance.service.dto.MaintarinDetailQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,42 +20,42 @@ import io.swagger.annotations.*;
 @Api(tags = "FinanceMaintarinDetail管理")
 @RestController
 @RequestMapping("api")
-public class FinanceMaintarinDetailController {
+public class MaintarinDetailController {
 
     @Autowired
-    private FinanceMaintarinDetailService financeMaintarinDetailService;
+    private MaintarinDetailService maintarinDetailService;
 
     @Log("查询FinanceMaintarinDetail")
     @ApiOperation(value = "查询FinanceMaintarinDetail")
-    @GetMapping(value = "/financeMaintarinDetail")
+    @GetMapping(value = "/maintarinDetail")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_SELECT')")
-    public ResponseEntity getFinanceMaintarinDetails(FinanceMaintarinDetailQueryCriteria criteria, Pageable pageable){
-        return new ResponseEntity(financeMaintarinDetailService.queryAll(criteria,pageable),HttpStatus.OK);
+    public ResponseEntity getFinanceMaintarinDetails(MaintarinDetailQueryCriteria criteria, Pageable pageable){
+        return new ResponseEntity(maintarinDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
     @Log("新增FinanceMaintarinDetail")
     @ApiOperation(value = "新增FinanceMaintarinDetail")
-    @PostMapping(value = "/financeMaintarinDetail")
+    @PostMapping(value = "/maintarinDetail")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_CREATE')")
-    public ResponseEntity create(@Validated @RequestBody FinanceMaintarinDetail resources){
-        return new ResponseEntity(financeMaintarinDetailService.create(resources),HttpStatus.CREATED);
+    public ResponseEntity create(@Validated @RequestBody MaintarinDetail resources){
+        return new ResponseEntity(maintarinDetailService.create(resources),HttpStatus.CREATED);
     }
 
     @Log("修改FinanceMaintarinDetail")
     @ApiOperation(value = "修改FinanceMaintarinDetail")
-    @PutMapping(value = "/financeMaintarinDetail")
+    @PutMapping(value = "/maintarinDetail")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_EDIT')")
-    public ResponseEntity update(@Validated @RequestBody FinanceMaintarinDetail resources){
-        financeMaintarinDetailService.update(resources);
+    public ResponseEntity update(@Validated @RequestBody MaintarinDetail resources){
+        maintarinDetailService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @Log("删除FinanceMaintarinDetail")
     @ApiOperation(value = "删除FinanceMaintarinDetail")
-    @DeleteMapping(value = "/financeMaintarinDetail/{id}")
+    @DeleteMapping(value = "/maintarinDetail/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
-        financeMaintarinDetailService.delete(id);
+        maintarinDetailService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

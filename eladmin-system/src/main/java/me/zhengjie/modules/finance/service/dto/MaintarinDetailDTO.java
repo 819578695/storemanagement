@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 * @date 2019-08-29
 */
 @Data
-public class FinanceMaintarinDetailDTO implements Serializable {
+public class MaintarinDetailDTO implements Serializable {
 
     // 处理精度丢失问题
     @JsonSerialize(using= ToStringSerializer.class)
