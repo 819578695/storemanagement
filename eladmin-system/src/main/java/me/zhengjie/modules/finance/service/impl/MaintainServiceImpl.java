@@ -43,15 +43,15 @@ public class MaintainServiceImpl implements MaintainService {
 
     @Override
     public Object queryAll(MaintainQueryCriteria criteria, Pageable pageable){
-        Page<Maintain> page = maintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-        List<MaintainDTO> MaintainDTOs = new ArrayList<>();
+            Page<Maintain> page = maintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
+            List<MaintainDTO> MaintainDTOs = new ArrayList<>();
             for (Maintain maintain : page.getContent()) {
                 MaintainDTO dto = maintainMapper.toDTO(maintain, maintain.getDept());
                 BigDecimal maintainSum = maintarinDetailRepository.findByMaintainId(dto.getId());
                 dto.setRemaining(maintainSum);
                 MaintainDTOs.add(dto);
             }
-            return PageUtil.toPage(MaintainDTOs,page.getTotalElements());
+            return PageUtil.toPage(MaintainDTOs, page.getTotalElements());
     }
 
     @Override

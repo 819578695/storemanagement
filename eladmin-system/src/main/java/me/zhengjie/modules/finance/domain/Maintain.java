@@ -6,7 +6,6 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.io.Serializable;
 
 /**
@@ -27,9 +26,6 @@ public class Maintain implements Serializable {
     @JoinColumn(name = "dept_id")
     private Dept dept;
 
-    // 余额
-    @Column(name = "remaining")
-    private BigDecimal remaining;
 
     public void copy(Maintain source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

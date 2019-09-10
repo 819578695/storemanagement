@@ -43,7 +43,7 @@ public interface MaintarinDetailService {
      * @return
      */
     //@CacheEvict(allEntries = true)
-    MaintarinDetailDTO create(MaintarinDetail resources);
+    void create(MaintarinDetail resources);
 
     /**
      * update

@@ -1,5 +1,6 @@
 package me.zhengjie.modules.finance.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.MaintarinDetailService;
@@ -67,13 +68,13 @@ public class MaintarinDetailServiceImpl implements MaintarinDetailService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public MaintarinDetailDTO create(MaintarinDetail resources) {
+    public void create(MaintarinDetail resources) {
         Snowflake snowflake = IdUtil.createSnowflake(1, 1);
         if (queryExist(resources)){
             resources.setId(snowflake.nextId());
-            return maintarinDetailMapper.toDto(maintarinDetailRepository.save(resources));
+        }else {
+            throw new BadRequestException("该支付方式已存在");
         }
-        return new MaintarinDetailDTO();
     }
 
     @Override

@@ -38,7 +38,8 @@ public class MaintarinDetailController {
     @PostMapping(value = "/maintarinDetail")
     @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_CREATE')")
     public ResponseEntity create(@Validated @RequestBody MaintarinDetail resources){
-        return new ResponseEntity(maintarinDetailService.create(resources),HttpStatus.CREATED);
+        maintarinDetailService.create(resources);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Log("修改FinanceMaintarinDetail")
