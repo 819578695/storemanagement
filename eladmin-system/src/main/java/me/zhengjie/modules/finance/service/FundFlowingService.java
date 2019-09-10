@@ -63,7 +63,7 @@ public interface FundFlowingService {
      * @return
      */
     //@CacheEvict(allEntries = true)新增收入
-    FundFlowingDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money);
+    FundFlowingDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money,BigDecimal substactMoney);
 
     /**
      * update
