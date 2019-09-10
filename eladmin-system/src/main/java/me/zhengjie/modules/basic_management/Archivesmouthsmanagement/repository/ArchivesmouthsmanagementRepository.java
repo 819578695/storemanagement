@@ -11,4 +11,5 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
 
    /*@Query(value = "select * from basics_stall where if(?1 =0,dept_id=?1,1=1)",nativeQuery = true)*/
      List<Archivesmouthsmanagement> findByDeptId(Long deptId);
+     List<Archivesmouthsmanagement> findByCity(String city);
 }

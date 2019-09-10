@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,8 +50,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
-    public  Object publicQuery(ArchivesmouthsmanagementQueryCriteria criteria){
-        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+    public  List<Archivesmouthsmanagement> publiccity(HttpServletRequest request){
+        String city = request.getQueryString();
+        List<Archivesmouthsmanagement> list;
+        list = archivesmouthsmanagementRepository.findByCity(city);
+        return list;
 
     }
 

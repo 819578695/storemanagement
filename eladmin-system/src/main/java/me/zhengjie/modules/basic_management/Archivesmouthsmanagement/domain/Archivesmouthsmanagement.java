@@ -67,6 +67,11 @@ public class Archivesmouthsmanagement implements Serializable {
     @Column(name = "stall_date")
     private Timestamp stalldate;
 
+    //省份id
+    @CreationTimestamp
+    @Column(name = "city")
+    private Long city;
+
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
