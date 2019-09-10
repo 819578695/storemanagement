@@ -7,6 +7,9 @@ import me.zhengjie.modules.business.service.dto.RentContractQueryCriteria;
 //import org.springframework.cache.annotation.CacheEvict;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.IOException;
 
 /**
 * @author kang
@@ -64,4 +67,13 @@ public interface RentContractService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 上传文件
+     *
+     * @param multipartRequest
+     * @return
+     * @throws IOException
+     */
+    String uploadFile(MultipartHttpServletRequest multipartRequest,String contractNo) throws Exception;
 }

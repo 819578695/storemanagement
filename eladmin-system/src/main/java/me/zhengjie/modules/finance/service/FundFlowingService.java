@@ -55,7 +55,7 @@ public interface FundFlowingService {
      * @return
      */
     //@CacheEvict(allEntries = true)新增成本
-    FundFlowingDTO createByPostCost(ParkCost resources, String value, BigDecimal money);
+    FundFlowingDTO createByPostCost(ParkCost resources, String value, BigDecimal money,BigDecimal substactMoney);
 
     /**
      * create

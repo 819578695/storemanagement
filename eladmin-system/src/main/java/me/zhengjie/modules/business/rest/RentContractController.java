@@ -4,6 +4,7 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.service.RentContractService;
 import me.zhengjie.modules.business.service.dto.RentContractQueryCriteria;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
 * @author kang
@@ -56,6 +58,18 @@ public class RentContractController {
     @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody RentContract resources){
         rentContractService.update(resources);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @Log("上传RentContract")
+    @ApiOperation(value = "上传RentContract")
+    @PostMapping(value="/upload/{contractNo}")
+    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_EDIT')")
+    public ResponseEntity uploadHeadPortrait(MultipartHttpServletRequest multipartRequest,@PathVariable String contractNo) throws Exception{
+        String path = rentContractService.uploadFile(multipartRequest,contractNo);
+        if (!StringUtils.isEmpty(path)) {
+            return new ResponseEntity(path,HttpStatus.OK);
+        }
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 

@@ -69,3 +69,8 @@ generator:
 #是否开启 swagger-ui
 swagger:
   enabled: false
+##服务器文件地址
+httpUrl: http://121.40.253.229:8080
+##文件默认路径
+filePath: /var/www/html
+baseHttpUrl: http://121.40.253.229

@@ -1,6 +1,7 @@
 package me.zhengjie.modules.business.service.mapper;
 
 import me.zhengjie.mapper.EntityMapper;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
@@ -29,14 +30,14 @@ public interface ParkCostMapper extends EntityMapper<ParkCostDTO, ParkCost> {
             @Mapping(source = "dictDetail.id",target = "paymentType"),
             @Mapping(source = "dictDetail.label",target = "paymentTypeName"),
             @Mapping(source = "parkCost.createTime",target = "createTime"),
-            @Mapping(source = "basicsPark.id",target = "parkId"),
-            @Mapping(source = "basicsPark.garden",target = "basicsParkName"),
+            @Mapping(source = "archivesmouthsmanagement.id",target = "archivesMouthsId"),
+            @Mapping(source = "archivesmouthsmanagement.housenumber",target = "houseNumber"),
             @Mapping(source = "rentContract.id",target = "rentContractId"),
             @Mapping(source = "rentContract.contractName",target = "rentContractName"),
             @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
             @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName"),
 
     })
-    ParkCostDTO toDto(ParkCost parkCost, Dept dept, DictDetail dictDetail, BasicsPark basicsPark, RentContract rentContract, ReceiptPaymentAccount receiptPaymentAccount);
+    ParkCostDTO toDto(ParkCost parkCost, Dept dept, DictDetail dictDetail, Archivesmouthsmanagement archivesmouthsmanagement, RentContract rentContract, ReceiptPaymentAccount receiptPaymentAccount);
 
 }

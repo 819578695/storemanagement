@@ -1,9 +1,11 @@
 package me.zhengjie.utils;
 
 import cn.hutool.core.util.IdUtil;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
-import java.io.File;
-import java.io.IOException;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.*;
 import java.text.DecimalFormat;
 
 /**
@@ -115,5 +117,56 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
             resultSize = size + "B   ";
         }
         return resultSize;
+    }
+    /**
+     * 文件上传
+     * @param multipartRequest
+     * @param httpUrl 服务器文件地址
+     * @param filePath 文件根路径
+     * @param fileAttrName 文件属性名
+     * @param folderName 文件夹名称(分层级例如:"/user/image",null或""代表默认目录)
+     * @param contractNo 编号(不带@后缀)
+     * @return String http地址
+     */
+    public static String uploadUtil(MultipartHttpServletRequest multipartRequest, String httpUrl, String filePath,
+                                    String fileAttrName, String folderName, String contractNo){
+        filePath = (filePath == null) ? "/" : filePath;
+        /* 通过MultipartHttpServletRequest来获得MultipartFile对象 */
+        MultipartFile multipartFile = multipartRequest.getFile(fileAttrName);
+        /* 获得原始文件的名字 */
+        String originalFileName = multipartFile.getOriginalFilename();
+        /* 获得文件的后缀名 */
+        String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
+        /* 对文件重命名，设定为当前系统时间的毫秒数加邮箱名 */
+        String newFileName = System.currentTimeMillis() + ((contractNo == null)?"":"."+contractNo) +suffix;
+        if (!StringUtils.isEmpty(folderName)) {
+            filePath += folderName;
+        }else{
+            folderName = "";
+        }
+        File folder = new File(filePath);
+        if (!folder.exists()) {
+            //　mkdirs(): 创建多层目录
+            folder.mkdirs();
+        }
+        File file = new File(filePath + File.separator + newFileName);
+        try {
+            /* 文件不存在就创建文件 */
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            /* 进行上传文件 */
+            InputStream input = multipartFile.getInputStream();
+            OutputStream output = new FileOutputStream(file);
+            IOUtils.copy(input, output);
+            String url = httpUrl + folderName + "/" + newFileName;
+            /* 关闭输入流和输出流 */
+            input.close();
+            output.close();
+            return url;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

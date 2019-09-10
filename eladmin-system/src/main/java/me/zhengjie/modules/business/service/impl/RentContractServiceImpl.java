@@ -5,6 +5,7 @@ import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.service.mapper.DeptMapper;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.RentContractRepository;
 import me.zhengjie.modules.business.service.RentContractService;
@@ -12,6 +13,7 @@ import me.zhengjie.modules.business.service.dto.RentContractDTO;
 import me.zhengjie.modules.business.service.dto.RentContractQueryCriteria;
 import me.zhengjie.modules.business.service.mapper.RentContractMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +26,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
 * @author kang
@@ -42,6 +45,11 @@ public class RentContractServiceImpl implements RentContractService {
     private DeptRepository deptRepository;
     @Autowired
     private ParkCostRepository parkCostRepository;
+
+    @Value("${httpUrl}")
+    private String httpUrl; //服务器文件地址
+    @Value("${filePath}")
+    private String filePath; //文件路径
 
     @Override
     public Object queryAll(RentContractQueryCriteria criteria, Pageable pageable){
@@ -98,4 +106,16 @@ public class RentContractServiceImpl implements RentContractService {
     public void delete(Long id) {
         rentContractRepository.deleteById(id);
     }
+
+    @Override
+    public String uploadFile(MultipartHttpServletRequest multipartRequest,String contractNo) throws Exception {
+            String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/image",contractNo );
+            try {
+                return imgUrl;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        return null;
+    }
+
 }

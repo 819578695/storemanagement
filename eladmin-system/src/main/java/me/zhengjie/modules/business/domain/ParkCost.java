@@ -3,6 +3,7 @@ package me.zhengjie.modules.business.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -28,10 +29,10 @@ public class ParkCost implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    // 园区id
+    // 档口Id
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "park_id")
-    private BasicsPark basicsPark;
+    @JoinColumn(name = "archives_mouths_id")
+    private Archivesmouthsmanagement archivesmouthsmanagement;
     /**
      * 部门id
      */

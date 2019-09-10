@@ -17,9 +17,14 @@ public class ParkCostQueryCriteria{
     private String deptName;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
-
+    @Query(propName = "housenumber",joinName = "archivesmouthsmanagement" ,type = Query.Type.INNER_LIKE)
+    private Long houseNumber;
     @Query(type = Query.Type.GREATER_THAN_DATE)
     private Date tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
     private Date tradDateEnd;
+    @Query(type = Query.Type.GREATER_THAN_DATE)
+    private Date createTimeStart;
+    @Query(type = Query.Type.LESS_THAN_DATE)
+    private Date createTimeEnd;
 }

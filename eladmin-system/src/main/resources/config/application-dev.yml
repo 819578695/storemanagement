@@ -2,13 +2,13 @@
 spring:
   datasource:
     druid:
-#      type: com.alibaba.druid.pool.DruidDataSource
-#      driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-#      url: jdbc:log4jdbc:mysql://101.37.157.28/eladmin?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-#      username: root
-#      password: 2wsgsda%lptP!3sd5rti
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+#     url: jdbc:log4jdbc:mysql://101.37.157.28/eladmin?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
+#     username: root
+#     password: 2wsgsda%lptP!3sd5rti
+#     type: com.alibaba.druid.pool.DruidDataSource
+#     driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       url: jdbc:log4jdbc:mysql://localhost:3306/eladmin?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
       username: root
       password: root
@@ -65,3 +65,8 @@ generator:
 #是否开启 swagger-ui
 swagger:
   enabled: true
+##服务器文件地址
+httpUrl: http://121.40.253.229:8080
+##文件默认路径
+filePath: /var/www/html
+baseHttpUrl: http://121.40.253.229
