@@ -68,7 +68,6 @@ public class Archivesmouthsmanagement implements Serializable {
     private Timestamp stalldate;
 
     //省份id
-    @CreationTimestamp
     @Column(name = "city")
     private Long city;
 
