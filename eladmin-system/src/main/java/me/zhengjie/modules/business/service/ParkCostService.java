@@ -70,4 +70,12 @@ public interface ParkCostService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 园区成本统计
+     * @param deptId
+     * @return
+     */
+    //@Cacheable(keyGenerator = "keyGenerator")
+    public Object findCostsMoney(Long deptId);
 }

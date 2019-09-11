@@ -262,4 +262,9 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     public void delete(Long id) {
         parkPevenueRepository.deleteById(id);
     }
+
+    @Override
+    public Object findPevenueMoney(Long deptId) {
+        return parkPevenueRepository.findByDeptIdSumRent(deptId);
+    }
 }

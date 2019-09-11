@@ -61,4 +61,12 @@ public interface ParkPevenueService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 园区收入统计
+     * @param deptId
+     * @return
+     */
+    //@Cacheable(keyGenerator = "keyGenerator")
+    public Object findPevenueMoney(Long deptId);
 }
