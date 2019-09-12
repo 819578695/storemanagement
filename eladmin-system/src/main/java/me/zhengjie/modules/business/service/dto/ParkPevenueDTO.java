@@ -1,6 +1,9 @@
 package me.zhengjie.modules.business.service.dto;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+
+import javax.persistence.Column;
 import java.sql.Timestamp;
 import java.math.BigDecimal;
 import java.io.Serializable;
@@ -52,9 +55,6 @@ public class ParkPevenueDTO implements Serializable {
     // 地磅费
     private BigDecimal groundPoundRent;
 
-    // 欠款金额
-    private BigDecimal arrersRent;
-
     //管理费
     private BigDecimal managementRent;
 
@@ -87,6 +87,12 @@ public class ParkPevenueDTO implements Serializable {
 
     //合同id
     private Long leaseContractId;
+
+    // 类型(1 已付 2 欠款 3 补缴)
+    private int type;
+
+    // 修改时间
+    private Timestamp updateTime;
 
 
 }

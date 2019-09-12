@@ -56,6 +56,13 @@ public interface ParkPevenueService {
     void update(ParkPevenue resources);
 
     /**
+     * payBack
+     * @param resources
+     */
+    //@CacheEvict(allEntries = true)
+    void payBack(ParkPevenue resources);
+
+    /**
      * delete
      * @param id
      */
