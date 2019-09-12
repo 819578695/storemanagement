@@ -50,10 +50,10 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
-    public  List<Archivesmouthsmanagement> publiccity(HttpServletRequest request){
-        String city = request.getQueryString();
+    public  List<Archivesmouthsmanagement> publiccity(Long areaId){
+        /*String city = request.getQueryString();*/
         List<Archivesmouthsmanagement> list;
-        list = archivesmouthsmanagementRepository.findByCity(city);
+        list = archivesmouthsmanagementRepository.findByareaId(areaId);
         return list;
 
     }

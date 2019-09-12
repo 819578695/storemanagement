@@ -7,7 +7,8 @@
  * History: //修改记录
  * <author>      <time>      <version>    <desc>
  * 修改人姓名             修改时间            版本号                  描述
- */
+ *//*
+
 package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat;
 
 import net.sf.json.JSONObject;
@@ -35,24 +36,28 @@ import java.security.spec.InvalidParameterSpecException;
 import java.util.HashMap;
 import java.util.Map;
 
+*/
 /**
  * 微信小程序相关登录接口
  *
  * @author zhixiang.meng
  * @see [相关类/方法]（可选）
  * @since [产品/模块版本] （可选）
- */
+ *//*
+
 public class wechat {
 
     private static Logger LOGGER = LoggerFactory.getLogger(wechat.class);
 
     public static final String SMALL_APPID = "success";
-    /**
+    */
+/**
      * 获取用户小程序的openid
      *
      * @param code
      * @return
-     */
+     *//*
+
     public static Map<Object, Object> getInfo(String code){
         String url ="https://api.weixin.qq.com/sns/jscode2session?appid="+Constant.SMALL_APPID+"&secret="+Constant.SMALL_SECRET+"&js_code="+code+"&grant_type="+Constant.GRANT_TYPE;
 
@@ -80,13 +85,15 @@ public class wechat {
         return map;
     }
 
-    /**
+    */
+/**
      * 从微信小程序那里获取用户基本信息
      * @param encryptedData
      * @param iv
      * @param sessionKey
      * @return
-     */
+     *//*
+
     public static Map<String, Object> getUserInfo(String encryptedData, String iv, String sessionKey){
         // 被加密的数据
         byte[] dataByte = Base64.decode(encryptedData);
@@ -146,10 +153,12 @@ public class wechat {
         return null;
     }
 
-    /**
+    */
+/**
      * 获取小程序的accessToken
      * @return
-     */
+     *//*
+
     public static String getAccessToken(){
         String access_token_all = "";
         StringBuffer buffer = new StringBuffer(); // 用来拼接参数
@@ -254,3 +263,4 @@ public class wechat {
 
 
 
+*/

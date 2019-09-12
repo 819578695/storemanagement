@@ -91,8 +91,9 @@ public class ArchivesmouthsmanagementController {
     @Log("微信小程序")
     @ApiOperation(value = "微信小程序查询")
     @GetMapping("/wechatquery")
-    public List<Archivesmouthsmanagement> wechatQuery(HttpServletRequest request){
-       List<Archivesmouthsmanagement> list = archivesmouthsmanagementService.publiccity(request);
+    public List<Archivesmouthsmanagement> wechatQuery(Long areaId){
+        /*city = "上海";*/
+       List<Archivesmouthsmanagement> list = archivesmouthsmanagementService.publiccity(areaId);
         return list ;
     }
 
