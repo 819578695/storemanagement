@@ -58,4 +58,12 @@ public class ParkPevenueController {
         parkPevenueService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("查询ParkPevenue统计数据")
+    @ApiOperation(value = "查询ParkPevenue统计数据")
+    @GetMapping (value = "/findPevenueMoney/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
+    public ResponseEntity findPevenueMoney(@PathVariable Long deptId){
+        return new ResponseEntity(parkPevenueService.findPevenueMoney(deptId),HttpStatus.OK);
+    }
 }

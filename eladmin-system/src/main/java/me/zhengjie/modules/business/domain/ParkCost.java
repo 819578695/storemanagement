@@ -41,7 +41,7 @@ public class ParkCost implements Serializable {
     private Dept dept;
 
     // 场地租金
-    @Column(name = "site_rent")
+    @Column(name = "site_rent",columnDefinition = "decimal(12,2) default 0")
     private BigDecimal siteRent;
 
     // 水费
