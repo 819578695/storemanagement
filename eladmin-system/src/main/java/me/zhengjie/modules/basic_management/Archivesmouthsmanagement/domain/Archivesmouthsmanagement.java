@@ -68,8 +68,8 @@ public class Archivesmouthsmanagement implements Serializable {
     private Timestamp stalldate;
 
     //省份id
-    @Column(name = "city")
-    private Long city;
+    @Column(name = "areaId")
+    private Long areaId;
 
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

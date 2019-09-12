@@ -41,4 +41,7 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
     // 部门id
     private Long deptId;
 
+    //关联城市id
+    private Long areaIdp;
+
 }
