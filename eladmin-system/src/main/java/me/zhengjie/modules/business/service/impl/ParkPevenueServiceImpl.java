@@ -276,17 +276,19 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                 MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
                 if (maintarinDetails != null) {
                     if (resources.getType() == 3) {
+                        Double houseRent = StringUtils.isNotNullBigDecimal(resources.getHouseRent())-StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent());
+                        Double waterRent = StringUtils.isNotNullBigDecimal(resources.getWaterRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent()));
+                        Double electricityRent= StringUtils.isNotNullBigDecimal(resources.getElectricityRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent()));
+                        Double propertyRent= StringUtils.isNotNullBigDecimal(resources.getPropertyRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent()));
+                        Double sanitationRent= StringUtils.isNotNullBigDecimal(resources.getSanitationRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent()));
+                        Double liquidatedRent= StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent()));
+                        Double lateRent= StringUtils.isNotNullBigDecimal(resources.getLateRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent()));
+                        Double groundPoundRent= StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent()));
+                        Double managementRent= StringUtils.isNotNullBigDecimal(resources.getManagementRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent()));
+                        Double parkingRent= StringUtils.isNotNullBigDecimal(resources.getParkingRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent()));
+
                         //如果补缴金额和欠付金额相同则直接修改
-                        if(StringUtils.isNotNullBigDecimal(resources.getHouseRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getWaterRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getElectricityRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getPropertyRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getSanitationRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getLateRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getManagementRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent()))&&
-                                StringUtils.isNotNullBigDecimal(resources.getParkingRent())==(StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent()))
+                        if(houseRent==0.0 &&waterRent==0.0 &&electricityRent==0.0 &&propertyRent==0.0 &&sanitationRent==0.0 &&liquidatedRent==0.0 &&lateRent==0.0 &&groundPoundRent==0.0 &&managementRent==0.0 &&parkingRent==0.0
                         ){
                             parkPevenue.setType(3);
                             parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
@@ -295,9 +297,40 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         //如果补缴部分或其他未补缴的时候需新增
                         else{
                             //新增新的补缴项
-                            ParkPevenue payBack = resources;
+                            ParkPevenue payBack = new ParkPevenue();
+                            payBack.setType(3);
+                            payBack.setArchivesmouthsmanagement(resources.getArchivesmouthsmanagement());
+                            payBack.setBasicsPark(resources.getBasicsPark());
+                            payBack.setDept(resources.getDept());
+                            payBack.setDictDetail(resources.getDictDetail());
+                            payBack.setElectricityRent(resources.getElectricityRent());
+                            payBack.setGroundPoundRent(resources.getGroundPoundRent());
+                            payBack.setHouseRent(resources.getHouseRent());
+                            payBack.setLateRent(resources.getLateRent());
+                            payBack.setLeaseContract(resources.getLeaseContract());
+                            payBack.setLiquidatedRent(resources.getLiquidatedRent());
+                            payBack.setManagementRent(resources.getManagementRent());
+                            payBack.setParkingRent(resources.getParkingRent());
+                            payBack.setPropertyRent(resources.getPropertyRent());
+                            payBack.setReceiptPaymentAccount(resources.getReceiptPaymentAccount());
+                            payBack.setSanitationRent(resources.getSanitationRent());
+                            payBack.setWaterRent(resources.getWaterRent());
                             payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
                             parkPevenueRepository.save(payBack);
+                            //然后修改原有的补缴费用
+                            resources.setType(2);
+                            resources.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
+                            resources.setGroundPoundRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
+                            resources.setHouseRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
+                            resources.setLateRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
+                            resources.setLiquidatedRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
+                            resources.setManagementRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
+                            resources.setParkingRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
+                            resources.setPropertyRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
+                            resources.setSanitationRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
+                            resources.setWaterRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
+                            payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
+                            parkPevenueRepository.save(resources);
                         }
                         //修改资金流水
                         //房租
@@ -351,12 +384,8 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                             BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent()) - (StringUtils.isNotNullBigDecimal(resources.getParkingRent()))));
                             fundFlowingService.createByPostPevenue(parkPevenue, "2", resources.getParkingRent(), Difference);
                         }
+
                     }
-
-
-                    parkPevenue.copy(resources);
-                    parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
-                    parkPevenueRepository.save(parkPevenue);
 
                 } else {
                     throw new BadRequestException("请先新建账户余额");
