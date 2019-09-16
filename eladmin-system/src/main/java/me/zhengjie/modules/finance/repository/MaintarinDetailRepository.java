@@ -20,8 +20,8 @@ public interface MaintarinDetailRepository extends JpaRepository<MaintarinDetail
     Long  getDetailByDeptAndAndMaintainId(long tardTypeId , Long maintainId);
 
     //查询金额总额
-    @Query(value = "select sum(remaining) from fund_maintarin_detail where maintain_id = ? ",nativeQuery = true)
-    BigDecimal findByMaintainId(Long maintainId);
+    @Query(value = "select sum(remaining) from fund_maintarin_detail where dept_id = ? ",nativeQuery = true)
+    BigDecimal findByMaintainId(Long deptId);
 
     //根据部门查询详情
     @Query(value = "select id ,trad_type_id , maintain_id ,remaining , transaction_date , dept_id from fund_maintarin_detail where dept_id = ? " , nativeQuery = true)

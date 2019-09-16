@@ -8,6 +8,7 @@ import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
 import java.awt.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 
 /**
@@ -34,5 +35,6 @@ public class MarginCostDTO {
     // 其他费用
     private BigDecimal otherRent;
 
-
+    //创建时间
+    private Timestamp createTime;
 }

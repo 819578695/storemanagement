@@ -1,5 +1,6 @@
 package me.zhengjie.modules.finance.service;
 
+import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -16,7 +17,7 @@ public interface MarginService {
     * @return
     */
     //@Cacheable(keyGenerator = "keyGenerator")
-    Object queryAll(Object criteria, Pageable pageable);
+    Object queryAll(MarginQueryCriteria criteria, Pageable pageable);
 
     /**
     * queryAll 不分页
