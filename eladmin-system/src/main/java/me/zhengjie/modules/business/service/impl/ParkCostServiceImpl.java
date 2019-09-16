@@ -234,4 +234,10 @@ public class ParkCostServiceImpl implements ParkCostService {
     public void delete(Long id) {
         parkCostRepository.deleteById(id);
     }
+
+    @Override
+    public Object findCostsMoney(Long deptId) {
+
+        return parkCostRepository.findByDeptIdSumRent(deptId);
+    }
 }

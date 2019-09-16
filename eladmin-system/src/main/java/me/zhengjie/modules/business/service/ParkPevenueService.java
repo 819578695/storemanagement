@@ -56,9 +56,24 @@ public interface ParkPevenueService {
     void update(ParkPevenue resources);
 
     /**
+     * payBack
+     * @param resources
+     */
+    //@CacheEvict(allEntries = true)
+    void payBack(ParkPevenue resources);
+
+    /**
      * delete
      * @param id
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 园区收入统计
+     * @param deptId
+     * @return
+     */
+    //@Cacheable(keyGenerator = "keyGenerator")
+    public Object findPevenueMoney(Long deptId);
 }

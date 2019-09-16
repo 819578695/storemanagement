@@ -20,7 +20,7 @@ public interface ArchivesmouthsmanagementService {
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable);
 
-    List<Archivesmouthsmanagement> publiccity(HttpServletRequest request);
+    List<Archivesmouthsmanagement> publiccity(Long areaId);
 
     /**
      * queryAll 不分页

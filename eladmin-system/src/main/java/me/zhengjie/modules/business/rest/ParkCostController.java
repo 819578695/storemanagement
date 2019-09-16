@@ -67,4 +67,12 @@ public class ParkCostController {
         parkCostService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("查询ParkCost统计数据")
+    @ApiOperation(value = "查询ParkCost统计数据")
+    @GetMapping (value = "/findCostsMoney/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
+    public ResponseEntity findCostsMoney(@PathVariable Long deptId){
+        return new ResponseEntity(parkCostService.findCostsMoney(deptId),HttpStatus.OK);
+    }
 }

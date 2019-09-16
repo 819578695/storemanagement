@@ -24,7 +24,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -68,7 +70,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get()));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());
@@ -96,7 +98,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
             MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
             if(maintarinDetails!=null){
                 //修改账户详情的余额
-                Double price=(StringUtils.isNotNullBigDecimal(resources.getArrersRent())+
+                Double price=(
                         StringUtils.isNotNullBigDecimal(resources.getHouseRent())
                         +StringUtils.isNotNullBigDecimal(resources.getElectricityRent())
                         +StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent())
@@ -107,68 +109,65 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         +StringUtils.isNotNullBigDecimal(resources.getPropertyRent())
                         +StringUtils.isNotNullBigDecimal(resources.getSanitationRent())
                         +StringUtils.isNotNullBigDecimal(resources.getWaterRent()));
-                    BigDecimal Difference = new BigDecimal(maintarinDetails.getRemaining().doubleValue() + price );
-                    maintarinDetails.setRemaining(Difference);
                     parkPevenueRepository.save(resources);
-                    maintainDetailRepository.save(maintarinDetails);
                 //房租
                 if ( resources.getHouseRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getHouseRent())){
-                        fundFlowingService.createByPostPevenue(p,"1",resources.getHouseRent());
+                        fundFlowingService.createByPostPevenue(p,"1",resources.getHouseRent(),new BigDecimal(0.00));
                     }
                 }
                 //水费
                 if (resources.getWaterRent()!=null ){
                     if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
-                        fundFlowingService.createByPostPevenue(p,"7",resources.getWaterRent());
+                        fundFlowingService.createByPostPevenue(p,"7",resources.getWaterRent(),new BigDecimal(0.00));
                     }
                 }
                 //电费
                 if (resources.getElectricityRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-                        fundFlowingService.createByPostPevenue(p,"8",resources.getElectricityRent());
+                        fundFlowingService.createByPostPevenue(p,"8",resources.getElectricityRent(),new BigDecimal(0.00));
                     }
                 }
                 //物业费
                 if (resources.getPropertyRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
-                        fundFlowingService.createByPostPevenue(p,"10",resources.getPropertyRent());
+                        fundFlowingService.createByPostPevenue(p,"10",resources.getPropertyRent(),new BigDecimal(0.00));
                     }
                 }
                 //卫生费
                 if (resources.getSanitationRent()!=null) {
                     if (StringUtils.iseqBigDecimal(resources.getSanitationRent())) {
-                        fundFlowingService.createByPostPevenue(p, "15", resources.getSanitationRent());
+                        fundFlowingService.createByPostPevenue(p, "15", resources.getSanitationRent(),new BigDecimal(0.00));
                     }
                 }
                 //违约金
                 if (resources.getLiquidatedRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getLiquidatedRent())) {
-                        fundFlowingService.createByPostPevenue(p, "12", resources.getLiquidatedRent());
+                        fundFlowingService.createByPostPevenue(p, "12", resources.getLiquidatedRent(),new BigDecimal(0.00));
                     }
                 }
                 //滞纳金
                 if (resources.getLateRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getLateRent())) {
-                        fundFlowingService.createByPostPevenue(p, "14", resources.getLateRent());
+                        fundFlowingService.createByPostPevenue(p, "14", resources.getLateRent(),new BigDecimal(0.00));
                     }
                 }
                 //地磅费
                 if (resources.getGroundPoundRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getGroundPoundRent())) {
-                        fundFlowingService.createByPostPevenue(p, "3", resources.getGroundPoundRent());
+                        fundFlowingService.createByPostPevenue(p, "3", resources.getGroundPoundRent(),new BigDecimal(0.00));
                     }
                 }
                 //管理费
                 if (resources.getManagementRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getManagementRent())) {
-                        fundFlowingService.createByPostPevenue(p, "13", resources.getManagementRent());
+                        fundFlowingService.createByPostPevenue(p, "13", resources.getManagementRent(),new BigDecimal(0.00));
                     }
                 }
                 //停车费
                 if (resources.getParkingRent()!=null){
                     if (StringUtils.iseqBigDecimal(resources.getParkingRent())) {
-                        fundFlowingService.createByPostPevenue(p, "2", resources.getParkingRent());
+                        fundFlowingService.createByPostPevenue(p, "2", resources.getParkingRent(),new BigDecimal(0.00));
                     }
                 }
             }
@@ -193,84 +192,204 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
             MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
             if (maintarinDetails != null) {
                 //修改之后的余额
-                Double price = (StringUtils.isNotNullBigDecimal(resources.getArrersRent()) + StringUtils.isNotNullBigDecimal(resources.getHouseRent()) + StringUtils.isNotNullBigDecimal(resources.getElectricityRent()) + StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent()) + StringUtils.isNotNullBigDecimal(resources.getLateRent()) + StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent()) + StringUtils.isNotNullBigDecimal(resources.getManagementRent()) + StringUtils.isNotNullBigDecimal(resources.getParkingRent()) + StringUtils.isNotNullBigDecimal(resources.getPropertyRent()) + StringUtils.isNotNullBigDecimal(resources.getSanitationRent()) + StringUtils.isNotNullBigDecimal(resources.getWaterRent()));                //修改之前的余额
+                // Double price = (StringUtils.isNotNullBigDecimal(resources.getArrersRent()) + StringUtils.isNotNullBigDecimal(resources.getHouseRent()) + StringUtils.isNotNullBigDecimal(resources.getElectricityRent()) + StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent()) + StringUtils.isNotNullBigDecimal(resources.getLateRent()) + StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent()) + StringUtils.isNotNullBigDecimal(resources.getManagementRent()) + StringUtils.isNotNullBigDecimal(resources.getParkingRent()) + StringUtils.isNotNullBigDecimal(resources.getPropertyRent()) + StringUtils.isNotNullBigDecimal(resources.getSanitationRent()) + StringUtils.isNotNullBigDecimal(resources.getWaterRent()));                //修改之前的余额
                 //修改之前的余额
-                Double beforePrice = (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getArrersRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getHouseRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getElectricityRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getGroundPoundRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLateRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLiquidatedRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getManagementRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getParkingRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getPropertyRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getSanitationRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getWaterRent()));
+                //Double beforePrice = (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getArrersRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getHouseRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getElectricityRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getGroundPoundRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLateRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLiquidatedRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getManagementRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getParkingRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getPropertyRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getSanitationRent()) + StringUtils.isNotNullBigDecimal(parkPevenueBefore.getWaterRent()));
 
-                BigDecimal Difference = new BigDecimal(maintarinDetails.getRemaining().doubleValue() + (price - beforePrice));
-                //判断当前帐户余额和修改后的金额,如果为负数就不做修改
-                if (Difference.signum() != -1) {
-                    //修改资金流水
-                    //房租
-                    if (resources.getHouseRent() != null&&resources.getHouseRent().compareTo(parkPevenue.getHouseRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getHouseRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "1", resources.getHouseRent());
-                        }
-                    }
-                    //水费
-                    if (resources.getWaterRent() != null&&resources.getWaterRent().compareTo(parkPevenue.getWaterRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getWaterRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "7", resources.getWaterRent());
-                        }
-                    }
-                    //电费
-                    if (resources.getElectricityRent() != null&&resources.getElectricityRent().compareTo(parkPevenue.getElectricityRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getElectricityRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "8", resources.getElectricityRent());
-                        }
-                    }
-                    //物业费
-                    if (resources.getPropertyRent() != null&&resources.getPropertyRent().compareTo(parkPevenue.getPropertyRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getPropertyRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "10", resources.getPropertyRent());
-                        }
-                    }
-                    //卫生费
-                    if (resources.getSanitationRent() != null&&resources.getSanitationRent().compareTo(parkPevenue.getSanitationRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getSanitationRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "15", resources.getSanitationRent());
-                        }
-                    }
-                    //违约金
-                    if (resources.getLiquidatedRent() != null&&resources.getLiquidatedRent().compareTo(parkPevenue.getLiquidatedRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getLiquidatedRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "12", resources.getLiquidatedRent());
-                        }
-                    }
-                    //滞纳金
-                    if (resources.getLateRent() != null&&resources.getLateRent().compareTo(parkPevenue.getLateRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getLateRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "14", resources.getLateRent());
-                        }
-                    }
-                    //地磅费
-                    if (resources.getGroundPoundRent() != null&&resources.getGroundPoundRent().compareTo(parkPevenue.getGroundPoundRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getGroundPoundRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "3", resources.getGroundPoundRent());
-                        }
-                    }
-                    //管理费
-                    if (resources.getManagementRent() != null&&resources.getManagementRent().compareTo(parkPevenue.getManagementRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getManagementRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "13", resources.getManagementRent());
-                        }
-                    }
-                    //停车费
-                    if (resources.getParkingRent() != null&&resources.getParkingRent().compareTo(parkPevenue.getParkingRent())!=0) {
-                        if (StringUtils.iseqBigDecimal(resources.getParkingRent())) {
-                            fundFlowingService.createByPostPevenue(parkPevenue, "2", resources.getParkingRent());
-                        }
-                    }
-                    //修改账户详情的余额
-                    maintarinDetails.setRemaining(Difference);
-                    maintainDetailRepository.save(maintarinDetails);
+                // BigDecimal Difference = new BigDecimal(maintarinDetails.getRemaining().doubleValue() + (price - beforePrice));
+                  //
+                   if(resources.getType()!=2){
+                       //修改资金流水
+                       //房租
+                       if (resources.getHouseRent() != null&&resources.getHouseRent().compareTo(parkPevenue.getHouseRent()==null?new BigDecimal(0.00):parkPevenue.getHouseRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getHouseRent()) - (StringUtils.isNotNullBigDecimal(resources.getHouseRent()))));
+                           fundFlowingService.createByPostPevenue(resources, "1", resources.getHouseRent(),Difference);
+                       }
+                       //水费
+                       if (resources.getWaterRent() != null&&resources.getWaterRent().compareTo(parkPevenue.getWaterRent()==null?new BigDecimal(0.00):parkPevenue.getWaterRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getWaterRent()) - (StringUtils.isNotNullBigDecimal(resources.getWaterRent()))));
+                           fundFlowingService.createByPostPevenue(resources, "7", resources.getWaterRent(),Difference);
+
+                       }
+                       //电费
+                       if (resources.getElectricityRent() != null&&resources.getElectricityRent().compareTo(parkPevenue.getElectricityRent()==null?new BigDecimal(0.00):parkPevenue.getElectricityRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getElectricityRent()) - (StringUtils.isNotNullBigDecimal(resources.getElectricityRent()))));
+                           fundFlowingService.createByPostPevenue(resources, "8", resources.getElectricityRent(),Difference);
+                       }
+                       //物业费
+                       if (resources.getPropertyRent() != null&&resources.getPropertyRent().compareTo(parkPevenue.getPropertyRent()==null?new BigDecimal(0.00):parkPevenue.getPropertyRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getPropertyRent()) - (StringUtils.isNotNullBigDecimal(resources.getPropertyRent()))));
+                           fundFlowingService.createByPostPevenue(resources, "10", resources.getPropertyRent(),Difference);
+                       }
+                       //卫生费
+                       if (resources.getSanitationRent() != null&&resources.getSanitationRent().compareTo(parkPevenue.getSanitationRent()==null?new BigDecimal(0.00):parkPevenue.getSanitationRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getSanitationRent()) - (StringUtils.isNotNullBigDecimal(resources.getSanitationRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "15", resources.getSanitationRent(),Difference);
+                       }
+                       //违约金
+                       if (resources.getLiquidatedRent() != null&&resources.getLiquidatedRent().compareTo(parkPevenue.getLiquidatedRent()==null?new BigDecimal(0.00):parkPevenue.getLiquidatedRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLiquidatedRent()) - (StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "12", resources.getLiquidatedRent(),Difference);
+                       }
+                       //滞纳金
+                       if (resources.getLateRent() != null&&resources.getLateRent().compareTo(parkPevenue.getLateRent()==null?new BigDecimal(0.00):parkPevenue.getLateRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getLateRent()) - (StringUtils.isNotNullBigDecimal(resources.getLateRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "14", resources.getLateRent(),Difference);
+                       }
+                       //地磅费
+                       if (resources.getGroundPoundRent() != null&&resources.getGroundPoundRent().compareTo(parkPevenue.getGroundPoundRent()==null?new BigDecimal(0.00):parkPevenue.getGroundPoundRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getGroundPoundRent()) - (StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "3", resources.getGroundPoundRent(),Difference);
+                       }
+                       //管理费
+                       if (resources.getManagementRent() != null&&resources.getManagementRent().compareTo(parkPevenue.getManagementRent()==null?new BigDecimal(0.00):parkPevenue.getManagementRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getManagementRent()) - (StringUtils.isNotNullBigDecimal(resources.getManagementRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "13", resources.getManagementRent(),Difference);
+                       }
+                       //停车费
+                       if (resources.getParkingRent() != null&&resources.getParkingRent().compareTo(parkPevenue.getParkingRent()==null?new BigDecimal(0.00):parkPevenue.getParkingRent())!=0) {
+                           BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(parkPevenueBefore.getParkingRent()) - (StringUtils.isNotNullBigDecimal(resources.getParkingRent()))));
+                           fundFlowingService.createByPostPevenue(parkPevenue, "2", resources.getParkingRent(),Difference);
+                       }
+                   }
+
+
                     parkPevenue.copy(resources);
+                    parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
                     parkPevenueRepository.save(parkPevenue);
-                } else {
-                    throw new BadRequestException("账户余额不足,请更换支付方式");
-                }
+
             } else {
                 throw new BadRequestException("请先新建账户余额");
+            }
+        }
+    }
+
+    @Override
+    public void payBack(ParkPevenue resources) {
+        Optional<ParkPevenue> optionalParkPevenue = parkPevenueRepository.findById(resources.getId());
+        ValidationUtil.isNull( optionalParkPevenue,"ParkPevenue","id",resources.getId());
+        ParkPevenue parkPevenue = optionalParkPevenue.get();
+        //当欠付变为补缴时
+        if (resources.getType()==3&&parkPevenue.getType()==2) {
+            if (parkPevenue != null) {
+                //根据支付方式和账户id查询账户详情
+                MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
+                if (maintarinDetails != null) {
+                    if (resources.getType() == 3) {
+                        Double houseRent = StringUtils.isNotNullBigDecimal(resources.getHouseRent())-StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent());
+                        Double waterRent = StringUtils.isNotNullBigDecimal(resources.getWaterRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent()));
+                        Double electricityRent= StringUtils.isNotNullBigDecimal(resources.getElectricityRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent()));
+                        Double propertyRent= StringUtils.isNotNullBigDecimal(resources.getPropertyRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent()));
+                        Double sanitationRent= StringUtils.isNotNullBigDecimal(resources.getSanitationRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent()));
+                        Double liquidatedRent= StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent()));
+                        Double lateRent= StringUtils.isNotNullBigDecimal(resources.getLateRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent()));
+                        Double groundPoundRent= StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent()));
+                        Double managementRent= StringUtils.isNotNullBigDecimal(resources.getManagementRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent()));
+                        Double parkingRent= StringUtils.isNotNullBigDecimal(resources.getParkingRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent()));
+
+                        //如果补缴金额和欠付金额相同则直接修改
+                        if(houseRent==0.0 &&waterRent==0.0 &&electricityRent==0.0 &&propertyRent==0.0 &&sanitationRent==0.0 &&liquidatedRent==0.0 &&lateRent==0.0 &&groundPoundRent==0.0 &&managementRent==0.0 &&parkingRent==0.0
+                        ){
+                            parkPevenue.setType(3);
+                            parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
+                            parkPevenueRepository.save(parkPevenue);
+                        }
+                        //如果补缴部分或其他未补缴的时候需新增
+                        else{
+                            //新增新的补缴项
+                            ParkPevenue payBack = new ParkPevenue();
+                            payBack.setType(3);
+                            payBack.setArchivesmouthsmanagement(resources.getArchivesmouthsmanagement());
+                            payBack.setBasicsPark(resources.getBasicsPark());
+                            payBack.setDept(resources.getDept());
+                            payBack.setDictDetail(resources.getDictDetail());
+                            payBack.setElectricityRent(resources.getElectricityRent());
+                            payBack.setGroundPoundRent(resources.getGroundPoundRent());
+                            payBack.setHouseRent(resources.getHouseRent());
+                            payBack.setLateRent(resources.getLateRent());
+                            payBack.setLeaseContract(resources.getLeaseContract());
+                            payBack.setLiquidatedRent(resources.getLiquidatedRent());
+                            payBack.setManagementRent(resources.getManagementRent());
+                            payBack.setParkingRent(resources.getParkingRent());
+                            payBack.setPropertyRent(resources.getPropertyRent());
+                            payBack.setReceiptPaymentAccount(resources.getReceiptPaymentAccount());
+                            payBack.setSanitationRent(resources.getSanitationRent());
+                            payBack.setWaterRent(resources.getWaterRent());
+                            payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
+                            parkPevenueRepository.save(payBack);
+                            //然后修改原有的补缴费用
+                            resources.setType(2);
+                            resources.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
+                            resources.setGroundPoundRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
+                            resources.setHouseRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
+                            resources.setLateRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
+                            resources.setLiquidatedRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
+                            resources.setManagementRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
+                            resources.setParkingRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
+                            resources.setPropertyRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
+                            resources.setSanitationRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
+                            resources.setWaterRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
+                            payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
+                            parkPevenueRepository.save(resources);
+                        }
+                        //修改资金流水
+                        //房租
+                        if (resources.getHouseRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent()) - (StringUtils.isNotNullBigDecimal(resources.getHouseRent()))));
+                            fundFlowingService.createByPostPevenue(resources, "1", resources.getHouseRent(),new BigDecimal(0.00));
+                        }
+                        //水费
+                        if (resources.getWaterRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent()) - (StringUtils.isNotNullBigDecimal(resources.getWaterRent()))));
+                            fundFlowingService.createByPostPevenue(resources, "7", resources.getWaterRent(), Difference);
+
+                        }
+                        //电费
+                        if (resources.getElectricityRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent()) - (StringUtils.isNotNullBigDecimal(resources.getElectricityRent()))));
+                            fundFlowingService.createByPostPevenue(resources, "8", resources.getElectricityRent(), Difference);
+                        }
+                        //物业费
+                        if (resources.getPropertyRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent()) - (StringUtils.isNotNullBigDecimal(resources.getPropertyRent()))));
+                            fundFlowingService.createByPostPevenue(resources, "10", resources.getPropertyRent(), Difference);
+                        }
+                        //卫生费
+                        if (resources.getSanitationRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent()) - (StringUtils.isNotNullBigDecimal(resources.getSanitationRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "15", resources.getSanitationRent(), Difference);
+                        }
+                        //违约金
+                        if (resources.getLiquidatedRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent()) - (StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "12", resources.getLiquidatedRent(), Difference);
+                        }
+                        //滞纳金
+                        if (resources.getLateRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent()) - (StringUtils.isNotNullBigDecimal(resources.getLateRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "14", resources.getLateRent(), Difference);
+                        }
+                        //地磅费
+                        if (resources.getGroundPoundRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent()) - (StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "3", resources.getGroundPoundRent(), Difference);
+                        }
+                        //管理费
+                        if (resources.getManagementRent() != null) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent()) - (StringUtils.isNotNullBigDecimal(resources.getManagementRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "13", resources.getManagementRent(), Difference);
+                        }
+                        //停车费
+                        if (resources.getParkingRent() != null ) {
+                            BigDecimal Difference = new BigDecimal((StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent()) - (StringUtils.isNotNullBigDecimal(resources.getParkingRent()))));
+                            fundFlowingService.createByPostPevenue(parkPevenue, "2", resources.getParkingRent(), Difference);
+                        }
+
+                    }
+
+                } else {
+                    throw new BadRequestException("请先新建账户余额");
+                }
             }
         }
     }
@@ -279,5 +398,10 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         parkPevenueRepository.deleteById(id);
+    }
+
+    @Override
+    public Object findPevenueMoney(Long deptId) {
+        return parkPevenueRepository.findByDeptIdSumRent(deptId);
     }
 }

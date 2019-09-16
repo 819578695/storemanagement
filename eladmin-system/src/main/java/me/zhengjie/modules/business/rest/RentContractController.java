@@ -65,7 +65,7 @@ public class RentContractController {
     @ApiOperation(value = "上传RentContract")
     @PostMapping(value="/upload/{contractNo}")
     @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_EDIT')")
-    public ResponseEntity uploadHeadPortrait(MultipartHttpServletRequest multipartRequest,@PathVariable String contractNo) throws Exception{
+    public ResponseEntity uploadRentContract(MultipartHttpServletRequest multipartRequest,@PathVariable String contractNo) throws Exception{
         String path = rentContractService.uploadFile(multipartRequest,contractNo);
         if (!StringUtils.isEmpty(path)) {
             return new ResponseEntity(path,HttpStatus.OK);

@@ -50,6 +50,16 @@ public class ParkPevenueController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @Log("补缴ParkPevenue")
+    @ApiOperation(value = "补缴ParkPevenue")
+    @PutMapping(value = "/parkPevenuePayBack")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT')")
+    public ResponseEntity payBack(@Validated @RequestBody ParkPevenue resources){
+        parkPevenueService.payBack(resources);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+
     @Log("删除ParkPevenue")
     @ApiOperation(value = "删除ParkPevenue")
     @DeleteMapping(value = "/parkPevenue/{id}")
@@ -57,5 +67,13 @@ public class ParkPevenueController {
     public ResponseEntity delete(@PathVariable Long id){
         parkPevenueService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("查询ParkPevenue统计数据")
+    @ApiOperation(value = "查询ParkPevenue统计数据")
+    @GetMapping (value = "/findPevenueMoney/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
+    public ResponseEntity findPevenueMoney(@PathVariable Long deptId){
+        return new ResponseEntity(parkPevenueService.findPevenueMoney(deptId),HttpStatus.OK);
     }
 }

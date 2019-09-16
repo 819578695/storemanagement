@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import lombok.Data;
+import me.zhengjie.modules.basic_management.city.domain.City;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
@@ -68,8 +69,9 @@ public class Archivesmouthsmanagement implements Serializable {
     private Timestamp stalldate;
 
     //省份id
-    @Column(name = "city")
-    private Long city;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "areaId")
+    private City areaId;
 
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

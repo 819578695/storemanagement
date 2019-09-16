@@ -174,7 +174,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     }
 
     @Override
-    public FundFlowingDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money) {
+    public FundFlowingDTO createByPostPevenue(ParkPevenue resources, String value, BigDecimal money,BigDecimal substactMoney) {
         Dept dept = resources.getDept();//部门
         DictDetail TradType = resources.getDictDetail();//支付方式
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0");//收入
@@ -185,18 +185,27 @@ public class FundFlowingServiceImpl implements FundFlowingService {
         FundFlowing fundFlowing= fundFlowingRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId(),resources.getId());
         if (maintarinDetail!=null){
             //默认修改(根据资金流水里的金额和修改之后的金额并修改后的账户余额)
-            BigDecimal a= fundFlowing.getMoney().subtract(money).add(fundFlowing.getUrrentBalance());
+            BigDecimal a = new BigDecimal(0);
             //如果为空则添加
             if (fundFlowing==null){
                 //账户余额添加金额
                 a = maintarinDetail.getRemaining().add(money);
                 fundFlowing=new FundFlowing();
+                maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(money));
+            }
+            else{
+                a = money.subtract(fundFlowing.getMoney()).add(fundFlowing.getUrrentBalance());
+                if (maintarinDetail.getRemaining().subtract(substactMoney).signum()!=-1) {
+                    maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(substactMoney));
+                }
+                else{
+                    throw new BadRequestException("账户余额不足,无法操作");
+                }
             }
             ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
             fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getReceiptAccount());//收付款信息
             fundFlowing.setBackAccount(receiptPaymentAccount.getReceiptAccountNum());//银行账号
             fundFlowing.setBackNum(receiptPaymentAccount.getReceiptBank());//开户名
-
             fundFlowing.setUrrentBalance(a);//发生交易后的金额
             fundFlowing.setDept(dept);//部门
             fundFlowing.setParkCostPevenueId(resources.getId());//成本收入id
