@@ -64,9 +64,10 @@ public class LeaseContractServiceImpl implements LeaseContractService {
             BigDecimal totalMoney = new BigDecimal(0);
             for(ParkPevenue parkPevenue : parkPevenues){
                 //bigdecimal 求和(未缴费用)
-                totalMoney = totalMoney.add(parkPevenue.getHouseRent());
-                leaseContract.setPaymentedExpenses(totalMoney);
-
+                if(parkPevenue.getHouseRent()!=null){
+                    totalMoney = totalMoney.add(parkPevenue.getHouseRent());
+                    leaseContract.setPaymentedExpenses(totalMoney);
+                }
             }
             leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get()));
 

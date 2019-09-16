@@ -188,6 +188,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
             fundFlowing.setTradType(TradType);//支付方式
             fundFlowing.setTypeDict(typeDict);//交易类型
             fundFlowing.setTallyType(tallyType);//收入支出项
+            maintarinDetailRepository.save(maintarinDetail);
         }
         else{
             throw new BadRequestException("请先新建账户余额");
