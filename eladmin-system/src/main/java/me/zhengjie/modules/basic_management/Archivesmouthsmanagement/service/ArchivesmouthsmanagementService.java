@@ -1,6 +1,7 @@
 package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,7 @@ public interface ArchivesmouthsmanagementService {
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable);
 
-    List<Archivesmouthsmanagement> publiccity(Long areaId);
+    List<ArchiveDto> publiccity(Long id);
 
     /**
      * queryAll 不分页

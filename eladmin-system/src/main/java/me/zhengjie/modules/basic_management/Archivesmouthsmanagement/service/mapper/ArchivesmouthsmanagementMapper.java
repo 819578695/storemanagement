@@ -2,7 +2,9 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ma
 
 import me.zhengjie.mapper.EntityMapper;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
+import me.zhengjie.modules.basic_management.city.domain.City;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.mapstruct.Mapper;

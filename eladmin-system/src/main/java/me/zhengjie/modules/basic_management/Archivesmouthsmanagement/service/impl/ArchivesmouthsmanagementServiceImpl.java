@@ -3,9 +3,12 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.im
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchiveMapper;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.basic_management.city.repository.CityRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.PageUtil;
@@ -32,12 +35,16 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
 
     @Autowired
     private ArchivesmouthsmanagementMapper archivesmouthsmanagementMapper;
+    @Autowired
+    private ArchiveMapper archivesMapper;
 
     @Autowired
     private DictDetailRepository dictDetailRepository;
 
     @Autowired
     private DeptRepository deptRepository;
+    @Autowired
+    private CityRepository cityRepository;
 
     @Override
     public  Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
@@ -50,11 +57,14 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
-    public  List<Archivesmouthsmanagement> publiccity(Long areaId){
+    public  List<ArchiveDto> publiccity(Long id){
         /*String city = request.getQueryString();*/
-        List<Archivesmouthsmanagement> list;
-        list = archivesmouthsmanagementRepository.findByareaId(areaId);
-        return list;
+        List<Archivesmouthsmanagement> list = archivesmouthsmanagementRepository.findByAreaId(id);
+        List<ArchiveDto> list1 = new ArrayList<>();
+        for (Archivesmouthsmanagement lists : list){
+            list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),cityRepository.findById(lists.getCity().getAreaId()).get()));
+        }
+        return list1;
 
     }
 

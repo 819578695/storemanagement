@@ -70,8 +70,18 @@ public class Archivesmouthsmanagement implements Serializable {
 
     //省份id
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "areaId")
-    private City areaId;
+    @JoinColumn(name = "area_id")
+    private City city;
+    //省份id
+    /*@Column(name = "area_id")
+    private Long areaId;*/
+
+    /*@Transient
+    private Integer sum;
+    @Transient
+    private String label;
+    @Transient
+    private String areaName;*/
 
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
