@@ -55,8 +55,7 @@ public class ParkPevenueController {
     @PutMapping(value = "/parkPevenuePayBack")
     @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT')")
     public ResponseEntity payBack(@Validated @RequestBody ParkPevenue resources){
-        parkPevenueService.payBack(resources);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return new ResponseEntity(parkPevenueService.payBack(resources),HttpStatus.OK);
     }
 
 

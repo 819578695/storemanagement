@@ -60,7 +60,7 @@ public interface ParkPevenueService {
      * @param resources
      */
     //@CacheEvict(allEntries = true)
-    void payBack(ParkPevenue resources);
+    ParkPevenueDTO payBack(ParkPevenue resources);
 
     /**
      * delete

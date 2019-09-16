@@ -20,8 +20,8 @@ public class ParkPevenueQueryCriteria{
     private Date createTimeEnd;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
-
-
+    @Query(type = Query.Type.EQUAL)
+    private int type;
     @Query(type = Query.Type.GREATER_THAN_DATE)
     private Date tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)

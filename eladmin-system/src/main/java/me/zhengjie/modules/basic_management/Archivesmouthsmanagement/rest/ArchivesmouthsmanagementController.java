@@ -4,7 +4,11 @@ import cn.hutool.core.codec.Base64;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.basic_management.city.repository.CityRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -91,9 +96,9 @@ public class ArchivesmouthsmanagementController {
     @Log("微信小程序")
     @ApiOperation(value = "微信小程序查询")
     @GetMapping("/wechatquery")
-    public List<Archivesmouthsmanagement> wechatQuery(Long areaId){
+    public List<ArchiveDto> wechatQuery(Long id){
         /*city = "上海";*/
-       List<Archivesmouthsmanagement> list = archivesmouthsmanagementService.publiccity(areaId);
+       List<ArchiveDto> list = archivesmouthsmanagementService.publiccity(id);
         return list ;
     }
 
