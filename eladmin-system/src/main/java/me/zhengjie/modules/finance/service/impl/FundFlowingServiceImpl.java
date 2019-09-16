@@ -8,6 +8,7 @@ import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
+import me.zhengjie.modules.finance.service.MaintarinDetailService;
 import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
 import me.zhengjie.modules.finance.service.mapper.FundFlowingMapper;
 import me.zhengjie.modules.system.domain.Dept;
@@ -15,6 +16,9 @@ import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.modules.system.service.DictDetailService;
+import me.zhengjie.modules.system.service.dto.DictDetailDTO;
+import me.zhengjie.modules.system.service.impl.DictDetailServiceImpl;
 import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
@@ -61,7 +65,10 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
     @Autowired
     private MaintarinDetailRepository maintarinDetailRepository;
-
+    @Autowired
+    private DictDetailService dictDetailService;
+    @Autowired
+    private MaintarinDetailService maintarinDetailService;
     @Override
     public Object queryAll(FundFlowingQueryCriteria criteria, Pageable pageable){
         Page<FundFlowing> page = fundFlowingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
@@ -87,6 +94,24 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FundFlowingDTO create(FundFlowing resources) {
+        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
+        if (maintarinDetail!=null){
+            BigDecimal remaining = maintarinDetail.getRemaining();
+            DictDetailDTO dictDetailDTO = dictDetailService.findById(resources.getTypeDict().getId());
+            if (dictDetailDTO.getLabel().equals("收入")){
+                remaining = remaining.add(resources.getMoney());
+                resources.setUrrentBalance(remaining);
+                maintarinDetail.setRemaining(remaining);
+                maintarinDetailService.update(maintarinDetail);
+            }else if(dictDetailDTO.getLabel().equals("支出")) {
+                remaining = remaining.subtract(resources.getMoney());
+                resources.setUrrentBalance(remaining);
+                maintarinDetail.setRemaining(remaining);
+                maintarinDetailService.update(maintarinDetail);
+            }
+        }else {
+            throw new BadRequestException("请先新建账户余额");
+        }
         return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));
     }
 
@@ -188,6 +213,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
             fundFlowing.setTradType(TradType);//支付方式
             fundFlowing.setTypeDict(typeDict);//交易类型
             fundFlowing.setTallyType(tallyType);//收入支出项
+            maintarinDetailRepository.save(maintarinDetail);
         }
         else{
             throw new BadRequestException("请先新建账户余额");

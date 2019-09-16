@@ -27,6 +27,7 @@ public class MaintarinDetail implements Serializable {
 
     // 交易账户类型
     @OneToOne
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JoinColumn(name = "trad_type_id")
     private DictDetail tradType;
 

@@ -50,6 +50,15 @@ public class ParkPevenueController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @Log("补缴ParkPevenue")
+    @ApiOperation(value = "补缴ParkPevenue")
+    @PutMapping(value = "/parkPevenuePayBack")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT')")
+    public ResponseEntity payBack(@Validated @RequestBody ParkPevenue resources){
+        return new ResponseEntity(parkPevenueService.payBack(resources),HttpStatus.OK);
+    }
+
+
     @Log("删除ParkPevenue")
     @ApiOperation(value = "删除ParkPevenue")
     @DeleteMapping(value = "/parkPevenue/{id}")

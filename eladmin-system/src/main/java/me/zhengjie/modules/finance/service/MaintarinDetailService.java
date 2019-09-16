@@ -58,4 +58,11 @@ public interface MaintarinDetailService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * getMoney
+     * @param criteria
+     * @return
+     */
+    Object getMoney(MaintarinDetailQueryCriteria criteria);
 }

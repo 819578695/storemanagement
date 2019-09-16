@@ -9,7 +9,6 @@ import me.zhengjie.annotation.Query;
 */
 @Data
 public class DictDetailQueryCriteria {
-
     @Query(type = Query.Type.INNER_LIKE)
     private String label;
 

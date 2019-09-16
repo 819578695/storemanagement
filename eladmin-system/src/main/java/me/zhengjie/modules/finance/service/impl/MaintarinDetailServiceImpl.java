@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -101,6 +102,13 @@ public class MaintarinDetailServiceImpl implements MaintarinDetailService {
     public void delete(Long id) {
         maintarinDetailRepository.deleteById(id);
     }
+
+
+    @Override
+    public Object getMoney(MaintarinDetailQueryCriteria criteria) {
+        return maintarinDetailRepository.findByMaintainId(criteria.getDeptId());
+    }
+
 }
 
 

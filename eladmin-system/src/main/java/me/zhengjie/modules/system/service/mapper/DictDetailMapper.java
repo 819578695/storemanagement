@@ -12,5 +12,4 @@ import org.mapstruct.ReportingPolicy;
 */
 @Mapper(componentModel = "spring",uses = {},unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface DictDetailMapper extends EntityMapper<DictDetailDTO, DictDetail> {
-
 }

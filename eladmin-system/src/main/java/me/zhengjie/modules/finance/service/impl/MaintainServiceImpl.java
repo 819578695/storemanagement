@@ -47,7 +47,7 @@ public class MaintainServiceImpl implements MaintainService {
             List<MaintainDTO> MaintainDTOs = new ArrayList<>();
             for (Maintain maintain : page.getContent()) {
                 MaintainDTO dto = maintainMapper.toDTO(maintain, maintain.getDept());
-                BigDecimal maintainSum = maintarinDetailRepository.findByMaintainId(dto.getId());
+                BigDecimal maintainSum = maintarinDetailRepository.findByMaintainId(dto.getDeptId());
                 dto.setRemaining(maintainSum);
                 MaintainDTOs.add(dto);
             }

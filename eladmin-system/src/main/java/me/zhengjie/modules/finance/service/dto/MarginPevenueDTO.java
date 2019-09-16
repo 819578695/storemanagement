@@ -3,6 +3,7 @@ package me.zhengjie.modules.finance.service.dto;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 
 /**
@@ -46,4 +47,6 @@ public class MarginPevenueDTO {
 
     //门牌号
     private Long houseNumber;
+    //创建时间
+    private Timestamp createTime;
 }

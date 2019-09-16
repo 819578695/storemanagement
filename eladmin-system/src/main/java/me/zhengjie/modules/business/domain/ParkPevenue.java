@@ -83,9 +83,9 @@ public class ParkPevenue implements Serializable {
     @Column(name = "ground_pound_rent")
     private BigDecimal groundPoundRent;
 
-    // 欠款金额
-    @Column(name = "arrers_rent")
-    private BigDecimal arrersRent;
+    // 类型(1 已付 2 欠款 3 补缴)
+    @Column(name = "type")
+    private int type;
 
     //管理费
     @Column(name = "management_rent")
@@ -104,6 +104,11 @@ public class ParkPevenue implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "lease_contract_id")
     private LeaseContract leaseContract;
+
+    // 修改时间
+
+    @Column(name = "update_time")
+    private Timestamp updateTime;
 
     // 创建时间
     @CreationTimestamp

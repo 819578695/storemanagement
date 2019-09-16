@@ -44,7 +44,7 @@ public class DictDetailController {
     @Log("查询多个字典详情")
     @GetMapping(value = "/dictDetail/map")
     public ResponseEntity getDictDetailMaps(DictDetailQueryCriteria criteria,
-                                         @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
+        @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
         String[] names = criteria.getDictName().split(",");
         Map map = new HashMap(names.length);
         for (String name : names) {
