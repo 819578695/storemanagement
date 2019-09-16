@@ -2,6 +2,7 @@ package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.finance.service.MarginService;
+import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class MarginController {
     @ApiOperation(value = "查询Margin")
     @GetMapping(value = "/margin")
     @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
-    public ResponseEntity getFinaceMargins( Object criteria, Pageable pageable){
+    public ResponseEntity getFinaceMargins(MarginQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(marginService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 

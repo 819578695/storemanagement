@@ -59,4 +59,11 @@ public class MaintarinDetailController {
         maintarinDetailService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("查询金额")
+    @GetMapping(value = "/getMoney")
+    @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTARINDETAIL_ALL','FINANCEMAINTARINDETAIL_SELECT')")
+    public  ResponseEntity getMoney(MaintarinDetailQueryCriteria criteria){
+        return new ResponseEntity(maintarinDetailService.getMoney(criteria),HttpStatus.OK);
+    }
 }

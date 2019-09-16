@@ -7,6 +7,7 @@ import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.MarginCostDTO;
 import me.zhengjie.modules.finance.service.dto.MarginPevenueDTO;
+import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
 import me.zhengjie.utils.QueryHelp;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,8 @@ public class MarginServiceImpl implements MarginService {
     @Autowired
     private ParkCostRepository parkCostRepository;
     @Override
-    public Object queryAll(Object criteria, Pageable pageable){
+    public Object queryAll(MarginQueryCriteria criteria, Pageable pageable){
         Page<ParkPevenue> pevenues = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
-//        Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder),pageable);
         Page<ParkCost> costs = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List costDTOS = new ArrayList<>();
         //园区收入
