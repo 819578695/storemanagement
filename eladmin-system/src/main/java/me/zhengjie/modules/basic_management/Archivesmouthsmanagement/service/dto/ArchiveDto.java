@@ -28,12 +28,10 @@ public class ArchiveDto implements Serializable {
     //图片查看
     private String picturetoview;
 
-    // 部门id
-    private Long deptId;
-
     //关联城市id
     private Long areaId;
 
     //关联城市name
     private String areaName;
+    private Integer num;
 }

@@ -76,13 +76,6 @@ public class Archivesmouthsmanagement implements Serializable {
     /*@Column(name = "area_id")
     private Long areaId;*/
 
-    /*@Transient
-    private Integer sum;
-    @Transient
-    private String label;
-    @Transient
-    private String areaName;*/
-
     public void copy(Archivesmouthsmanagement source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

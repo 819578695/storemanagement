@@ -22,9 +22,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
@@ -57,14 +55,17 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
-    public  List<ArchiveDto> publiccity(Long id){
-        /*String city = request.getQueryString();*/
+    public  Map publiccity(Long id){
         List<Archivesmouthsmanagement> list = archivesmouthsmanagementRepository.findByAreaId(id);
+        int num = archivesmouthsmanagementRepository.findBycoum(id);
         List<ArchiveDto> list1 = new ArrayList<>();
         for (Archivesmouthsmanagement lists : list){
             list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),cityRepository.findById(lists.getCity().getAreaId()).get()));
         }
-        return list1;
+        Map map = new HashMap();
+        map.put("list",list1);
+        map.put("num",num);
+        return map;
 
     }
 
