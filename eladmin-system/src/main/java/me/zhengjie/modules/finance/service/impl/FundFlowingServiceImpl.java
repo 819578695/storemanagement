@@ -10,6 +10,7 @@ import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.MaintarinDetailService;
 import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
+import me.zhengjie.modules.finance.service.dto.FundFlowingExportDTO;
 import me.zhengjie.modules.finance.service.mapper.FundFlowingMapper;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -18,8 +19,6 @@ import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.modules.system.service.DictDetailService;
 import me.zhengjie.modules.system.service.dto.DictDetailDTO;
-import me.zhengjie.modules.system.service.impl.DictDetailServiceImpl;
-import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.service.FundFlowingService;
@@ -69,6 +68,13 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     private DictDetailService dictDetailService;
     @Autowired
     private MaintarinDetailService maintarinDetailService;
+
+    @Override
+    public Object queryExportAll(FundFlowingQueryCriteria criteria) {
+        List<FundFlowingExportDTO> list = fundFlowingRepository.findByDeptId(criteria.getDeptId(), criteria.getTradDateStart(), criteria.getTradDateEnd());
+        return null;
+    }
+
     @Override
     public Object queryAll(FundFlowingQueryCriteria criteria, Pageable pageable){
         Page<FundFlowing> page = fundFlowingRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);

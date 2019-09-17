@@ -17,6 +17,13 @@ import java.math.BigDecimal;
 public interface FundFlowingService {
 
     /**
+     * 查询全部导出内容
+     * @param criteria
+     * @return
+     */
+    Object queryExportAll(FundFlowingQueryCriteria criteria);
+
+    /**
     * queryAll 分页
     * @param criteria
     * @param pageable
