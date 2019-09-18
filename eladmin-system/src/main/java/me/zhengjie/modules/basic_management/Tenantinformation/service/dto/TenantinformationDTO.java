@@ -48,6 +48,12 @@ public class TenantinformationDTO implements Serializable {
     // 合同详情
     private String thecontractdetails;
 
+    // 合同详情
+    private Long stallid;
+
+    // 合同详情
+    private String stallname;
+
     // 部门id
     private Long deptId;
 

@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -37,8 +38,8 @@ public class Tenantinformation implements Serializable {
     private DictDetail dictDetail;
 
     // 房号(门牌号)
-    @Column(name = "roomnumber")
-    private Long roomnumber;
+    @Column(name = "stall_id")
+    private Archivesmouthsmanagement Archivesmouthsmanagement;
 
     // 公司名称
     @Column(name = "companyname")

@@ -1,5 +1,6 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.TenantinformationMapper;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
@@ -46,12 +47,15 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Autowired
     private LeaseContractRepository LeaseContractRepository;
 
+    @Autowired
+    private ArchivesmouthsmanagementRepository ArchivesmouthsmanagementRepository;
+
     @Override
     public Object queryAll(TenantinformationQueryCriteria criteria, Pageable pageable){
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<TenantinformationDTO> tenantinformations = new ArrayList<>();
         for (Tenantinformation tenantinformation : page.getContent()){
-            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get()));
+            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get(),ArchivesmouthsmanagementRepository.findById(tenantinformation.getArchivesmouthsmanagement().getId()).get()));
         }
         return PageUtil.toPage(tenantinformations,page.getTotalElements());
     }
