@@ -38,7 +38,8 @@ public class Tenantinformation implements Serializable {
     private DictDetail dictDetail;
 
     // 房号(门牌号)
-    @Column(name = "stall_id")
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "stall_id")
     private Archivesmouthsmanagement Archivesmouthsmanagement;
 
     // 公司名称
