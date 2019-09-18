@@ -33,5 +33,4 @@ public class ArchiveDto implements Serializable {
 
     //关联城市name
     private String areaName;
-    private Integer num;
 }

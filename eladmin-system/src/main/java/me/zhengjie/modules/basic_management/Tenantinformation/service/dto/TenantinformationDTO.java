@@ -42,6 +42,9 @@ public class TenantinformationDTO implements Serializable {
     // 欠款金额
     private Long amountinarear;
 
+    //合同关联
+    private Long contractid;
+
     // 合同详情
     private String thecontractdetails;
 

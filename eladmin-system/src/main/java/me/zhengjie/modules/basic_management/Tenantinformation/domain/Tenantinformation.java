@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
@@ -59,9 +60,10 @@ public class Tenantinformation implements Serializable {
     @Column(name = "amountinarear")
     private Long amountinarear;
 
-    // 合同详情
-    @Column(name = "thecontractdetails")
-    private String thecontractdetails;
+    //关联合同表
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "contract_id")
+    private LeaseContract LeaseContract;
 
     // 部门id
     @ManyToOne(fetch=FetchType.LAZY)
