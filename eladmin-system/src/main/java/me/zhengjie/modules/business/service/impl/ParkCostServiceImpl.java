@@ -90,7 +90,13 @@ public class ParkCostServiceImpl implements ParkCostService {
     }
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria){
-        return parkCostMapper.toDto(parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<ParkCost> list = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
+        for (ParkCost parkCost : list) {
+            Optional<RentContract> rentContract =  rentContractRepository.findById(parkCost.getRentContract().getId());
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findAllById(parkCost.getDept().getId()),dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),archivesmouthsmanagementRepository.findById(parkCost.getArchivesmouthsmanagement().getId()).get(),rentContract.get(),receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
+        }
+        return PageUtil.toPage(parkCostDTOS,null);
     }
 
     @Override

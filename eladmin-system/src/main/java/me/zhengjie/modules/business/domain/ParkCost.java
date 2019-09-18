@@ -33,12 +33,16 @@ public class ParkCost implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "archives_mouths_id")
     private Archivesmouthsmanagement archivesmouthsmanagement;
+   /*@Column(name = "archives_mouths_id")
+   private Long archivesMouthsId;*/
     /**
      * 部门id
      */
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "dept_id")
-    private Dept dept;
+     @ManyToOne(fetch=FetchType.LAZY)
+     @JoinColumn(name = "dept_id")
+     private Dept dept;
+   /* @Column(name = "dept_id")
+    private Long deptId;*/
 
     // 场地租金
     @Column(name = "site_rent",columnDefinition = "decimal(12,2) default 0")
@@ -68,6 +72,8 @@ public class ParkCost implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
     private DictDetail dictDetail;
+    /* @Column(name = "payment_type")
+    private Long paymentType;*/
 
     // 创建时间
     @CreationTimestamp
@@ -78,11 +84,15 @@ public class ParkCost implements Serializable {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "rent_contract_id")
     private RentContract rentContract;
+    /*@Column(name = "rent_contract_id")
+    private Long rentContractId;*/
 
     //收付款信息
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
     private ReceiptPaymentAccount receiptPaymentAccount;
+   /* @Column(name = "receipt_payment_account_id")
+    private Long receiptPaymentAccountId;*/
 
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
