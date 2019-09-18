@@ -174,7 +174,7 @@ public class ParkCostServiceImpl implements ParkCostService {
 
         if(parkCost!=null){
             //根据支付方式和账户id查询账户详情
-            MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(parkCost.getDictDetail().getId(),parkCost.getDept().getId());
+            MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
             if (maintarinDetails!=null){
                 //修改之后的余额
                 //Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));

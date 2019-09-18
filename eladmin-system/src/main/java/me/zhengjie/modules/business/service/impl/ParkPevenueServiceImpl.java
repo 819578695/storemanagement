@@ -96,6 +96,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Transactional(rollbackFor = Exception.class)
     public ParkPevenueDTO create(ParkPevenue resources) {
         ParkPevenue p =resources;
+        DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");//欠付
         if (p!=null)
         {
             //根据支付方式和部门查询账户详情
@@ -115,7 +116,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         +StringUtils.isNotNullBigDecimal(resources.getWaterRent()));
                     parkPevenueRepository.save(resources);
                     //为欠款类型补添加到账户余额
-              if(!resources.getPayType().getValue().equals("PEVENUE_UNDER") ){
+              if(resources.getPayType().getId()!=underDict.getId() ){
                   addFinance(resources);
               }
             }
