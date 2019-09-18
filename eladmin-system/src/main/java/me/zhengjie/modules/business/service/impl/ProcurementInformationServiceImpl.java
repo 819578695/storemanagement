@@ -5,6 +5,7 @@ import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
 import me.zhengjie.modules.business.service.mapper.ReceiptPaymentAccountMapper;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.Job;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;

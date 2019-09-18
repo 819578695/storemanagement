@@ -32,6 +32,13 @@ public class ParkPevenueController {
     public ResponseEntity getParkPevenues(ParkPevenueQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(parkPevenueService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+    @Log("查询所有ParkPevenue")
+    @ApiOperation(value = "查询所有ParkPevenue")
+    @GetMapping(value = "/parkPevenueAll")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
+    public ResponseEntity parkPevenueAll(ParkPevenueQueryCriteria criteria){
+        return new ResponseEntity(parkPevenueService.queryAll(criteria),HttpStatus.OK);
+    }
 
     @Log("新增ParkPevenue")
     @ApiOperation(value = "新增ParkPevenue")

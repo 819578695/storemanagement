@@ -89,7 +89,13 @@ public class ParkPevenueDTO implements Serializable {
     private Long leaseContractId;
 
     // 类型(1 已付 2 欠款 3 补缴)
-    private int type;
+    private Long payTypeId;
+
+    // 类型(1 已付 2 欠款 3 补缴)
+    private String payTypeValue;
+
+    // 类型(1 已付 2 欠款 3 补缴)
+    private String payTypeName;
 
     // 修改时间
     private Timestamp updateTime;

@@ -40,7 +40,11 @@ public interface ParkPevenueMapper extends EntityMapper<ParkPevenueDTO, ParkPeve
             @Mapping(source = "dictDetail.label",target = "paymentTypeName"),
             @Mapping(source = "parkPevenue.createTime",target = "createTime"),
             @Mapping(source = "leaseContract.id",target = "leaseContractId"),
-            @Mapping(source = "leaseContract.contractName",target = "leaseContractName")
+            @Mapping(source = "leaseContract.contractName",target = "leaseContractName"),
+            @Mapping(source = "payType.id",target = "payTypeId"),
+            @Mapping(source = "payType.label",target = "payTypeName"),
+            @Mapping(source = "payType.value",target = "payTypeValue"),
+
     })
-    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail,LeaseContract leaseContract);
+    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail,LeaseContract leaseContract,DictDetail payType);
 }
