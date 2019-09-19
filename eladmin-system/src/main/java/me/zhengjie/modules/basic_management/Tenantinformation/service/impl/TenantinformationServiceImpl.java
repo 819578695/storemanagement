@@ -3,9 +3,14 @@ package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.TenantinformationMapper;
+import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
+import me.zhengjie.modules.business.repository.ParkPevenueRepository;
+import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
@@ -16,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +29,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
+import sun.nio.ch.IOStatus;
 
 /**
 * @author zlk
@@ -42,6 +49,9 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     private DictDetailRepository dictDetailRepository;
 
     @Autowired
+    private DictRepository dictRepository;
+
+    @Autowired
     private DeptRepository deptRepository;
 
     @Autowired
@@ -50,11 +60,24 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Autowired
     private ArchivesmouthsmanagementRepository ArchivesmouthsmanagementRepository;
 
+    @Autowired
+    private  ParkPevenueRepository parkPevenueRepository;
+
     @Override
     public Object queryAll(TenantinformationQueryCriteria criteria, Pageable pageable){
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<TenantinformationDTO> tenantinformations = new ArrayList<>();
+        //欠付
+        DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");
+
         for (Tenantinformation tenantinformation : page.getContent()){
+            List<ParkPevenue> parkPevenueList = parkPevenueRepository.findByArchivesmouthsmanagementIdAndPayTypeId(tenantinformation.getArchivesmouthsmanagement().getId(),underDict.getId());
+            BigDecimal totalMoney = new BigDecimal(0);
+            for (ParkPevenue parkPevenue : parkPevenueList){
+                //bigdecimal 求和(未缴费用)
+                totalMoney = totalMoney.add(new BigDecimal(StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent())));
+                tenantinformation.setAmountinarear(totalMoney);
+            }
             tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get(),ArchivesmouthsmanagementRepository.findById(tenantinformation.getArchivesmouthsmanagement().getId()).get()));
         }
         return PageUtil.toPage(tenantinformations,page.getTotalElements());
