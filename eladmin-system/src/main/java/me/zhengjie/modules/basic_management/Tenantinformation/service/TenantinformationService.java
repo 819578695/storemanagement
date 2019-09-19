@@ -5,6 +5,8 @@ import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.Tenant
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationQueryCriteria;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
 * @author zlk
 * @date 2019-08-12

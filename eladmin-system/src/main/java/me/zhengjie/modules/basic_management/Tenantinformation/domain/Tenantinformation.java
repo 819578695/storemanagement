@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -60,7 +61,7 @@ public class Tenantinformation implements Serializable {
 
     // 欠款金额
     @Column(name = "amountinarear")
-    private Long amountinarear;
+    private BigDecimal amountinarear;
 
     //关联合同表
     @ManyToOne(fetch=FetchType.LAZY)
