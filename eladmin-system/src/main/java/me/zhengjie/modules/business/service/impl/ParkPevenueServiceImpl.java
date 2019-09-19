@@ -82,7 +82,12 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
 
     @Override
     public Object queryAll(ParkPevenueQueryCriteria criteria){
-        return parkPevenueMapper.toDto(parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<ParkPevenue> list = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
+        for (ParkPevenue parkPevenue : list) {
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get()));
+        }
+        return PageUtil.toPage(parkPevenueDTOS,null);
     }
 
     @Override
@@ -191,7 +196,6 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         //如果补缴金额和欠付金额相同则直接修改
                         if(houseRent==0.0 &&waterRent==0.0 &&electricityRent==0.0 &&propertyRent==0.0 &&sanitationRent==0.0 &&liquidatedRent==0.0 &&lateRent==0.0 &&groundPoundRent==0.0 &&managementRent==0.0 &&parkingRent==0.0
                         ){
-
                             parkPevenue.setPayType(payBackDict);
                             parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
                             parkPevenueRepository.save(parkPevenue);
@@ -222,19 +226,19 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                             parkPevenueRepository.save(payBack);
                             addFinance(payBack);
                             //然后修改原有的补缴费用
-                            resources.setPayType(underDict);
-                            resources.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
-                            resources.setGroundPoundRent(resources.getGroundPoundRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
-                            resources.setHouseRent(resources.getHouseRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
-                            resources.setLateRent(resources.getLateRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
-                            resources.setLiquidatedRent(resources.getLiquidatedRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
-                            resources.setManagementRent(resources.getManagementRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
-                            resources.setParkingRent(resources.getParkingRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
-                            resources.setPropertyRent(resources.getPropertyRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
-                            resources.setSanitationRent(resources.getSanitationRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
-                            resources.setWaterRent(resources.getWaterRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
+                            parkPevenue.setPayType(underDict);
+                            parkPevenue.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
+                            parkPevenue.setGroundPoundRent(resources.getGroundPoundRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
+                            parkPevenue.setHouseRent(resources.getHouseRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
+                            parkPevenue.setLateRent(resources.getLateRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
+                            parkPevenue.setLiquidatedRent(resources.getLiquidatedRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
+                            parkPevenue.setManagementRent(resources.getManagementRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
+                            parkPevenue.setParkingRent(resources.getParkingRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
+                            parkPevenue.setPropertyRent(resources.getPropertyRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
+                            parkPevenue.setSanitationRent(resources.getSanitationRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
+                            parkPevenue.setWaterRent(resources.getWaterRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
                             payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
-                            parkPevenueRepository.save(resources);
+                            parkPevenueRepository.save(parkPevenue);
                         }
                     }
 
@@ -243,7 +247,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                 }
             }
         }
-        return parkPevenueMapper.toDto(resources);
+        return parkPevenueMapper.toDto(parkPevenue,null,null,null,null,null,parkPevenue.getPayType());
     }
 
     @Override
