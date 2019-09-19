@@ -20,6 +20,9 @@ public interface FundFlowingRepository extends JpaRepository<FundFlowing, Long>,
 
     FundFlowing findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(Long tallyTypeId, Long typeDictId, Long parkCostPevenueId);
 
+    //根据收入支出Id和支付方式id
+    List<FundFlowing> findByTypeDictIdAndParkCostPevenueId( Long typeDictId, Long parkCostPevenueId);
+
     @Query(value = "SELECT " +
             "  d.NAME AS deptName, " +
             "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"房租\") ) AS rentSum, " +

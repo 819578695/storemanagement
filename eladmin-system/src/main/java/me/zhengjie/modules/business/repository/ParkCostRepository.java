@@ -27,7 +27,7 @@ public interface ParkCostRepository extends JpaRepository<ParkCost, Long>, JpaSp
             "GROUP BY MONTH(create_time)",nativeQuery = true)
     BigDecimal[] findByDeptIdSumRent(Long deptId);
 
-    /*@Query(value="select new me.zhengjie.modules.business.service.dto.ParkCostDTO(p.id,b.id,p.siteRent,p.waterRent,p.electricityRent,p.propertyRent,p.taxCost,p.otherRent,dd.id,p.createTime,d.name,d.id,dd.label,b.housenumber,c.contractName,c.id,r.id,r.name) from ParkCost p" +
+    /*@Query(value=" me.zhengjie.modules.business.service.dto.ParkCostDTO(p.id,b.id,p.siteRent,p.waterRent,p.electricityRent,p.propertyRent,p.taxCost,p.otherRent,dd.id,p.createTime,d.name,d.id,dd.label,b.housenumber,c.contractName,c.id,r.id,r.name) from ParkCost p" +
             "LEFT JOIN Dept d on p.deptId=d.id\n" +
             "LEFT JOIN Archivesmouthsmanagement b on p.archivesMouthsId=b.id\n" +
             "left join ReceiptPaymentAccount r on p.receiptPaymentAccountId=r.id\n" +

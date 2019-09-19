@@ -6,7 +6,9 @@ import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRep
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.FundFlowingService;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -58,8 +60,6 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Autowired
     private DictDetailRepository dictDetailRepository;
     @Autowired
-    private BasicsParkRepository basicsParkRepository;
-    @Autowired
     private LeaseContractRepository leaseContractRepository;
     @Autowired
     private FundFlowingService fundFlowingService;
@@ -67,6 +67,10 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private MaintarinDetailRepository maintainDetailRepository;
     @Autowired
     private DictRepository dictRepository;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
+    @Autowired
+    private FundFlowingRepository fundFlowingRepository;
 
 
     @Override
@@ -253,6 +257,36 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        ParkPevenue p=parkPevenueRepository.findById(id).get();
+//根据支付类型和收入id查询对应的资金流水后
+        Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId();
+        if (typeId!=null){
+            //删除资金流水
+            List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
+            //当前账户支付方式余额
+            MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+            BigDecimal totalMoney = new BigDecimal(0);
+            if(maintarinDetail!=null){
+                for (FundFlowing fundFlowing : fundFlowingList) {
+                    if (fundFlowing.getMoney()!=null){
+                        totalMoney = totalMoney.add(fundFlowing.getMoney());
+                    }
+                    if (fundFlowing!=null){
+                        fundFlowingRepository.delete(fundFlowing);
+                    }
+                }
+                if(maintarinDetail.getRemaining().subtract(totalMoney).signum()!=-1){
+                    maintarinDetail.setRemaining(maintarinDetail.getRemaining().subtract(totalMoney));
+                    maintainDetailRepository.save(maintarinDetail);
+                }
+                else{
+                    throw new BadRequestException("账户余额不足,无法操作");
+                }
+            }
+            else{
+                throw new BadRequestException("请先新建账户余额");
+            }
+        }
         parkPevenueRepository.deleteById(id);
     }
 
@@ -262,6 +296,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     }
 
 
+    /*补缴*/
     public void updateFinance(ParkPevenue resources,ParkPevenue parkPevenue){
         //修改资金流水
         //房租

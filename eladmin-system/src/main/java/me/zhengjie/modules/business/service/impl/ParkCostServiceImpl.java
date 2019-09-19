@@ -7,6 +7,7 @@ import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.repository.RentContractRepository;
+import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintainRepository;
@@ -238,6 +239,31 @@ public class ParkCostServiceImpl implements ParkCostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        ParkCost p = parkCostRepository.findById(id).get();
+        //根据支付类型和支出id查询对应的资金流水后
+        Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId();
+      if (typeId!=null){
+          //删除资金流水
+          List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
+          //当前账户支付方式余额
+          MaintarinDetail maintarinDetail=maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+          BigDecimal totalMoney = new BigDecimal(0);
+          if(maintarinDetail!=null){
+              for (FundFlowing fundFlowing : fundFlowingList) {
+                  if (fundFlowing.getMoney()!=null){
+                      totalMoney = totalMoney.add(fundFlowing.getMoney());
+                  }
+                  if (fundFlowing!=null){
+                      fundFlowingRepository.delete(fundFlowing);
+                  }
+              }
+              maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(totalMoney));
+              maintainDetailRepository.save(maintarinDetail);
+          }
+          else{
+              throw new BadRequestException("请先新建账户余额");
+          }
+      }
         parkCostRepository.deleteById(id);
     }
 
