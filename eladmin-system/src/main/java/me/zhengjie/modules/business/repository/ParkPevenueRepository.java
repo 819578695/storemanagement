@@ -23,4 +23,5 @@ public interface ParkPevenueRepository extends JpaRepository<ParkPevenue, Long>,
     BigDecimal[] findByDeptIdSumRent(Long deptId);
 
 
+    List<ParkPevenue> findByArchivesmouthsmanagementIdAndPayTypeId(Long archivesmouthsmanagementId,Long payTypeId);
 }

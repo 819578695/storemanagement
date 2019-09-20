@@ -3,12 +3,15 @@ package me.zhengjie.modules.basic_management.Tenantinformation.domain;
 import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 /**
@@ -36,8 +39,9 @@ public class Tenantinformation implements Serializable {
     private DictDetail dictDetail;
 
     // 房号(门牌号)
-    @Column(name = "roomnumber")
-    private Long roomnumber;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "stall_id")
+    private Archivesmouthsmanagement Archivesmouthsmanagement;
 
     // 公司名称
     @Column(name = "companyname")
@@ -57,11 +61,12 @@ public class Tenantinformation implements Serializable {
 
     // 欠款金额
     @Column(name = "amountinarear")
-    private Long amountinarear;
+    private BigDecimal amountinarear;
 
-    // 合同详情
-    @Column(name = "thecontractdetails")
-    private String thecontractdetails;
+    //关联合同表
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "contract_id")
+    private LeaseContract LeaseContract;
 
     // 部门id
     @ManyToOne(fetch=FetchType.LAZY)

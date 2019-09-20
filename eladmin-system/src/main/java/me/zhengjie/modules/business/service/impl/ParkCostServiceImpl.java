@@ -7,6 +7,7 @@ import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.repository.RentContractRepository;
+import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintainRepository;
@@ -90,7 +91,13 @@ public class ParkCostServiceImpl implements ParkCostService {
     }
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria){
-        return parkCostMapper.toDto(parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<ParkCost> list = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
+        for (ParkCost parkCost : list) {
+            Optional<RentContract> rentContract =  rentContractRepository.findById(parkCost.getRentContract().getId());
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findAllById(parkCost.getDept().getId()),dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),archivesmouthsmanagementRepository.findById(parkCost.getArchivesmouthsmanagement().getId()).get(),rentContract.get(),receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
+        }
+        return PageUtil.toPage(parkCostDTOS,null);
     }
 
     @Override
@@ -174,7 +181,7 @@ public class ParkCostServiceImpl implements ParkCostService {
 
         if(parkCost!=null){
             //根据支付方式和账户id查询账户详情
-            MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(parkCost.getDictDetail().getId(),parkCost.getDept().getId());
+            MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
             if (maintarinDetails!=null){
                 //修改之后的余额
                 //Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
@@ -232,6 +239,31 @@ public class ParkCostServiceImpl implements ParkCostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        ParkCost p = parkCostRepository.findById(id).get();
+        //根据支付类型和支出id查询对应的资金流水后
+        Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId();
+      if (typeId!=null){
+          //删除资金流水
+          List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
+          //当前账户支付方式余额
+          MaintarinDetail maintarinDetail=maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+          BigDecimal totalMoney = new BigDecimal(0);
+          if(maintarinDetail!=null){
+              for (FundFlowing fundFlowing : fundFlowingList) {
+                  if (fundFlowing.getMoney()!=null){
+                      totalMoney = totalMoney.add(fundFlowing.getMoney());
+                  }
+                  if (fundFlowing!=null){
+                      fundFlowingRepository.delete(fundFlowing);
+                  }
+              }
+              maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(totalMoney));
+              maintainDetailRepository.save(maintarinDetail);
+          }
+          else{
+              throw new BadRequestException("请先新建账户余额");
+          }
+      }
         parkCostRepository.deleteById(id);
     }
 

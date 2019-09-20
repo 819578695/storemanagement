@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.service.dto;
 
 import lombok.Data;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 
@@ -24,9 +25,6 @@ public class TenantinformationDTO implements Serializable {
     //档口名称
     private String stalltypeName;
 
-    // 房号(门牌号)
-    private Long roomnumber;
-
     // 公司名称
     private String companyname;
 
@@ -40,10 +38,19 @@ public class TenantinformationDTO implements Serializable {
     private String phone;
 
     // 欠款金额
-    private Long amountinarear;
+    private BigDecimal amountinarear;
+
+    //合同关联
+    private Long contractid;
 
     // 合同详情
     private String thecontractdetails;
+
+    // 关联门牌
+    private Long stallid;
+
+    // 门牌号
+    private String roomnumber;
 
     // 部门id
     private Long deptId;

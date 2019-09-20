@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 //@CacheConfig(cacheNames = "Archivesmouthsmanagement")
 public interface ArchivesmouthsmanagementService {
@@ -21,7 +22,7 @@ public interface ArchivesmouthsmanagementService {
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable);
 
-    List<ArchiveDto> publiccity(Long id);
+    Map publiccity(Long id);
 
     /**
      * queryAll 不分页

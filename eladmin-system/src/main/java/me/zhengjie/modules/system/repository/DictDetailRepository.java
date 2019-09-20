@@ -1,6 +1,6 @@
 package me.zhengjie.modules.system.repository;
 
-import jdk.internal.org.objectweb.asm.tree.analysis.Value;
+
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.service.dto.DictDetailDTO;
 import org.springframework.data.jpa.repository.JpaRepository;

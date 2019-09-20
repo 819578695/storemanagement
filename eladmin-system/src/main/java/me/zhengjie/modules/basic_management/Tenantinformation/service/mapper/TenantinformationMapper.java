@@ -1,8 +1,10 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.service.mapper;
 
 import me.zhengjie.mapper.EntityMapper;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationDTO;
+import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.mapstruct.Mapper;
@@ -20,8 +22,11 @@ public interface TenantinformationMapper extends EntityMapper<TenantinformationD
             @Mapping(source = "tenantinformation.id",target = "id"),
             @Mapping(source = "dictDetail.id",target = "stalltype"),
             @Mapping(source = "dictDetail.label",target = "stalltypeName"),
+            @Mapping(source = "LeaseContract.id",target = "contractid"),
+            @Mapping(source = "LeaseContract.fileName",target = "thecontractdetails"),
+            @Mapping(source = "Archivesmouthsmanagement.id",target = "stallid"),
+            @Mapping(source = "Archivesmouthsmanagement.housenumber",target = "roomnumber"),
             @Mapping(source = "dept.id",target = "deptId"),
     })
-    TenantinformationDTO toDto(Tenantinformation tenantinformation, Dept dept, DictDetail dictDetail);
-
+    TenantinformationDTO toDto(Tenantinformation tenantinformation, Dept dept, DictDetail dictDetail, LeaseContract LeaseContract, Archivesmouthsmanagement Archivesmouthsmanagement);
 }

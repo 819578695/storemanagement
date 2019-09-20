@@ -6,11 +6,15 @@ import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRep
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.FundFlowingService;
+import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.utils.StringUtils;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
@@ -56,13 +60,17 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Autowired
     private DictDetailRepository dictDetailRepository;
     @Autowired
-    private BasicsParkRepository basicsParkRepository;
-    @Autowired
     private LeaseContractRepository leaseContractRepository;
     @Autowired
     private FundFlowingService fundFlowingService;
     @Autowired
     private MaintarinDetailRepository maintainDetailRepository;
+    @Autowired
+    private DictRepository dictRepository;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
+    @Autowired
+    private FundFlowingRepository fundFlowingRepository;
 
 
     @Override
@@ -70,7 +78,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get()));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());
@@ -78,7 +86,12 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
 
     @Override
     public Object queryAll(ParkPevenueQueryCriteria criteria){
-        return parkPevenueMapper.toDto(parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<ParkPevenue> list = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
+        for (ParkPevenue parkPevenue : list) {
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get()));
+        }
+        return PageUtil.toPage(parkPevenueDTOS,null);
     }
 
     @Override
@@ -92,6 +105,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Transactional(rollbackFor = Exception.class)
     public ParkPevenueDTO create(ParkPevenue resources) {
         ParkPevenue p =resources;
+        DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");//欠付
         if (p!=null)
         {
             //根据支付方式和部门查询账户详情
@@ -111,7 +125,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         +StringUtils.isNotNullBigDecimal(resources.getWaterRent()));
                     parkPevenueRepository.save(resources);
                     //为欠款类型补添加到账户余额
-              if(resources.getType()!=2){
+              if(resources.getPayType().getId()!=underDict.getId() ){
                   addFinance(resources);
               }
             }
@@ -142,7 +156,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
 
                 // BigDecimal Difference = new BigDecimal(maintarinDetails.getRemaining().doubleValue() + (price - beforePrice));
                   //
-                   if(resources.getType()!=2){
+                   if(!resources.getPayType().getValue().equals("PEVENUE_UNDER")){
                        //修改资金流水
                        updateFinance(resources,parkPevenueBefore);
                    }
@@ -164,12 +178,14 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         ValidationUtil.isNull( optionalParkPevenue,"ParkPevenue","id",resources.getId());
         ParkPevenue parkPevenue = optionalParkPevenue.get();
         //当欠付变为补缴时
-        if (resources.getType()==3&&parkPevenue.getType()==2) {
+        if (resources.getPayType().getValue().equals("PEVENUE_UNDER")) {
             if (parkPevenue != null) {
                 //根据支付方式和账户id查询账户详情
                 MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
+                DictDetail payBackDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_PAYBACK");//补缴
+                DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");//欠付
                 if (maintarinDetails != null) {
-                    if (resources.getType() == 3) {
+                    if (resources.getPayType().getValue().equals("PEVENUE_UNDER")) {
                         Double houseRent = StringUtils.isNotNullBigDecimal(resources.getHouseRent())-StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent());
                         Double waterRent = StringUtils.isNotNullBigDecimal(resources.getWaterRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent()));
                         Double electricityRent= StringUtils.isNotNullBigDecimal(resources.getElectricityRent())-(StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent()));
@@ -184,7 +200,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         //如果补缴金额和欠付金额相同则直接修改
                         if(houseRent==0.0 &&waterRent==0.0 &&electricityRent==0.0 &&propertyRent==0.0 &&sanitationRent==0.0 &&liquidatedRent==0.0 &&lateRent==0.0 &&groundPoundRent==0.0 &&managementRent==0.0 &&parkingRent==0.0
                         ){
-                            parkPevenue.setType(3);
+                            parkPevenue.setPayType(payBackDict);
                             parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
                             parkPevenueRepository.save(parkPevenue);
                             addFinance(parkPevenue);
@@ -193,7 +209,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         else{
                             //新增新的补缴项
                             ParkPevenue payBack = new ParkPevenue();
-                            payBack.setType(3);
+                            payBack.setPayType(payBackDict);
                             payBack.setArchivesmouthsmanagement(resources.getArchivesmouthsmanagement());
                             payBack.setBasicsPark(resources.getBasicsPark());
                             payBack.setDept(resources.getDept());
@@ -214,19 +230,19 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                             parkPevenueRepository.save(payBack);
                             addFinance(payBack);
                             //然后修改原有的补缴费用
-                            resources.setType(2);
-                            resources.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
-                            resources.setGroundPoundRent(resources.getGroundPoundRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
-                            resources.setHouseRent(resources.getHouseRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
-                            resources.setLateRent(resources.getLateRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
-                            resources.setLiquidatedRent(resources.getLiquidatedRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
-                            resources.setManagementRent(resources.getManagementRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
-                            resources.setParkingRent(resources.getParkingRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
-                            resources.setPropertyRent(resources.getPropertyRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
-                            resources.setSanitationRent(resources.getSanitationRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
-                            resources.setWaterRent(resources.getWaterRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
+                            parkPevenue.setPayType(underDict);
+                            parkPevenue.setElectricityRent(resources.getElectricityRent()==null?null:new BigDecimal(Math.abs(electricityRent.doubleValue())));
+                            parkPevenue.setGroundPoundRent(resources.getGroundPoundRent()==null?null:new BigDecimal(Math.abs(groundPoundRent.doubleValue())));
+                            parkPevenue.setHouseRent(resources.getHouseRent()==null?null:new BigDecimal(Math.abs(houseRent.doubleValue())));
+                            parkPevenue.setLateRent(resources.getLateRent()==null?null:new BigDecimal(Math.abs(lateRent.doubleValue())));
+                            parkPevenue.setLiquidatedRent(resources.getLiquidatedRent()==null?null:new BigDecimal(Math.abs(liquidatedRent.doubleValue())));
+                            parkPevenue.setManagementRent(resources.getManagementRent()==null?null:new BigDecimal(Math.abs(managementRent.doubleValue())));
+                            parkPevenue.setParkingRent(resources.getParkingRent()==null?null:new BigDecimal(Math.abs(parkingRent.doubleValue())));
+                            parkPevenue.setPropertyRent(resources.getPropertyRent()==null?null:new BigDecimal(Math.abs(propertyRent.doubleValue())));
+                            parkPevenue.setSanitationRent(resources.getSanitationRent()==null?null:new BigDecimal(Math.abs(sanitationRent.doubleValue())));
+                            parkPevenue.setWaterRent(resources.getWaterRent()==null?null:new BigDecimal(Math.abs(waterRent.doubleValue())));
                             payBack.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
-                            parkPevenueRepository.save(resources);
+                            parkPevenueRepository.save(parkPevenue);
                         }
                     }
 
@@ -235,12 +251,42 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                 }
             }
         }
-        return parkPevenueMapper.toDto(resources);
+        return parkPevenueMapper.toDto(parkPevenue,null,null,null,null,null,parkPevenue.getPayType());
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        ParkPevenue p=parkPevenueRepository.findById(id).get();
+//根据支付类型和收入id查询对应的资金流水后
+        Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId();
+        if (typeId!=null){
+            //删除资金流水
+            List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
+            //当前账户支付方式余额
+            MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+            BigDecimal totalMoney = new BigDecimal(0);
+            if(maintarinDetail!=null){
+                for (FundFlowing fundFlowing : fundFlowingList) {
+                    if (fundFlowing.getMoney()!=null){
+                        totalMoney = totalMoney.add(fundFlowing.getMoney());
+                    }
+                    if (fundFlowing!=null){
+                        fundFlowingRepository.delete(fundFlowing);
+                    }
+                }
+                if(maintarinDetail.getRemaining().subtract(totalMoney).signum()!=-1){
+                    maintarinDetail.setRemaining(maintarinDetail.getRemaining().subtract(totalMoney));
+                    maintainDetailRepository.save(maintarinDetail);
+                }
+                else{
+                    throw new BadRequestException("账户余额不足,无法操作");
+                }
+            }
+            else{
+                throw new BadRequestException("请先新建账户余额");
+            }
+        }
         parkPevenueRepository.deleteById(id);
     }
 
@@ -250,6 +296,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     }
 
 
+    /*补缴*/
     public void updateFinance(ParkPevenue resources,ParkPevenue parkPevenue){
         //修改资金流水
         //房租

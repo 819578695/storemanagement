@@ -84,8 +84,9 @@ public class ParkPevenue implements Serializable {
     private BigDecimal groundPoundRent;
 
     // 类型(1 已付 2 欠款 3 补缴)
-    @Column(name = "type")
-    private int type;
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "type")
+    private DictDetail payType;
 
     //管理费
     @Column(name = "management_rent")

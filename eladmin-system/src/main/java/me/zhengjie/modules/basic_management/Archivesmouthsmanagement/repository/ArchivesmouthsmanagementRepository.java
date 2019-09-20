@@ -13,4 +13,6 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
      List<Archivesmouthsmanagement> findByDeptId(Long deptId);
      @Query(value = "SELECT * FROM basics_stall b  WHERE b.area_id = ?1", nativeQuery = true)
      List<Archivesmouthsmanagement> findByAreaId(Long id);
+     @Query(value = "SELECT COUNT(1) num FROM basics_stall b  WHERE b.area_id = ?1", nativeQuery = true)
+     int findBycoum(Long id);
 }

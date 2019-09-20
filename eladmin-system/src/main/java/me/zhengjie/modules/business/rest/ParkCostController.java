@@ -42,6 +42,14 @@ public class ParkCostController {
         return new ResponseEntity(parkCostService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @Log("查询所有ParkCost")
+    @ApiOperation(value = "查询所有ParkCost")
+    @GetMapping(value = "/parkCostAll")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
+    public ResponseEntity getParkCostALL(ParkCostQueryCriteria criteria){
+        return new ResponseEntity(parkCostService.queryAll(criteria),HttpStatus.OK);
+    }
+
     @Log("新增ParkCost")
     @ApiOperation(value = "新增ParkCost")
     @PostMapping(value = "/parkCost")
