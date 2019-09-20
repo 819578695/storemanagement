@@ -53,6 +53,8 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
         Page<ProcurementInformation> page = procurementInformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ProcurementInformationDTO> procurementInformationDTOS = new ArrayList<>();
         for (ProcurementInformation procurementInformation : page.getContent()) {
+            Optional<Dept> dept = deptRepository.findById(procurementInformation.getDept().getId());
+            ValidationUtil.isNull(dept,"Dept","id",procurementInformation.getDept().getId());
             procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),deptRepository.findById(procurementInformation.getDept().getId()).get()));
         }
         return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());

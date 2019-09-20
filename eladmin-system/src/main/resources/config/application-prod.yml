@@ -5,8 +5,8 @@ spring:
       type: com.alibaba.druid.pool.DruidDataSource
       driverClassName: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
       url: jdbc:log4jdbc:mysql://121.40.253.229/zgt_store?serverTimezone=Asia/Shanghai&characterEncoding=utf8&useSSL=false
-      username: root
-      password: admin
+      username: zgt_store
+      password: w54kGWKjxRArWW4i
 
       # 初始化配置
       initial-size: 3
