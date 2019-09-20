@@ -66,7 +66,10 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         map.put("list",list1);
         map.put("num",num);
         return map;
-
+    }
+    @Override
+    public List<ArchivesmouthsmanagementDTO> publicWechatId(ArchivesmouthsmanagementQueryCriteria criteria){
+        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
 
     @Override

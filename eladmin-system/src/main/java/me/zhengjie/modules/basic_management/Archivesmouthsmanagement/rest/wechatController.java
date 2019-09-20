@@ -1,15 +1,25 @@
 package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.rest;
 
 import cn.hutool.core.codec.Base64;
+import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.zhengjie.aop.log.Log;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.UserUtil;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.Wxpoid;
+import me.zhengjie.modules.basic_management.client.domain.BasicsClient;
+import me.zhengjie.modules.basic_management.client.service.BasicsClientService;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -17,6 +27,8 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Api(tags = "Tenantinformation管理")
@@ -25,6 +37,8 @@ import java.util.Map;
 public class wechatController {
     @Autowired
     private ArchivesmouthsmanagementService archivesmouthsmanagementService;
+    @Autowired
+    private BasicsClientService basicsClientService;
 
     @Log("微信小程序")
     @ApiOperation(value = "微信小程序查询")
@@ -32,6 +46,35 @@ public class wechatController {
     public Map wechatQuery(Long id){
         Map list = archivesmouthsmanagementService.publiccity(id);
         return list ;
+    }
+
+    @Log("微信查询")
+    @ApiOperation(value = "微信查询")
+    @GetMapping("/publicWechatId")
+    public List<ArchivesmouthsmanagementDTO> publicWechatId(ArchivesmouthsmanagementQueryCriteria criteria){
+        List<ArchivesmouthsmanagementDTO> list = archivesmouthsmanagementService.publicWechatId(criteria);
+        return list;
+    }
+
+    @Log("微信返回openid")
+    @ApiOperation(value = "微信返回openid")
+    @GetMapping("/loginByopid")
+    public Map loginByopid(String code){
+        Map<String,String> map = new HashMap<>();
+        String openid = null ;
+        if (StringUtils.isNotEmpty(code)) {
+            openid = UserUtil.getopenid(code);
+            Wxpoid json = JSON.parseObject(openid, Wxpoid.class);
+            map.put("openid", json.getOpenid());
+            map.put("sessionKey", json.getSession_key());
+        }
+        return map;
+    }
+    @Log("微信新增")
+    @ApiOperation(value = "微信新增")
+    @PostMapping(value = "/wechatadd")
+    public ResponseEntity create(@Validated @RequestBody BasicsClient resources){
+        return new ResponseEntity(basicsClientService.create(resources), HttpStatus.CREATED);
     }
 
     @RequestMapping("/deciphering")
@@ -44,7 +87,7 @@ public class wechatController {
         try {
             str = decrypt(sessionKey,ivData,encrypData);
 //            JSONObject x=JSONObject.parseObject(str);
-//            Dto dto = WebUtils.getParamAsDto(request);
+//            Dto dto = WebUtils.getParamAsDto(request);UserUtil
 //            dto.put("phoneNumber",x.get("phoneNumber"));
 //
 //            Dto order = (Dto) g4Reader.queryForObject("openId.SelectUser", dto);

@@ -8,6 +8,10 @@ public class ArchivesmouthsmanagementQueryCriteria {
 
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
+    private Long id;
+
+    // 模糊
+    @Query(type = Query.Type.INNER_LIKE)
     private String housenumber;
 
     // 模糊
