@@ -23,6 +23,7 @@ public interface ArchivesmouthsmanagementService {
     Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable);
 
     Map publiccity(Long id);
+    List<ArchivesmouthsmanagementDTO> publicWechatId(ArchivesmouthsmanagementQueryCriteria criteria);
 
     /**
      * queryAll 不分页
