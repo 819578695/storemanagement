@@ -14,9 +14,9 @@ import me.zhengjie.annotation.Query;
 @Data
 public class FundFlowingQueryCriteria {
     @Query(type = Query.Type.GREATER_THAN_DATE)
-    private Date tradDateStart;
+    private String tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
-    private Date tradDateEnd;
+    private String tradDateEnd;
 
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;

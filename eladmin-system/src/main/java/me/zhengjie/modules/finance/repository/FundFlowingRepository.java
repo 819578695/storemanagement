@@ -8,39 +8,20 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
 * @author nmk
 * @date 2019-08-22
 */
-public interface FundFlowingRepository extends JpaRepository<FundFlowing, Long>, JpaSpecificationExecutor {
+public interface FundFlowingRepository  extends JpaRepository<FundFlowing, Long>, JpaSpecificationExecutor {
 
     FundFlowing findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(Long tallyTypeId, Long typeDictId, Long parkCostPevenueId);
 
-    @Query(value = "SELECT " +
-            "  d.NAME AS deptName, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"房租\") ) AS rentSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"停车费\") ) AS parkSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"地磅费\") ) AS wagonSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"往来款\") ) AS contactsSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"水费\") ) AS waterSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"电费\") ) AS electricSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"其他费用\") ) AS otherSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"物业费\") ) AS propertySum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"税赋成本\") ) AS scotSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"违约金\") ) AS penalSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"管理费\") ) AS managementSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"滞纳金\") ) AS overdueSum, " +
-            "  ( SELECT SUM(money) FROM fund_flowing WHERE dept_id = :deptId AND tally_type_id = (SELECT id FROM dict_detail WHERE label = \"卫生费\") ) AS sanitationSum " +
-            "FROM " +
-            " fund_flowing f " +
-            " LEFT JOIN dept d ON f.dept_id = d.id " +
-            " WHERE f.dept_id = :deptId " +
-            " and cast(f.trad_date AS date ) >= :tradDateStart "+
-            " and cast(f.trad_date AS date ) <= :tradDateEnd "+
-            " GROUP BY d.name" ,nativeQuery = true)
-    List<FundFlowingExportDTO> findByDeptId(@Param("deptId") Long deptId , @Param("tradDateStart") Date tradDateStart , @Param("tradDateEnd") Date tradDateEnd);
+    @Query(value = " select distinct new me.zhengjie.modules.finance.service.dto.FundFlowingExportDTO( d.name  , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'房租\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'停车费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'地磅费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'往来款\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'投资款\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'水费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'电费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'其他费用\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'物业费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'税赋成本\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'违约金\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'管理费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'滞纳金\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd), ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :incomeId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'卫生费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'房租\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'水费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) ,( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'电费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'物业费\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'赋税成本\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'其他费用\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'往来款\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) , ( SELECT SUM(money) FROM FundFlowing WHERE dept.id = :deptId and typeDict.id = :expendId AND tally_type_id = (SELECT id FROM DictDetail WHERE label = \'投资款\') AND trad_date BETWEEN :tradDateStart AND :tradDateEnd) ) FROM FundFlowing f LEFT JOIN Dept d ON f.dept.id = d.id WHERE f.dept.id = :deptId")
+    FundFlowingExportDTO findFundFlowingExportDto(@Param("deptId") Long deptId ,@Param("tradDateStart") Date tradDateStart , @Param("tradDateEnd") Date tradDateEnd,@Param("expendId") Long expendId , @Param("incomeId") Long incomeId);
 }

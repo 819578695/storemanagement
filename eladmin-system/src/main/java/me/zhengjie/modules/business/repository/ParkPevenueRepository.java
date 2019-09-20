@@ -1,6 +1,7 @@
 package me.zhengjie.modules.business.repository;
 
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,6 @@ public interface ParkPevenueRepository extends JpaRepository<ParkPevenue, Long>,
             " WHERE   if(?1 !='',dept_id=?1,1=1) and (PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( create_time, '%Y%m' ) ) =1 or DATE_FORMAT( create_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' ))\n" +
             "GROUP BY MONTH(create_time)",nativeQuery = true)
     BigDecimal[] findByDeptIdSumRent(Long deptId);
+
+
 }

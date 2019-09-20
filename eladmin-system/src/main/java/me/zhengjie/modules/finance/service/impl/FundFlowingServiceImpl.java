@@ -4,7 +4,9 @@ import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
@@ -13,11 +15,15 @@ import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
 import me.zhengjie.modules.finance.service.dto.FundFlowingExportDTO;
 import me.zhengjie.modules.finance.service.mapper.FundFlowingMapper;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.Dict;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
+import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.DictDetailService;
+import me.zhengjie.modules.system.service.dto.DeptDTO;
+import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.modules.system.service.dto.DictDetailDTO;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
@@ -29,6 +35,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -68,11 +77,38 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     private DictDetailService dictDetailService;
     @Autowired
     private MaintarinDetailService maintarinDetailService;
-
+    @Autowired
+    private DeptService deptService;
     @Override
     public Object queryExportAll(FundFlowingQueryCriteria criteria) {
-        List<FundFlowingExportDTO> list = fundFlowingRepository.findByDeptId(criteria.getDeptId(), criteria.getTradDateStart(), criteria.getTradDateEnd());
-        return null;
+        DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
+        //支出ID
+        Long expendId = null  ;
+        //收入ID
+        Long incomeId = null ;
+        for (DictDetail dictDetail : list) {
+            if ("支出".equals(dictDetail.getLabel())){
+                expendId = dictDetail.getId();
+            }
+            if ("收入".equals(dictDetail.getLabel())){
+                incomeId = dictDetail.getId();
+            }
+        }
+        List<DeptDTO> deptDTOS = deptService.queryAll(new DeptQueryCriteria());
+        List<FundFlowingExportDTO> fundFlowingExportDTOlist = new ArrayList<>();
+        for (DeptDTO deptDTO : deptDTOS) {
+            try {
+                FundFlowingExportDTO fundFlowingExportDto = fundFlowingRepository.findFundFlowingExportDto(deptDTO.getId(), format1.parse(criteria.getTradDateStart()), format1.parse(criteria.getTradDateEnd()),expendId,incomeId );
+            if (fundFlowingExportDto != null){
+                fundFlowingExportDTOlist.add(fundFlowingExportDto);
+            }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return fundFlowingExportDTOlist;
     }
 
     @Override
