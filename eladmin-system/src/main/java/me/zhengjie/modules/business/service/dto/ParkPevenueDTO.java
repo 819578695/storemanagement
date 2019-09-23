@@ -100,5 +100,10 @@ public class ParkPevenueDTO implements Serializable {
     // 修改时间
     private Timestamp updateTime;
 
+    //
+    private Timestamp startTime;
+
+    private Timestamp endTime;
+
 
 }

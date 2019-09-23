@@ -116,6 +116,14 @@ public class ParkPevenue implements Serializable {
     @Column(name = "create_time")
     private Timestamp createTime;
 
+    // 所缴月份(起止时间)
+    @Column(name = "start_time")
+    private Timestamp startTime;
+
+    // 所缴月份(截止时间)
+    @Column(name = "end_time")
+    private Timestamp endTime;
+
     public void copy(ParkPevenue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
