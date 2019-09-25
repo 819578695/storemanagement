@@ -4,6 +4,7 @@ import me.zhengjie.mapper.EntityMapper;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
+import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
@@ -44,7 +45,9 @@ public interface ParkPevenueMapper extends EntityMapper<ParkPevenueDTO, ParkPeve
             @Mapping(source = "payType.id",target = "payTypeId"),
             @Mapping(source = "payType.label",target = "payTypeName"),
             @Mapping(source = "payType.value",target = "payTypeValue"),
+            @Mapping(source = "tenantinformation.id",target = "tenementId"),
+            @Mapping(source = "tenantinformation.linkman",target = "linkman"),
 
     })
-    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail,LeaseContract leaseContract,DictDetail payType);
+    ParkPevenueDTO toDto(ParkPevenue parkPevenue, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail, LeaseContract leaseContract, DictDetail payType, Tenantinformation tenantinformation);
 }

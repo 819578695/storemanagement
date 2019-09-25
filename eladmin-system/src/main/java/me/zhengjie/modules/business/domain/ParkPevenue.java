@@ -4,6 +4,7 @@ import lombok.Data;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
+import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
@@ -123,6 +124,11 @@ public class ParkPevenue implements Serializable {
     // 所缴月份(截止时间)
     @Column(name = "end_time")
     private Timestamp endTime;
+
+    // 租户信息
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "tenement_id")
+    private Tenantinformation tenantinformation;
 
     public void copy(ParkPevenue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
