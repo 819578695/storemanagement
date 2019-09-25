@@ -32,8 +32,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
 
     @Autowired
+    @SuppressWarnings("all")
     private ArchivesmouthsmanagementMapper archivesmouthsmanagementMapper;
+
     @Autowired
+    @SuppressWarnings("all")
     private ArchiveMapper archivesMapper;
 
     @Autowired
