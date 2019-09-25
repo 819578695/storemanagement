@@ -15,6 +15,9 @@ public interface TenantinformationRepository extends JpaRepository<Tenantinforma
 
     List<Tenantinformation> findByDeptId(Long deptId);
 
+    @Query(value = "select * from basics_tenement where stall_id=?1",nativeQuery = true)
+    Tenantinformation findByArchivesmouthsmanagementId(Long archivesmouthsmanagementId);
+
     /*@Query(value = "SELECT\n" +
             "(\n" +
             "  IFNULL(p.house_rent,0) +\n" +

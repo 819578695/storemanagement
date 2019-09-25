@@ -95,6 +95,13 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LeaseContractDTO create(LeaseContract resources) {
+        if (resources!=null){
+             //新增合同會綁定租戶和檔口
+            Optional<Archivesmouthsmanagement> optionalArchivesmouthsmanagement = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId());
+            ValidationUtil.isNull( optionalArchivesmouthsmanagement,"Archivesmouthsmanagement","id",resources.getArchivesmouthsmanagement().getId());
+           Archivesmouthsmanagement archivesmouthsmanagement = optionalArchivesmouthsmanagement.get();
+
+        }
         return leaseContractMapper.toDto(leaseContractRepository.save(resources));
     }
 

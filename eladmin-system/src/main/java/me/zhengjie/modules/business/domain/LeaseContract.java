@@ -60,11 +60,11 @@ public class LeaseContract implements Serializable {
     @Column(name = "end_date")
     private Timestamp endDate;
 
-    // 起止日期
+    // 免租期起止日期
     @Column(name = "rent_free_start_time")
     private Timestamp rentFreeStartTime;
 
-    // 截止日期
+    // 免租期截止日期
     @Column(name = "rent_free_end_time")
     private Timestamp rentFreeEndTime;
 

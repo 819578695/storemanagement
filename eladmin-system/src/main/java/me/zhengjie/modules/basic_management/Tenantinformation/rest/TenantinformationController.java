@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.Tenantinformation.rest;
 
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
+import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationQueryCriteria;
 import org.aspectj.lang.annotation.After;
@@ -33,6 +34,7 @@ public class TenantinformationController {
     @Autowired
     private TenantinformationService tenantinformationService;
 
+
     @Log("查询Tenantinformation")
     @ApiOperation(value = "查询Tenantinformation")
     @GetMapping(value = "/tenantinformation")
@@ -63,6 +65,14 @@ public class TenantinformationController {
     @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_DELETE')")
     public ResponseEntity tenantinformationByDeptId(@PathVariable Long deptId){
         return new ResponseEntity(tenantinformationService.findByDeptId(deptId),HttpStatus.OK);
+    }
+
+    @Log("查询TenantinformationByArchivesmouthsmanagementId")
+    @ApiOperation(value = "查询TenantinformationArchivesmouthsmanagementId")
+    @GetMapping(value = "/tenantinformationByArchivesmouthsmanagementId/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")
+    public ResponseEntity tenantinformationByArchivesmouthsmanagementId(@PathVariable Long id){
+        return new ResponseEntity(tenantinformationService.findByArchivesmouthsmanagementId(id),HttpStatus.OK);
     }
 
     @Log("删除Tenantinformation")
