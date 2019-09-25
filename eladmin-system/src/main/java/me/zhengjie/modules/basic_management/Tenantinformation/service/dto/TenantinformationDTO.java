@@ -60,6 +60,4 @@ public class TenantinformationDTO implements Serializable {
     // 创建时间
     private Timestamp tenementdate;
 
-    // 租戶名稱
-    private String tenementName;
 }

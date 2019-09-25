@@ -33,4 +33,7 @@ public class ArchiveDto implements Serializable {
 
     //关联城市name
     private String areaName;
+
+    // 租戶名稱
+    private String tenementName;
 }
