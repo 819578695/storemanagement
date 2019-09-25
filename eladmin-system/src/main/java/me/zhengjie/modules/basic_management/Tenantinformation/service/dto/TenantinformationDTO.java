@@ -1,6 +1,8 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.service.dto;
 
 import lombok.Data;
+
+import javax.persistence.Column;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -57,4 +59,7 @@ public class TenantinformationDTO implements Serializable {
 
     // 创建时间
     private Timestamp tenementdate;
+
+    // 租戶名稱
+    private String tenementName;
 }

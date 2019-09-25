@@ -2,6 +2,7 @@ package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
+import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
@@ -71,6 +72,8 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     private MaintarinDetailRepository maintarinDetailRepository;
     @Autowired
     private FundFlowingRepository fundFlowingRepository;
+    @Autowired
+    private TenantinformationRepository tenantinformationRepository;
 
 
     @Override
@@ -78,7 +81,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         Page<ParkPevenue> page = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : page.getContent()) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).isPresent()?archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get():null,deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get(),tenantinformationRepository.findById(parkPevenue.getTenantinformation().getId()).isPresent()?tenantinformationRepository.findById(parkPevenue.getTenantinformation().getId()).get():null));
         }
 
         return PageUtil.toPage(parkPevenueDTOS,page.getTotalElements());
@@ -89,7 +92,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         List<ParkPevenue> list = parkPevenueRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
         List<ParkPevenueDTO> parkPevenueDTOS = new ArrayList<>();
         for (ParkPevenue parkPevenue : list) {
-            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId())==null?null:archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get()));
+            parkPevenueDTOS.add(parkPevenueMapper.toDto(parkPevenue,archivesmouthsmanagementRepository.findById(parkPevenue.getArchivesmouthsmanagement().getId()).get(),deptRepository.findAllById(parkPevenue.getDept().getId()),receiptPaymentAccountRepository.findById(parkPevenue.getReceiptPaymentAccount().getId()).get(),dictDetailRepository.findById(parkPevenue.getDictDetail().getId()).get(),leaseContractRepository.findById(parkPevenue.getLeaseContract().getId()).get(),dictDetailRepository.findById(parkPevenue.getPayType().getId()).get(),tenantinformationRepository.findById(parkPevenue.getTenantinformation().getId()).get()));
         }
         return PageUtil.toPage(parkPevenueDTOS,null);
     }
@@ -251,7 +254,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                 }
             }
         }
-        return parkPevenueMapper.toDto(parkPevenue,null,null,null,null,null,parkPevenue.getPayType());
+        return parkPevenueMapper.toDto(parkPevenue,null,null,null,null,null,parkPevenue.getPayType(),null);
     }
 
     @Override

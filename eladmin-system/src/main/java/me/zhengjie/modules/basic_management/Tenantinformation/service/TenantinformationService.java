@@ -33,6 +33,8 @@ public interface TenantinformationService {
 
     Object findByDeptId(Long deptId);
 
+    Object findByArchivesmouthsmanagementId(Long id);
+
     /**
      * findById
      * @param id
