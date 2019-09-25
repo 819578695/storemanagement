@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
@@ -17,7 +16,6 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,6 +73,14 @@ public class wechatController {
     @PostMapping(value = "/wechatadd")
     public ResponseEntity create(@Validated @RequestBody BasicsClient resources){
         return new ResponseEntity(basicsClientService.create(resources), HttpStatus.CREATED);
+    }
+
+    @Log("微信删除")
+    @ApiOperation(value = "微信删除")
+    @DeleteMapping(value = "/wechatdelete/{id}")
+    public ResponseEntity createdelete(@PathVariable Integer id){
+        basicsClientService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping("/deciphering")
