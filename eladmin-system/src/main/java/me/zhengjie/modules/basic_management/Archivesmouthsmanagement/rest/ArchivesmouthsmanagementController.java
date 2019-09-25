@@ -53,6 +53,22 @@ public class ArchivesmouthsmanagementController {
         return new ResponseEntity(archivesmouthsmanagementService.findByDeptId(deptId),HttpStatus.OK);
     }
 
+    @Log("根据部门查询已出租Archivesmouthsmanagement")
+    @ApiOperation(value = "根据部门Archivesmouthsmanagement")
+    @GetMapping(value = "/findByDeptIdAndTenementNameIsNotNull/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
+    public ResponseEntity findByDeptIdAndTenementNameIsNotNull(@PathVariable Long deptId){
+        return new ResponseEntity(archivesmouthsmanagementService.findByDeptIdAndTenementNameIsNotNull(deptId),HttpStatus.OK);
+    }
+
+    @Log("根据部门查询未出租Archivesmouthsmanagement")
+    @ApiOperation(value = "根据部门查询未出租Archivesmouthsmanagement")
+    @GetMapping(value = "/findByDeptIdAndTenementNameIsNull/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
+    public ResponseEntity findByDeptIdAndTenementNameIsNull(@PathVariable Long deptId){
+        return new ResponseEntity(archivesmouthsmanagementService.findByDeptIdAndTenementNameIsNull(deptId),HttpStatus.OK);
+    }
+
     @Log("新增Archivesmouthsmanagement")
     @ApiOperation(value = "新增Archivesmouthsmanagement")
     @PostMapping(value = "/archivesmouthsmanagement")
