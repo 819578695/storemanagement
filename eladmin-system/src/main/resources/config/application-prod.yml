@@ -70,7 +70,7 @@ generator:
 swagger:
   enabled: false
 ##服务器文件地址
-httpUrl: http://121.40.253.229:7676
+httpUrl: http://121.40.253.229
 ##文件默认路径
-filePath: /var/www/html
+filePath: /www/server/nginx/html
 baseHttpUrl: http://121.40.253.229
