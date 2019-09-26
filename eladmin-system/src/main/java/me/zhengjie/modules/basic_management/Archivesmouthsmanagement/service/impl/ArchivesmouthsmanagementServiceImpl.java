@@ -96,6 +96,16 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
+    public Object findByDeptIdAndTenementNameIsNull(Long deptId) {
+        return archivesmouthsmanagementMapper.toDto(deptId==1?archivesmouthsmanagementRepository.findByTenementNameIsNull():archivesmouthsmanagementRepository.findByDeptIdAndTenementNameIsNull(deptId));
+    }
+
+    @Override
+    public Object findByDeptIdAndTenementNameIsNotNull(Long deptId) {
+        return archivesmouthsmanagementMapper.toDto(deptId==1?archivesmouthsmanagementRepository.findByTenementNameIsNotNull():archivesmouthsmanagementRepository.findByDeptIdAndTenementNameIsNotNull(deptId));
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
         return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));

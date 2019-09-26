@@ -2,9 +2,6 @@ package me.zhengjie.modules.finance.service.dto;
 
 import lombok.Data;
 
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.math.BigDecimal;
 import me.zhengjie.annotation.Query;
 
 /**

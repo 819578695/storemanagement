@@ -45,7 +45,7 @@ public class ParkCostController {
     @Log("查询所有ParkCost")
     @ApiOperation(value = "查询所有ParkCost")
     @GetMapping(value = "/parkCostAll")
-    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_EXPORT_ALL')")
     public ResponseEntity getParkCostALL(ParkCostQueryCriteria criteria){
         return new ResponseEntity(parkCostService.queryAll(criteria),HttpStatus.OK);
     }
@@ -79,7 +79,7 @@ public class ParkCostController {
     @Log("查询ParkCost统计数据")
     @ApiOperation(value = "查询ParkCost统计数据")
     @GetMapping (value = "/findCostsMoney/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL')")
     public ResponseEntity findCostsMoney(@PathVariable Long deptId){
         return new ResponseEntity(parkCostService.findCostsMoney(deptId),HttpStatus.OK);
     }
