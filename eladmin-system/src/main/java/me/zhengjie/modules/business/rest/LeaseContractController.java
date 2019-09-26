@@ -33,6 +33,13 @@ public class LeaseContractController {
         return new ResponseEntity(leaseContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
+    @Log("查询LeaseContract不带权限")
+    @ApiOperation(value = "查询LeaseContract不带权限")
+    @GetMapping(value = "/leaseContractNoRole")
+    public ResponseEntity getLeaseContractsNoRole(LeaseContractQueryCriteria criteria, Pageable pageable){
+        return new ResponseEntity(leaseContractService.queryAll(criteria,pageable),HttpStatus.OK);
+    }
+
     @Log("根据部门查询RentContract")
     @ApiOperation(value = "根据部门RentContract")
     @GetMapping(value = "/leaseContractByDeptId/{deptId}")

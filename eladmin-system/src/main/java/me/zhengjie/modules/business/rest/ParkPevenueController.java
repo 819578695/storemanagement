@@ -35,7 +35,7 @@ public class ParkPevenueController {
     @Log("查询所有ParkPevenue")
     @ApiOperation(value = "查询所有ParkPevenue")
     @GetMapping(value = "/parkPevenueAll")
-    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT_ALL')")
     public ResponseEntity parkPevenueAll(ParkPevenueQueryCriteria criteria){
         return new ResponseEntity(parkPevenueService.queryAll(criteria),HttpStatus.OK);
     }
@@ -60,7 +60,7 @@ public class ParkPevenueController {
     @Log("补缴ParkPevenue")
     @ApiOperation(value = "补缴ParkPevenue")
     @PutMapping(value = "/parkPevenuePayBack")
-    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_PAYBACK')")
     public ResponseEntity payBack(@Validated @RequestBody ParkPevenue resources){
         return new ResponseEntity(parkPevenueService.payBack(resources),HttpStatus.OK);
     }
@@ -78,7 +78,6 @@ public class ParkPevenueController {
     @Log("查询ParkPevenue统计数据")
     @ApiOperation(value = "查询ParkPevenue统计数据")
     @GetMapping (value = "/findPevenueMoney/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
     public ResponseEntity findPevenueMoney(@PathVariable Long deptId){
         return new ResponseEntity(parkPevenueService.findPevenueMoney(deptId),HttpStatus.OK);
     }

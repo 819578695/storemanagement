@@ -35,7 +35,7 @@ public class ProcurementInformationController {
     @Log("查询所有ProcurementInformation")
     @ApiOperation(value = "查询所有ProcurementInformation")
     @GetMapping(value = "/procurementInformationAll")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTINFORMATION_ALL','PROCUREMENTINFORMATION_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTINFORMATION_ALL','PROCUREMENTINFORMATION_EXPORT_ALL')")
     public ResponseEntity procurementInformationaAll(ProcurementInformationQueryCriteria criteria){
         return new ResponseEntity(procurementInformationService.queryAll(criteria),HttpStatus.OK);
     }

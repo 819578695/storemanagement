@@ -150,7 +150,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
 
         if(parkPevenue!=null) {
             //根据支付方式和账户id查询账户详情
-            MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
+            MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(), resources.getDept().getId());
             if (maintarinDetails != null) {
                 //修改之后的余额
                 // Double price = (StringUtils.isNotNullBigDecimal(resources.getArrersRent()) + StringUtils.isNotNullBigDecimal(resources.getHouseRent()) + StringUtils.isNotNullBigDecimal(resources.getElectricityRent()) + StringUtils.isNotNullBigDecimal(resources.getGroundPoundRent()) + StringUtils.isNotNullBigDecimal(resources.getLateRent()) + StringUtils.isNotNullBigDecimal(resources.getLiquidatedRent()) + StringUtils.isNotNullBigDecimal(resources.getManagementRent()) + StringUtils.isNotNullBigDecimal(resources.getParkingRent()) + StringUtils.isNotNullBigDecimal(resources.getPropertyRent()) + StringUtils.isNotNullBigDecimal(resources.getSanitationRent()) + StringUtils.isNotNullBigDecimal(resources.getWaterRent()));                //修改之前的余额
@@ -184,7 +184,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         if (resources.getPayType().getValue().equals("PEVENUE_UNDER")) {
             if (parkPevenue != null) {
                 //根据支付方式和账户id查询账户详情
-                MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(parkPevenue.getDictDetail().getId(), parkPevenue.getDept().getId());
+                MaintarinDetail maintarinDetails = maintainDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(), resources.getDept().getId());
                 DictDetail payBackDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_PAYBACK");//补缴
                 DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");//欠付
                 if (maintarinDetails != null) {

@@ -72,5 +72,5 @@ swagger:
 ##服务器文件地址
 httpUrl: http://121.40.253.229
 ##文件默认路径
-filePath: /www/server/nginx/html
+filePath: /www/server/nginx/html/dist
 baseHttpUrl: http://121.40.253.229
