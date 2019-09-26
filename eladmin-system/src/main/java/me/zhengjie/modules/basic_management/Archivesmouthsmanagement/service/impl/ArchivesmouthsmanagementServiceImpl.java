@@ -32,8 +32,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
 
     @Autowired
+    @SuppressWarnings("all")
     private ArchivesmouthsmanagementMapper archivesmouthsmanagementMapper;
+
     @Autowired
+    @SuppressWarnings("all")
     private ArchiveMapper archivesMapper;
 
     @Autowired
@@ -86,6 +89,16 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     public Object findByDeptId(Long deptId) {
         return archivesmouthsmanagementMapper.toDto(deptId==1?archivesmouthsmanagementRepository.findAll():archivesmouthsmanagementRepository.findByDeptId(deptId));
+    }
+
+    @Override
+    public Object findByDeptIdAndTenementNameIsNull(Long deptId) {
+        return archivesmouthsmanagementMapper.toDto(deptId==1?archivesmouthsmanagementRepository.findByTenementNameIsNull():archivesmouthsmanagementRepository.findByDeptIdAndTenementNameIsNull(deptId));
+    }
+
+    @Override
+    public Object findByDeptIdAndTenementNameIsNotNull(Long deptId) {
+        return archivesmouthsmanagementMapper.toDto(deptId==1?archivesmouthsmanagementRepository.findByTenementNameIsNotNull():archivesmouthsmanagementRepository.findByDeptIdAndTenementNameIsNotNull(deptId));
     }
 
     @Override

@@ -54,6 +54,10 @@ public class Archivesmouthsmanagement implements Serializable {
     @Column(name = "contacts")
     private String contacts;
 
+    // 租戶名稱
+    @Column(name = "tenement_name")
+    private String tenementName;
+
     //租用类型
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "stall_type")

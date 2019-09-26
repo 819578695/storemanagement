@@ -14,4 +14,6 @@ import java.util.List;
 public interface LeaseContractRepository extends JpaRepository<LeaseContract, Long>, JpaSpecificationExecutor {
     List<LeaseContract> findByDeptId(Long deptId);
 
+    List<LeaseContract> findByArchivesmouthsmanagementId(Long id);
+
 }

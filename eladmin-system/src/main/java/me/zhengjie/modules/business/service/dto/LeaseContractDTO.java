@@ -64,5 +64,11 @@ public class LeaseContractDTO implements Serializable {
     //租户名称
     private String tenementName;
 
+    // 起止日期
+    private Timestamp rentFreeStartTime;
+
+    // 截止日期
+    private Timestamp rentFreeEndTime;
+
 
 }

@@ -34,6 +34,11 @@ public interface ArchivesmouthsmanagementService {
     public Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria);
 
     Object findByDeptId(Long deptId);
+    Object findByDeptIdAndTenementNameIsNull(Long deptId);
+    Object findByDeptIdAndTenementNameIsNotNull(Long deptId);
+
+
+
     /**
      * findById
      * @param id

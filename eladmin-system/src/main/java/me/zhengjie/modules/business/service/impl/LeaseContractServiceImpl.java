@@ -1,7 +1,9 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
+import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
@@ -95,6 +97,20 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public LeaseContractDTO create(LeaseContract resources) {
+        if (resources!=null){
+             //新增合同會綁定租戶和檔口
+            Archivesmouthsmanagement archivesmouthsmanagement = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();
+            Tenantinformation tenantinformation= tenantinformationRepository.findById(resources.getTenantinformation().getId()).get();
+            //修改合同对应的档口和租户
+           if (archivesmouthsmanagement!=null&&tenantinformation!=null){
+                archivesmouthsmanagement.setTenementName(tenantinformation.getLinkman());
+                tenantinformation.setArea(archivesmouthsmanagement.getAcreage());
+                tenantinformation.setArchivesmouthsmanagement(archivesmouthsmanagement);
+                tenantinformation.setDictDetail(archivesmouthsmanagement.getDictDetail());
+                archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+                tenantinformationRepository.save(tenantinformation);
+           }
+        }
         return leaseContractMapper.toDto(leaseContractRepository.save(resources));
     }
 
@@ -104,6 +120,37 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         Optional<LeaseContract> optionalLeaseContract = leaseContractRepository.findById(resources.getId());
         ValidationUtil.isNull( optionalLeaseContract,"LeaseContract","id",resources.getId());
         LeaseContract leaseContract = optionalLeaseContract.get();
+        if (resources!=null&&resources!=leaseContract){
+            //新增合同會綁定租戶和檔口
+            Archivesmouthsmanagement archivesmouthsmanagement = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();
+            Tenantinformation tenantinformation= tenantinformationRepository.findById(resources.getTenantinformation().getId()).get();
+            //修改合同对应的档口和租户
+            //如果档口修改则将修改的id进行判断
+            if(resources.getArchivesmouthsmanagement().getId()!=leaseContract.getArchivesmouthsmanagement().getId()){
+                List<LeaseContract> leaseContractList = leaseContractRepository.findByArchivesmouthsmanagementId(resources.getArchivesmouthsmanagement().getId());
+                if(leaseContractList.size()>0){
+                    throw new BadRequestException("您选择的档口已经出租,无法进行修改");
+                }
+                else{
+                    if(tenantinformation!=null){
+                        tenantinformation.setArea(archivesmouthsmanagement.getAcreage());
+                        tenantinformation.setArchivesmouthsmanagement(archivesmouthsmanagement);
+                        tenantinformation.setDictDetail(archivesmouthsmanagement.getDictDetail());
+                        tenantinformationRepository.save(tenantinformation);
+                    }
+                }
+
+            }
+            //如果租户信息修改则将修改的id进行判断
+            if(resources.getTenantinformation().getId()!=leaseContract.getTenantinformation().getId()){
+                if(archivesmouthsmanagement!=null){
+                    archivesmouthsmanagement.setTenementName(tenantinformation.getLinkman());
+                    archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+                }
+            }
+
+
+        }
         leaseContract.copy(resources);
         leaseContractRepository.save(leaseContract);
     }

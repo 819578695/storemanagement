@@ -55,6 +55,7 @@ public class Tenantinformation implements Serializable {
     @Column(name = "linkman")
     private String linkman;
 
+
     // 联系电话
     @Column(name = "phone")
     private String phone;

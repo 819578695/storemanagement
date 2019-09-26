@@ -44,4 +44,7 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
     //关联城市id
     private Long areaId;
 
+    // 租戶名稱
+    private String tenementName;
+
 }

@@ -100,5 +100,19 @@ public class ParkPevenueDTO implements Serializable {
     // 修改时间
     private Timestamp updateTime;
 
+    //开始时间
+    private Timestamp startTime;
+
+    //结束时间
+    private Timestamp endTime;
+
+    //联系人
+    private  String linkman;
+
+    //租户信息id
+    private  Long tenementId;
+
+
+
 
 }
