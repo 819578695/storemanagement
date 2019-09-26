@@ -59,13 +59,17 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
 
     @Override
     public  Map publiccity(Long id){
+        Map map = new HashMap();
         List<Archivesmouthsmanagement> list = archivesmouthsmanagementRepository.findByAreaId(id);
-        int num = archivesmouthsmanagementRepository.findBycoum(id);
+        /*int num = archivesmouthsmanagementRepository.findBycoum(id);*/
+        int num = 0;
         List<ArchiveDto> list1 = new ArrayList<>();
         for (Archivesmouthsmanagement lists : list){
+            if (lists.getTenementName()==null||lists.getTenementName().equals("")){
             list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),cityRepository.findById(lists.getCity().getAreaId()).get()));
+            num = num+1;
+                }
         }
-        Map map = new HashMap();
         map.put("list",list1);
         map.put("num",num);
         return map;
