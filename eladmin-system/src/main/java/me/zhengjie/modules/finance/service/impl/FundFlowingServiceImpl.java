@@ -201,8 +201,8 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                     fundFlowing.setTypeDict(typeDict);//交易类型
                     fundFlowing.setTallyType(tallyType);//收入支出项
                     fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getPaymentAccount());//付款信息
-                    fundFlowing.setBackAccount(receiptPaymentAccount.getPaymentAccountNum());//银行账号
-                    fundFlowing.setBackNum(receiptPaymentAccount.getPaymentAccount());//开户名
+                    fundFlowing.setBackAccount(receiptPaymentAccount.getPaymentBank());//开户名
+                    fundFlowing.setBackNum(receiptPaymentAccount.getPaymentAccountNum());//银行账号
                     maintarinDetailRepository.save(maintarinDetail);
                 }
             else{
