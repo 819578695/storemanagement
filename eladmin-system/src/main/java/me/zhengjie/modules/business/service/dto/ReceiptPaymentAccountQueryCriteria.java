@@ -12,6 +12,6 @@ public class ReceiptPaymentAccountQueryCriteria{
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
-    @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
+    @Query(type = Query.Type.EQUAL)
     private Long deptId;
 }
