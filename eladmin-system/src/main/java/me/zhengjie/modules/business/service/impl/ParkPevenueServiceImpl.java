@@ -224,6 +224,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                             payBack.setLeaseContract(resources.getLeaseContract());
                             payBack.setLiquidatedRent(resources.getLiquidatedRent());
                             payBack.setManagementRent(resources.getManagementRent());
+                            payBack.setTenantinformation(resources.getTenantinformation());
                             payBack.setParkingRent(resources.getParkingRent());
                             payBack.setPropertyRent(resources.getPropertyRent());
                             payBack.setReceiptPaymentAccount(resources.getReceiptPaymentAccount());
