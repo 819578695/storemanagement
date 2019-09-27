@@ -1,9 +1,7 @@
 package me.zhengjie.modules.finance.service.impl;
 
-import io.netty.util.internal.StringUtil;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto;
-import me.zhengjie.modules.finance.domain.FundMargin;
 import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.FundMarginDTO;
@@ -36,8 +34,6 @@ import java.util.*;
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true, rollbackFor = Exception.class)
 public class MarginServiceImpl implements MarginService {
 
-    @Autowired
-    private MarginRepository marginRepository;
     @Autowired
     private DeptServiceImpl deptService;
     @Autowired
@@ -124,9 +120,16 @@ public class MarginServiceImpl implements MarginService {
         return this.query(criteria);
     }
     @Override
-    public List<TreeDTO> buildTree() {
+    public List<TreeDTO> buildTree(MarginQueryCriteria criteria) {
         List<TreeDTO> trees = new ArrayList<>();
-        List<DeptDTO> deptDTOS = deptService.queryAll(new DeptQueryCriteria());
+        List<DeptDTO> deptDTOS;
+        if (criteria.getDeptId() != 1) {
+            DeptQueryCriteria criteria1 = new DeptQueryCriteria();
+            criteria1.setId(criteria.getDeptId());
+            deptDTOS = deptService.queryAll(criteria1);
+        }else {
+            deptDTOS = deptService.queryAll(new DeptQueryCriteria());
+        }
         for (DeptDTO deptDTO : deptDTOS) {
             List<ArchiveTreeDto> list = archivesmouthsmanagementRepository.queryByDeptAndId(deptDTO.getId());
             trees.add(new TreeDTO(deptDTO.getId(),deptDTO.getName(),list));

@@ -43,7 +43,7 @@ public class MarginController {
     @Log("查询deptTree")
     @GetMapping(value = "/marginTree")
     @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
-    public  ResponseEntity getMarginTree(){
-        return new ResponseEntity(marginService.buildTree(), HttpStatus.OK);
+    public  ResponseEntity getMarginTree(MarginQueryCriteria criteria){
+        return new ResponseEntity(marginService.buildTree(criteria), HttpStatus.OK);
     }
 }

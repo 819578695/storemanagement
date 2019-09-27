@@ -32,5 +32,5 @@ public interface MarginService {
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryCostAll(MarginQueryCriteria criteria);
 
-    List<TreeDTO> buildTree();
+    List<TreeDTO> buildTree(MarginQueryCriteria criteria);
 }
