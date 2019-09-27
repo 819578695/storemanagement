@@ -53,4 +53,13 @@ public class RentContractDTO implements Serializable {
     //部门名称
     private String deptName;
 
+    //支付周期
+    private Long payCycleId;
+
+    //支付周期名称
+    private String payCycleName;
+
+    //支付单价
+    private BigDecimal payPrice;
+
 }

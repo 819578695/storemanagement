@@ -6,6 +6,7 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.DictDetail;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -91,6 +92,15 @@ public class LeaseContract implements Serializable {
     // 文件名
     @Column(name = "file_name")
     private String fileName;
+
+    // 合同支付周期
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "pay_cycle")
+    private DictDetail payCycle;
+
+    // 合同支付单价
+    @Column(name = "pay_price")
+    private BigDecimal payPrice;
 
     public void copy(LeaseContract source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

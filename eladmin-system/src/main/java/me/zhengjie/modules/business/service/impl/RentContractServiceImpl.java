@@ -4,6 +4,7 @@ import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.service.mapper.DeptMapper;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.ValidationUtil;
@@ -45,6 +46,8 @@ public class RentContractServiceImpl implements RentContractService {
     private DeptRepository deptRepository;
     @Autowired
     private ParkCostRepository parkCostRepository;
+    @Autowired
+    private DictDetailRepository dictDetailRepository;
 
     @Value("${httpUrl}")
     private String httpUrl; //服务器文件地址
@@ -65,7 +68,7 @@ public class RentContractServiceImpl implements RentContractService {
                     rentContract.setPaymentedExpenses(totalMoney);
                 }
             }
-            rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId())));
+            rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId()),dictDetailRepository.findById(rentContract.getPayCycle().getId()).get()));
         }
         return PageUtil.toPage(rentContractDTOS,page.getTotalElements());
     }
