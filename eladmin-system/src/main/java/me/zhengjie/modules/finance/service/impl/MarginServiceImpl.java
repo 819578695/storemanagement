@@ -15,12 +15,9 @@ import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.modules.system.service.dto.DeptDTO;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.modules.system.service.impl.DeptServiceImpl;
-import me.zhengjie.utils.PageUtil;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -59,20 +52,12 @@ public class MarginServiceImpl implements MarginService {
 
     //动态查询
     public Object query(MarginQueryCriteria criteria){
-        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
-        //收入ID
-        Long incomeId = null ;
-        for (DictDetail dictDetail : list) {
-            if ("收入".equals(dictDetail.getLabel())){
-                incomeId = dictDetail.getId();
-            }
-        }
         //查询主语句
         String sql = "select sum(f.money) AS money , d.id , d.label from fund_margin f left join dict_detail d on d.id = f.tally_type_id ";
         Map<String,Object> map = new HashMap<>();
         //拼接收入项
         sql += " where f.type_id =:incomeId ";
-        map.put("incomeId",incomeId);
+        map.put("incomeId",criteria.getTypeId());
         //拼接查询
         if (criteria.getDeptId() != null){
             sql += " and f.dept_id = :deptId ";
@@ -111,26 +96,33 @@ public class MarginServiceImpl implements MarginService {
         return fundMarginDTOS;
     }
 
-
-
-
-
     @Override
     public Object queryAll(MarginQueryCriteria criteria){
-        //获取收入ID
-        /*Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId();
-        List<FundMarginDTO> fundMarginDTOS = new ArrayList();
-        //传入部门ID及档口号
-        if (criteria.getDeptId() != null & criteria.getHouseId()!= null){
-            fundMarginDTOS = marginRepository.findByPevenueAllByDeptIdAndHouseNumber(criteria.getDeptId(),criteria.getHouseId(),typeId);
-        }else {
-            //传入部门ID
-            fundMarginDTOS = marginRepository.findByDeptIdAndAndMoney(criteria.getDeptId(), typeId);
+        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
+        Long incomeId = null ;
+        //收入ID
+        for (DictDetail dictDetail : list) {
+            if ("收入".equals(dictDetail.getLabel())){
+                incomeId = dictDetail.getId();
+            }
         }
-        return fundMarginDTOS;*/
+        criteria.setTypeId(incomeId);
         return this.query(criteria);
     }
 
+    @Override
+    public Object queryCostAll(MarginQueryCriteria criteria){
+        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
+        Long incomeId = null ;
+        //收入ID
+        for (DictDetail dictDetail : list) {
+            if ("支出".equals(dictDetail.getLabel())){
+                incomeId = dictDetail.getId();
+            }
+        }
+        criteria.setTypeId(incomeId);
+        return this.query(criteria);
+    }
     @Override
     public List<TreeDTO> buildTree() {
         List<TreeDTO> trees = new ArrayList<>();

@@ -17,7 +17,7 @@ import java.util.Set;
 public interface MarginService {
 
     /**
-    * queryAll 分页
+    * queryAll 收入
     * @param criteria
     * @return
     */
@@ -25,12 +25,12 @@ public interface MarginService {
     Object queryAll(MarginQueryCriteria criteria);
 
     /**
-    * queryAll 不分页
-    * @param criteria
-    * @return
-    */
+     * queryAll 成本
+     * @param criteria
+     * @return
+     */
     //@Cacheable(keyGenerator = "keyGenerator")
-//    public Object queryAll(FinaceMarginQueryCriteria criteria);
+    Object queryCostAll(MarginQueryCriteria criteria);
 
     List<TreeDTO> buildTree();
 }
