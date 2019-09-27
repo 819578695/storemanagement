@@ -9,6 +9,7 @@ import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
+import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.service.LeaseContractService;
@@ -55,6 +56,9 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Autowired
     private ParkPevenueRepository parkPevenueRepository;
 
+    @Autowired
+    private DictDetailRepository dictDetailRepository;
+
 
 
     @Override
@@ -71,7 +75,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                     leaseContract.setPaymentedExpenses(totalMoney);
                 }
             }
-            leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get()));
+            leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get(),dictDetailRepository.findById(leaseContract.getPayCycle().getId()).get()));
 
         }
         return PageUtil.toPage(leaseContractDTOS,page.getTotalElements());
