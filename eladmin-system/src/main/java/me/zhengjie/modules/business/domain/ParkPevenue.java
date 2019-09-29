@@ -9,6 +9,8 @@ import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -33,11 +35,13 @@ public class ParkPevenue implements Serializable {
     // 园区id
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "park_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private BasicsPark  basicsPark;
 
 
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private ReceiptPaymentAccount receiptPaymentAccount;
 
     /**
@@ -45,11 +49,13 @@ public class ParkPevenue implements Serializable {
      */
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "dept_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Dept dept;
 
     // 档口Id
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "archives_mouths_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Archivesmouthsmanagement archivesmouthsmanagement;
 
     // 房租
@@ -87,6 +93,7 @@ public class ParkPevenue implements Serializable {
     // 类型(1 已付 2 欠款 3 补缴)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "type")
+    @NotFound(action= NotFoundAction.IGNORE)
     private DictDetail payType;
 
     //管理费
@@ -100,11 +107,13 @@ public class ParkPevenue implements Serializable {
     // 付款方式(关联)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
+    @NotFound(action= NotFoundAction.IGNORE)
     private DictDetail dictDetail;
 
     // 合同
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "lease_contract_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private LeaseContract leaseContract;
 
     // 修改时间
@@ -128,6 +137,7 @@ public class ParkPevenue implements Serializable {
     // 租户信息
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "tenement_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Tenantinformation tenantinformation;
 
     public void copy(ParkPevenue source){

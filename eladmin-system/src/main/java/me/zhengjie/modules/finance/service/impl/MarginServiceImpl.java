@@ -2,11 +2,18 @@ package me.zhengjie.modules.finance.service.impl;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto;
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.finance.domain.FundMargin;
+import me.zhengjie.modules.finance.domain.Maintain;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.FundMarginDTO;
+import me.zhengjie.modules.finance.service.dto.MaintainDTO;
 import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
 import me.zhengjie.modules.finance.service.dto.TreeDTO;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
@@ -42,9 +49,13 @@ public class MarginServiceImpl implements MarginService {
     private DictDetailRepository dictDetailRepository;
     @Autowired
     private DictRepository dictRepository;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
+
+
 
     //动态查询
     public Object query(MarginQueryCriteria criteria){
@@ -135,6 +146,26 @@ public class MarginServiceImpl implements MarginService {
             trees.add(new TreeDTO(deptDTO.getId(),deptDTO.getName(),list));
         }
         return trees;
+    }
+
+    @Override
+    public FundMarginDTO createByPostCost(ParkCost resources, String value, BigDecimal money, BigDecimal substactMoney) {
+        Dept dept = resources.getDept();//部门
+        DictDetail TradType = resources.getDictDetail();//支付方式
+        DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1");//支出
+        DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//支出
+        //根据部门id和支付方式查询账户金额
+        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+
+        //添加毛利
+       FundMargin fundMargin = new FundMargin();
+       fundMargin.setDept(dept);
+       fundMargin.setMoney(money);
+       fundMargin.setTallyType(tallyType);
+       fundMargin.setTradType(TradType);
+       fundMargin.setTradDate(resources.getCreateTime());
+
+        return null;
     }
 
 }

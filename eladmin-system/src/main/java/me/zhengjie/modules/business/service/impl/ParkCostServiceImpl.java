@@ -80,8 +80,7 @@ public class ParkCostServiceImpl implements ParkCostService {
         Page<ParkCost> page = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
         for (ParkCost parkCost : page.getContent()) {
-        Optional<RentContract> rentContract =  rentContractRepository.findById(parkCost.getRentContract().getId());
-            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findAllById(parkCost.getDept().getId()),dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),rentContract.get(),receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,parkCost.getDept()==null?null:deptRepository.findAllById(parkCost.getDept().getId()),parkCost.getDictDetail()==null?null:dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),parkCost.getRentContract()==null?null:rentContractRepository.findById(parkCost.getRentContract().getId()).get(),parkCost.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
         }
         return PageUtil.toPage(parkCostDTOS,page.getTotalElements());
     }
@@ -95,8 +94,7 @@ public class ParkCostServiceImpl implements ParkCostService {
         List<ParkCost> list = parkCostRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
         List<ParkCostDTO> parkCostDTOS = new ArrayList<>();
         for (ParkCost parkCost : list) {
-            Optional<RentContract> rentContract =  rentContractRepository.findById(parkCost.getRentContract().getId());
-            parkCostDTOS.add(parkCostMapper.toDto(parkCost,deptRepository.findAllById(parkCost.getDept().getId()),dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),rentContract.get(),receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
+            parkCostDTOS.add(parkCostMapper.toDto(parkCost,parkCost.getDept()==null?null:deptRepository.findAllById(parkCost.getDept().getId()),parkCost.getDictDetail()==null?null:dictDetailRepository.findById(parkCost.getDictDetail().getId()).get(),parkCost.getRentContract()==null?null:rentContractRepository.findById(parkCost.getRentContract().getId()).get(),parkCost.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findById(parkCost.getReceiptPaymentAccount().getId()).get()));
         }
         return PageUtil.toPage(parkCostDTOS,null);
     }

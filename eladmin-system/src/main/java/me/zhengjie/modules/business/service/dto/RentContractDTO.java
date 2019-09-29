@@ -68,4 +68,7 @@ public class RentContractDTO implements Serializable {
     //是否启用
     private String isEnable;
 
+    //创建时间
+    private Timestamp createTime;
+
 }

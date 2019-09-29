@@ -71,7 +71,7 @@ public class RentContractServiceImpl implements RentContractService {
                     rentContract.setPaymentedExpenses(totalMoney);
                 }
             }
-            rentContractDTOS.add(rentContractMapper.toDto(rentContract,deptRepository.findAllById(rentContract.getDept().getId()),dictDetailRepository.findById(rentContract.getPayCycle().getId()).get()));
+            rentContractDTOS.add(rentContractMapper.toDto(rentContract,rentContract.getDept()==null?null:deptRepository.findAllById(rentContract.getDept().getId()),rentContract.getPayCycle()==null?null:dictDetailRepository.findById(rentContract.getPayCycle().getId()).get()));
         }
         return PageUtil.toPage(rentContractDTOS,page.getTotalElements());
     }

@@ -1,11 +1,12 @@
 package me.zhengjie.modules.finance.service;
 
-import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
-import me.zhengjie.modules.finance.service.dto.TreeDTO;
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.finance.service.dto.*;
 import me.zhengjie.modules.system.service.dto.DeptDTO;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -33,4 +34,12 @@ public interface MarginService {
     Object queryCostAll(MarginQueryCriteria criteria);
 
     List<TreeDTO> buildTree(MarginQueryCriteria criteria);
+
+    /**
+     * create
+     * @param resources
+     * @return
+     */
+    //@CacheEvict(allEntries = true)新增成本
+    FundMarginDTO createByPostCost(ParkCost resources, String value, BigDecimal money, BigDecimal substactMoney);
 }

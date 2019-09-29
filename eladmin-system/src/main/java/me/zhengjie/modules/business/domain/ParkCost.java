@@ -8,6 +8,8 @@ import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -32,6 +34,7 @@ public class ParkCost implements Serializable {
     // 档口Id
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "archives_mouths_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Archivesmouthsmanagement archivesmouthsmanagement;
    /*@Column(name = "archives_mouths_id")
    private Long archivesMouthsId;*/
@@ -40,6 +43,7 @@ public class ParkCost implements Serializable {
      */
      @ManyToOne(fetch=FetchType.LAZY)
      @JoinColumn(name = "dept_id")
+     @NotFound(action= NotFoundAction.IGNORE)
      private Dept dept;
    /* @Column(name = "dept_id")
     private Long deptId;*/
@@ -71,6 +75,7 @@ public class ParkCost implements Serializable {
     // 付款方式(关联)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
+    @NotFound(action= NotFoundAction.IGNORE)
     private DictDetail dictDetail;
     /* @Column(name = "payment_type")
     private Long paymentType;*/
@@ -83,6 +88,7 @@ public class ParkCost implements Serializable {
     // 合同
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "rent_contract_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private RentContract rentContract;
     /*@Column(name = "rent_contract_id")
     private Long rentContractId;*/
@@ -90,6 +96,7 @@ public class ParkCost implements Serializable {
     //收付款信息
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private ReceiptPaymentAccount receiptPaymentAccount;
    /* @Column(name = "receipt_payment_account_id")
     private Long receiptPaymentAccountId;*/

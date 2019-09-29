@@ -8,9 +8,10 @@ import me.zhengjie.modules.basic_management.Tenantinformation.repository.Tenanti
 import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
+import me.zhengjie.modules.security.security.JwtUser;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.*;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.service.LeaseContractService;
 import me.zhengjie.modules.business.service.dto.LeaseContractDTO;
@@ -22,13 +23,12 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
 
 /**
 * @author nmk
@@ -75,7 +75,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                     leaseContract.setPaymentedExpenses(totalMoney);
                 }
             }
-            leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),deptRepository.findById(leaseContract.getDept().getId()).get(),tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get(),dictDetailRepository.findById(leaseContract.getPayCycle().getId()).get()));
+            leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,leaseContract.getArchivesmouthsmanagement()==null?null:archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),leaseContract.getDept()==null?null:deptRepository.findById(leaseContract.getDept().getId()).get(),leaseContract.getTenantinformation()==null?null:tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get(),leaseContract.getPayCycle()==null?null:dictDetailRepository.findById(leaseContract.getPayCycle().getId()).get()));
 
         }
         return PageUtil.toPage(leaseContractDTOS,page.getTotalElements());
@@ -102,6 +102,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Transactional(rollbackFor = Exception.class)
     public LeaseContractDTO create(LeaseContract resources) {
         if (resources!=null){
+
              //新增合同會綁定租戶和檔口
             Archivesmouthsmanagement archivesmouthsmanagement = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();
             Tenantinformation tenantinformation= tenantinformationRepository.findById(resources.getTenantinformation().getId()).get();
@@ -114,6 +115,12 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                 archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
                 tenantinformationRepository.save(tenantinformation);
            }
+            JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
+            Long no = 0001l;
+            if (leaseContractRepository.findByNewcontractNo(resources.getDept().getId())!=null){
+                no=Long.valueOf(leaseContractRepository.findByNewcontractNo(resources.getDept().getId()))+0001l;
+            }
+            resources.setContractNo(jwtUser.getDeptNo()+ StringUtils.getCurentDate()+new DecimalFormat("0000").format(no));
         }
         return leaseContractMapper.toDto(leaseContractRepository.save(resources));
     }

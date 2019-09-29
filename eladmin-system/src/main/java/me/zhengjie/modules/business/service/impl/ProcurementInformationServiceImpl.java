@@ -1,6 +1,7 @@
 package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.modules.business.domain.ProcurementInformation;
+import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
@@ -55,14 +56,20 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
         for (ProcurementInformation procurementInformation : page.getContent()) {
             Optional<Dept> dept = deptRepository.findById(procurementInformation.getDept().getId());
             ValidationUtil.isNull(dept,"Dept","id",procurementInformation.getDept().getId());
-            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),deptRepository.findById(procurementInformation.getDept().getId()).get()));
+
+            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),procurementInformation.getDictDetail()==null?null:dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
         }
         return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());
     }
 
     @Override
     public Object queryAll(ProcurementInformationQueryCriteria criteria){
-        return procurementInformationMapper.toDto(procurementInformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<ProcurementInformation> all = procurementInformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
+        List<ProcurementInformationDTO> procurementInformationDTOS = new ArrayList<>();
+        for (ProcurementInformation procurementInformation : all) {
+            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),procurementInformation.getDictDetail()==null?null:dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
+        }
+        return PageUtil.toPage(procurementInformationDTOS,null);
     }
 
     @Override
