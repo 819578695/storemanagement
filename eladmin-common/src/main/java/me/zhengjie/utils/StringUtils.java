@@ -1,8 +1,14 @@
 package me.zhengjie.utils;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,8 +17,12 @@ import java.util.Date;
  */
 public class StringUtils extends org.apache.commons.lang3.StringUtils {
 
+    @Autowired
+    private  UserDetailsService userDetailsService;
+
     private static final char SEPARATOR = '_';
     private static final String CHARSET_NAME = "UTF-8";
+    private static final int DEFAULT_LENGTH = 4;
 
     /**
      * 是否包含字符串
@@ -170,6 +180,35 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
         }
         return bigDecimal.doubleValue();
     }
+
+
+
+
+     /*生成流水号*/
+     public static String getSequence(long seq) {
+         String str = String.valueOf(seq);
+         int len = str.length();
+         if (len >= DEFAULT_LENGTH) {// 取决于业务规模,应该不会到达4
+             return str;
+         }
+         int rest = DEFAULT_LENGTH - len;
+         StringBuilder sb = new StringBuilder();
+         for (int i = 0; i < rest; i++) {
+             sb.append('0');
+         }
+         sb.append(str);
+         return sb.toString();
+     }
+    /**
+     * 得到系统当前日期
+     * "yyyyMMdd"
+     */
+    public static String getCurentDate() {
+        SimpleDateFormat tempDate = new SimpleDateFormat("yyyyMMdd");
+        String datetime = tempDate.format(new java.util.Date());
+        return datetime;
+    }
+
 
 
 

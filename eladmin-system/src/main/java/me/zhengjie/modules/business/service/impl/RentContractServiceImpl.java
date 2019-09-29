@@ -3,11 +3,12 @@ package me.zhengjie.modules.business.service.impl;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
+import me.zhengjie.modules.monitor.service.RedisService;
+import me.zhengjie.modules.security.security.JwtUser;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.service.mapper.DeptMapper;
-import me.zhengjie.utils.FileUtil;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.*;
 import me.zhengjie.modules.business.repository.RentContractRepository;
 import me.zhengjie.modules.business.service.RentContractService;
 import me.zhengjie.modules.business.service.dto.RentContractDTO;
@@ -15,18 +16,18 @@ import me.zhengjie.modules.business.service.dto.RentContractQueryCriteria;
 import me.zhengjie.modules.business.service.mapper.RentContractMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
@@ -48,6 +49,8 @@ public class RentContractServiceImpl implements RentContractService {
     private ParkCostRepository parkCostRepository;
     @Autowired
     private DictDetailRepository dictDetailRepository;
+    @Autowired
+    private RedisService redisService;
 
     @Value("${httpUrl}")
     private String httpUrl; //服务器文件地址
@@ -93,6 +96,12 @@ public class RentContractServiceImpl implements RentContractService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RentContractDTO create(RentContract resources) {
+        JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
+        Long no = 0001l;
+        if (rentContractRepository.findByNewcontractNo(resources.getDept().getId())!=null){
+            no=Long.valueOf(rentContractRepository.findByNewcontractNo(resources.getDept().getId()))+0001l;
+        }
+        resources.setContractNo(jwtUser.getDeptNo()+StringUtils.getCurentDate()+new DecimalFormat("0000").format(no));
         return rentContractMapper.toDto(rentContractRepository.save(resources));
     }
 

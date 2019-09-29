@@ -62,4 +62,10 @@ public class RentContractDTO implements Serializable {
     //支付单价
     private BigDecimal payPrice;
 
+    //合同备注
+    private String remarks;
+
+    //是否启用
+    private String isEnable;
+
 }

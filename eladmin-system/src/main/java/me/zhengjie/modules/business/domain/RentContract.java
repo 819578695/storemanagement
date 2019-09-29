@@ -75,6 +75,10 @@ public class RentContract implements Serializable {
     @Column(name = "contract_no")
     private String contractNo;
 
+    // 备注
+    @Column(name = "remarks")
+    private String remarks;
+
     // 合同支付周期
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "pay_cycle")
@@ -83,6 +87,10 @@ public class RentContract implements Serializable {
     // 合同支付单价
     @Column(name = "pay_price")
     private BigDecimal payPrice;
+
+    // 合同支付单价
+    @Column(name = "is_enable")
+    private String isEnable;
 
     public void copy(RentContract source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

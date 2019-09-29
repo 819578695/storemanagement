@@ -25,6 +25,11 @@ public class DeptDTO implements Serializable {
      */
     private String name;
 
+    /**
+     * 部门编号
+     */
+    private String deptNo;
+
     @NotNull
     private Boolean enabled;
 

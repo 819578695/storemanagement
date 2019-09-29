@@ -35,6 +35,13 @@ public class Dept implements Serializable {
     @NotBlank
     private String name;
 
+    /**
+     * 名称
+     */
+    @Column(name = "dept_no",nullable = false)
+    @NotNull
+    private String deptNo;
+
     @NotNull
     private Boolean enabled;
 
