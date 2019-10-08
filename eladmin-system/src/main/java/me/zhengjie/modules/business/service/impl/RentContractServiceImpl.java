@@ -22,8 +22,10 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -69,6 +71,16 @@ public class RentContractServiceImpl implements RentContractService {
                     //bigdecimal 求和(未缴费用)
                     totalMoney = totalMoney.add(parkCost.getSiteRent());
                     rentContract.setPaymentedExpenses(totalMoney);
+                }
+            }
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+
+            //合同启用才会生效
+            if (rentContract.getIsEnable().equals("1")){
+                //合同截止时间早于当前时间 则将自动吧合同转为
+                if (rentContract.getEndDate().before(timestamp)){
+                    rentContract.setIsEnable("2");
+                    rentContractRepository.save(rentContract);
                 }
             }
             rentContractDTOS.add(rentContractMapper.toDto(rentContract,rentContract.getDept()==null?null:deptRepository.findAllById(rentContract.getDept().getId()),rentContract.getPayCycle()==null?null:dictDetailRepository.findById(rentContract.getPayCycle().getId()).get()));

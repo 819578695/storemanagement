@@ -20,13 +20,13 @@ import org.mapstruct.ReportingPolicy;
 public interface TenantinformationMapper extends EntityMapper<TenantinformationDTO, Tenantinformation> {
     @Mappings({
             @Mapping(source = "tenantinformation.id",target = "id"),
-            @Mapping(source = "dictDetail.id",target = "stalltype"),
-            @Mapping(source = "dictDetail.label",target = "stalltypeName"),
+            @Mapping(source = "LeaseContract.archivesmouthsmanagement.dictDetail.id",target = "stalltype"),
+            @Mapping(source = "LeaseContract.archivesmouthsmanagement.acreage",target = "area"),
             @Mapping(source = "LeaseContract.id",target = "contractid"),
             @Mapping(source = "LeaseContract.fileName",target = "thecontractdetails"),
-            @Mapping(source = "Archivesmouthsmanagement.id",target = "stallid"),
-            @Mapping(source = "Archivesmouthsmanagement.housenumber",target = "roomnumber"),
+            @Mapping(source = "LeaseContract.archivesmouthsmanagement.id",target = "stallid"),
+            @Mapping(source = "LeaseContract.archivesmouthsmanagement.housenumber",target = "roomnumber"),
             @Mapping(source = "dept.id",target = "deptId"),
     })
-    TenantinformationDTO toDto(Tenantinformation tenantinformation, Dept dept, DictDetail dictDetail, LeaseContract LeaseContract, Archivesmouthsmanagement Archivesmouthsmanagement);
+    TenantinformationDTO toDto(Tenantinformation tenantinformation, Dept dept, LeaseContract LeaseContract);
 }

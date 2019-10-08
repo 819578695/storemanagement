@@ -5,6 +5,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -97,6 +98,7 @@ public class RentContract implements Serializable {
     private String isEnable;
 
     //创建时间
+    @CreationTimestamp
     @Column(name = "create_time")
     private Timestamp createTime;
 

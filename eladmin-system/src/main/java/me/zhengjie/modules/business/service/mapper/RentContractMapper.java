@@ -22,6 +22,7 @@ public interface RentContractMapper extends EntityMapper<RentContractDTO, RentCo
 
     @Mappings({
             @Mapping(source = "rentContract.id",target = "id"),
+            @Mapping(source = "rentContract.createTime",target = "createTime"),
             @Mapping(source = "dept.name",target = "deptName"),
             @Mapping(source = "dept.id",target = "deptId"),
             @Mapping(source = "payCycle.label",target = "payCycleName"),

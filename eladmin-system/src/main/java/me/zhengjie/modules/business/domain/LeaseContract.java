@@ -7,6 +7,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Arch
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -113,6 +114,7 @@ public class LeaseContract implements Serializable {
     private String isEnable;
 
     //创建时间
+    @CreationTimestamp
     @Column(name = "create_time")
     private Timestamp createTime;
 
