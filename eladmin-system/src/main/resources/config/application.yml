@@ -1,6 +1,5 @@
 server:
-  port: 7979
-
+  port: 7676
 spring:
   profiles:
     active: dev
