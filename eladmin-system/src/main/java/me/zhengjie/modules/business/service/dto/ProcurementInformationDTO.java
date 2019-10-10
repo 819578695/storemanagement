@@ -45,4 +45,10 @@ public class ProcurementInformationDTO implements Serializable {
 
     // 部门id
     private Long deptId;
+
+    // 文件名
+    private String fileName;
+
+    // 是否启用
+    private String isEnable;
 }

@@ -101,6 +101,14 @@ public class ParkCost implements Serializable {
    /* @Column(name = "receipt_payment_account_id")
     private Long receiptPaymentAccountId;*/
 
+    // 所缴月份(起止时间)
+    @Column(name = "start_time")
+    private Timestamp startTime;
+
+    // 所缴月份(截止时间)
+    @Column(name = "end_time")
+    private Timestamp endTime;
+
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

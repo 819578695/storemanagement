@@ -6,11 +6,12 @@ import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
 import me.zhengjie.modules.business.service.mapper.ReceiptPaymentAccountMapper;
+import me.zhengjie.modules.security.security.JwtUser;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.Job;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
-import me.zhengjie.utils.ValidationUtil;
+import me.zhengjie.utils.*;
 import me.zhengjie.modules.business.repository.ProcurementInformationRepository;
 import me.zhengjie.modules.business.service.ProcurementInformationService;
 import me.zhengjie.modules.business.service.dto.ProcurementInformationDTO;
@@ -21,13 +22,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import me.zhengjie.utils.PageUtil;
-import me.zhengjie.utils.QueryHelp;
 
 /**
 * @author kang
@@ -78,6 +78,13 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ProcurementInformationDTO create(ProcurementInformation resources) {
+
+        JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
+        Long no = 0001l;
+        if (procurementInformationRepository.findByNewcontractNo(resources.getDept().getId())!=null){
+            no=Long.valueOf(procurementInformationRepository.findByNewcontractNo(resources.getDept().getId()))+0001l;
+        }
+        resources.setPno(jwtUser.getDeptNo()+ StringUtils.getCurentDate()+new DecimalFormat("0000").format(no));
         return procurementInformationMapper.toDto(procurementInformationRepository.save(resources));
     }
 

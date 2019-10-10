@@ -7,7 +7,9 @@ import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinfor
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.domain.ProcurementPaymentInfo;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
+import me.zhengjie.modules.business.repository.ProcurementPaymentInfoRepository;
 import me.zhengjie.modules.security.security.JwtUser;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
@@ -59,6 +61,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
 
     @Autowired
     private DictDetailRepository dictDetailRepository;
+
 
 
 
@@ -167,6 +170,12 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        if(id!=null){
+            List<ParkPevenue> parkPevenueList = parkPevenueRepository.findByLeaseContractId(id);
+                if(parkPevenueList.size()>0){
+                    throw new BadRequestException("该合同下还有相关的收入信息,请先删除相关收入信息");
+                }
+        }
         leaseContractRepository.deleteById(id);
     }
 
@@ -178,7 +187,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         for (LeaseContract leaseContract : leaseContractList) {
             //合同启用才会生效
             if (leaseContract.getIsEnable().equals("1")){
-                //合同截止时间早于当前时间 则将自动吧合同转为
+                //合同截止时间早于当前时间 则将自动吧合同转为作废
                 if (leaseContract.getEndDate().before(timestamp)){
                     leaseContract.setIsEnable("2");
                     leaseContractRepository.save(leaseContract);
@@ -190,14 +199,15 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                          archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
                      }
                 }
-               //修改租户信息
+               /*//修改租户信息
                 if (leaseContract.getTenantinformation().getId()!=null) {
                     Tenantinformation tenantinformation = tenantinformationRepository.findByArchivesmouthsmanagementId(leaseContract.getArchivesmouthsmanagement().getId());
                     if(tenantinformation!=null){
                         tenantinformation.setArchivesmouthsmanagement(null);
                         tenantinformationRepository.save(tenantinformation);
                     }
-                }
+                }*/
+
               }
             }
         }

@@ -75,6 +75,14 @@ public class ProcurementInformation implements Serializable {
     @Column(name = "create_time")
     private Timestamp createTime;
 
+    // 文件名
+    @Column(name = "file_name")
+    private String fileName;
+
+    // 是否启用
+    @Column(name = "is_enable")
+    private String isEnable;
+
 
     public void copy(ProcurementInformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
