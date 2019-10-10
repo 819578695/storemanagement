@@ -1,9 +1,9 @@
 server:
-  port: 7979
+  port: 7676
 
 spring:
   profiles:
-    active: dev
+    active: prod
   jackson:
     time-zone: GMT+8
   data:
