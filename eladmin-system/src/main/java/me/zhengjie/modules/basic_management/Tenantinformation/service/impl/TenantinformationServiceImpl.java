@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -93,10 +94,18 @@ public class TenantinformationServiceImpl implements TenantinformationService {
 
     @Override
     public List<ParticularsDTO> queryParticulars(Long id){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         List<LeaseContract> list = LeaseContractRepository.findByTenantinformationId(id);
         List<ParticularsDTO> listdto = new ArrayList();
         for (LeaseContract leaseContract : list){
             listdto.add(particularsMapper.toDto(leaseContract.getTenantinformation(),leaseContract));
+            for (ParticularsDTO dto : listdto){
+                if (leaseContract.getEndDate().before(timestamp)){
+                    dto.setPastdue("到期");
+                }else {
+                    dto.setPastdue("已出租");
+                }
+            }
         }
         return listdto;
     }
