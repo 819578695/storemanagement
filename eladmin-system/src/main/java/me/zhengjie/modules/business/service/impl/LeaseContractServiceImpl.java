@@ -190,7 +190,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                          archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
                      }
                 }
-                //修改租户信息
+               //修改租户信息
                 if (leaseContract.getTenantinformation().getId()!=null) {
                     Tenantinformation tenantinformation = tenantinformationRepository.findByArchivesmouthsmanagementId(leaseContract.getArchivesmouthsmanagement().getId());
                     if(tenantinformation!=null){

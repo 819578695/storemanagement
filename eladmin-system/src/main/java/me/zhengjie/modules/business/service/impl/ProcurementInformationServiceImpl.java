@@ -42,10 +42,7 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
 
     @Autowired
     private ProcurementInformationMapper procurementInformationMapper;
-    @Autowired
-    private  ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
-    @Autowired
-    private DictDetailRepository dictDetailRepository;
+
     @Autowired
     private DeptRepository deptRepository;
 
@@ -56,8 +53,7 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
         for (ProcurementInformation procurementInformation : page.getContent()) {
             Optional<Dept> dept = deptRepository.findById(procurementInformation.getDept().getId());
             ValidationUtil.isNull(dept,"Dept","id",procurementInformation.getDept().getId());
-
-            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),procurementInformation.getDictDetail()==null?null:dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
+            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
         }
         return PageUtil.toPage(procurementInformationDTOS,page.getTotalElements());
     }
@@ -67,7 +63,7 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
         List<ProcurementInformation> all = procurementInformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder));
         List<ProcurementInformationDTO> procurementInformationDTOS = new ArrayList<>();
         for (ProcurementInformation procurementInformation : all) {
-            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getReceiptPaymentAccount()==null?null:receiptPaymentAccountRepository.findAllById(procurementInformation.getReceiptPaymentAccount().getId()),procurementInformation.getDictDetail()==null?null:dictDetailRepository.findById(procurementInformation.getDictDetail().getId()).get(),procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
+            procurementInformationDTOS.add(procurementInformationMapper.toDto(procurementInformation,procurementInformation.getDept()==null?null:deptRepository.findById(procurementInformation.getDept().getId()).get()));
         }
         return PageUtil.toPage(procurementInformationDTOS,null);
     }

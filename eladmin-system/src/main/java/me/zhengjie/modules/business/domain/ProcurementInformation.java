@@ -61,10 +61,6 @@ public class ProcurementInformation implements Serializable {
     @Column(name = "contract_amount")
     private BigDecimal contractAmount;
 
-    // 付款比例
-    @Column(name = "payment_ratio")
-    private String paymentRatio;
-
     // 申请金额
     @Column(name = "applications_amount")
     private BigDecimal applicationsAmount;
@@ -74,33 +70,10 @@ public class ProcurementInformation implements Serializable {
     @Column(name = "applications_date")
     private Timestamp applicationsDate;
 
-    // 应付日期
-    @Column(name = "due_date")
-    private Timestamp dueDate;
-
-    // 实际付款金额
-    @Column(name = "actual_payment_amount")
-    private BigDecimal actualPaymentAmount;
-
-    // 实际付款日期
-    @Column(name = "actual_payment_date")
-    private Timestamp actualPaymentDate;
-
-    // 付款方式(关联)
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "payment_type")
-    @NotFound(action= NotFoundAction.IGNORE)
-    private DictDetail dictDetail;
-
     // 创建时间
     @CreationTimestamp
     @Column(name = "create_time")
     private Timestamp createTime;
-
-    @OneToOne
-    @JoinColumn(name = "receipt_payment_account_id")
-    @NotFound(action= NotFoundAction.IGNORE)
-    private ReceiptPaymentAccount receiptPaymentAccount;
 
 
     public void copy(ProcurementInformation source){

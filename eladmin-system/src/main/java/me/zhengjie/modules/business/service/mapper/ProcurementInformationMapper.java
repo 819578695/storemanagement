@@ -22,12 +22,8 @@ public interface ProcurementInformationMapper extends EntityMapper<ProcurementIn
 
   @Mappings({
           @Mapping(source = "procurementInformation.id",target = "id"),
-          @Mapping(source = "receiptPaymentAccount.id",target = "receiptPaymentAccountId"),
-          @Mapping(source = "receiptPaymentAccount.name",target = "receiptPaymentAccountName"),
-          @Mapping(source = "dictDetail.id",target = "paymentType"),
-          @Mapping(source = "dictDetail.label",target = "paymentTypeName"),
           @Mapping(source = "dept.name",target = "deptName"),
           @Mapping(source = "dept.id",target = "deptId"),
   })
-    ProcurementInformationDTO toDto(ProcurementInformation procurementInformation, ReceiptPaymentAccount receiptPaymentAccount, DictDetail dictDetail, Dept dept);
+    ProcurementInformationDTO toDto(ProcurementInformation procurementInformation, Dept dept);
 }
