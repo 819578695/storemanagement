@@ -71,6 +71,10 @@ public class TenantinformationServiceImpl implements TenantinformationService {
         DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");
 
         for (Tenantinformation tenantinformation : page.getContent()){
+            /*if (tenantinformation.getDictDetail()==null){
+                long is = 38;
+                tenantinformation.getDictDetail().setId(is);
+            }*/
             List<ParkPevenue> parkPevenueList = parkPevenueRepository.findByArchivesmouthsmanagementIdAndPayTypeId(tenantinformation.getArchivesmouthsmanagement().getId(),underDict.getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for (ParkPevenue parkPevenue : parkPevenueList){
@@ -78,7 +82,13 @@ public class TenantinformationServiceImpl implements TenantinformationService {
                 totalMoney = totalMoney.add(new BigDecimal(StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent())));
                 tenantinformation.setAmountinarear(totalMoney);
             }
-            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get(),ArchivesmouthsmanagementRepository.findById(tenantinformation.getArchivesmouthsmanagement().getId()).get()));
+            /*if (tenantinformation.getDictDetail()==null){*/
+                /*long is = 10;
+                findById(tenantinformation.getDictDetail().getId()).setDeptId(is);*/
+                /*DictDetail dictDetail = new DictDetail();*/
+               /* tenantinformations.add(tenantinformationMapper.toDtos(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get(),ArchivesmouthsmanagementRepository.findById(tenantinformation.getArchivesmouthsmanagement().getId()).get()));*/
+            /*}*/
+            tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,deptRepository.findById(tenantinformation.getDept().getId()).get(),dictDetailRepository.findById(tenantinformation.getDictDetail().getId())==null?null:dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get(),LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get(),ArchivesmouthsmanagementRepository.findById(tenantinformation.getArchivesmouthsmanagement().getId()).get()));
         }
         return PageUtil.toPage(tenantinformations,page.getTotalElements());
     }
@@ -109,6 +119,10 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public TenantinformationDTO create(Tenantinformation resources) {
+        /*List<Tenantinformation> list = new ArrayList<>();
+        for (Tenantinformation tenantinformation : list){
+        dictDetailRepository.findById(tenantinformation.getDictDetail().getId()).get();
+        }*/
         return tenantinformationMapper.toDto(tenantinformationRepository.save(resources));
     }
 

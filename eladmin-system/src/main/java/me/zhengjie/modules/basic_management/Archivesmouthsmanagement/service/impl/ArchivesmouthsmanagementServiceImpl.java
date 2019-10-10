@@ -66,7 +66,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         List<ArchiveDto> list1 = new ArrayList<>();
         for (Archivesmouthsmanagement lists : list){
             if (lists.getTenementName()==null||lists.getTenementName().equals("")){
-            list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),cityRepository.findById(lists.getCity().getAreaId()).get()));
+            list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),cityRepository.findById(lists.getCity().getAreaId()).get(),deptRepository.findById(lists.getDept().getId()).get()));
             num = num+1;
                 }
         }

@@ -69,8 +69,8 @@ public class BasicsPark implements Serializable {
     private String theContractInformation;
 
     // 图片上传
-    @Column(name = "image_upload")
-    private String imageUpload;
+    @Column(name = "url")
+    private String url;
 
     // 创建时间
     @CreationTimestamp
@@ -80,4 +80,10 @@ public class BasicsPark implements Serializable {
     public void copy(BasicsPark source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
+    /*@Override
+    public String toString() {
+        return "Picture{" +
+                "filename='" + imageUpload + '\'' +
+                '}';
+    }*/
 }
