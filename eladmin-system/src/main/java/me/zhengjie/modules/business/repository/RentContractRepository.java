@@ -13,6 +13,8 @@ import java.util.List;
 */
 public interface RentContractRepository extends JpaRepository<RentContract, Long>, JpaSpecificationExecutor {
 
+    /*根据部门查询*/
+    @Query(value = "select * FROM rent_contract where dept_id=?1 and is_enable=1  ",nativeQuery =true)
     List<RentContract> findByDeptId(Long deptId);
 
     /*查询最新的流水编号*/
