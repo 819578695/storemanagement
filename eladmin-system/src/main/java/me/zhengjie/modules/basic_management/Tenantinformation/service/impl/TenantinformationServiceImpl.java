@@ -2,7 +2,10 @@ package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
+import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.ParticularsDTO;
+import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.ParticularsMapper;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.mapper.TenantinformationMapper;
+import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
@@ -63,6 +66,9 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Autowired
     private  ParkPevenueRepository parkPevenueRepository;
 
+    @Autowired
+    private ParticularsMapper particularsMapper;
+
     @Override
     public Object queryAll(TenantinformationQueryCriteria criteria, Pageable pageable){
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
@@ -83,6 +89,16 @@ public class TenantinformationServiceImpl implements TenantinformationService {
             tenantinformations.add(tenantinformationMapper.toDto(tenantinformation,tenantinformation.getDept()==null?null:deptRepository.findById(tenantinformation.getDept().getId()).get(),tenantinformation.getLeaseContract()==null?null:LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get()));
         }
         return PageUtil.toPage(tenantinformations,page.getTotalElements());
+    }
+
+    @Override
+    public List<ParticularsDTO> queryParticulars(Long id){
+        List<LeaseContract> list = LeaseContractRepository.findByTenantinformationId(id);
+        List<ParticularsDTO> listdto = new ArrayList();
+        for (LeaseContract leaseContract : list){
+            listdto.add(particularsMapper.toDto(leaseContract.getTenantinformation(),leaseContract));
+        }
+        return listdto;
     }
 
     @Override

@@ -75,6 +75,10 @@ public class Tenantinformation implements Serializable {
     @Column(name = "tenement_date")
     private Timestamp tenementdate;
 
+    //是否过期
+    @Column(name = "past_due")
+    private String Pastdue;
+
     public void copy(Tenantinformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
