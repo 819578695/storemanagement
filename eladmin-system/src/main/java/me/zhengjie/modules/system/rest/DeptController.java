@@ -33,7 +33,6 @@ public class DeptController {
 
     @Log("查询所有")
     @GetMapping(value = "/depts")
-    @PreAuthorize("hasAnyRole('ADMIN','DEPET_ALL')")
     public ResponseEntity getDeptAll(DeptQueryCriteria criteria){
         return new ResponseEntity(deptService.queryAll(criteria),HttpStatus.OK);
     }

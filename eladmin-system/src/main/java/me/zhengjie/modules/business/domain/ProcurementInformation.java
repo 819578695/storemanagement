@@ -6,6 +6,8 @@ import cn.hutool.core.bean.copier.CopyOptions;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -32,6 +34,7 @@ public class ProcurementInformation implements Serializable {
      */
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "dept_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Dept dept;
 
     // 项目编号
@@ -86,6 +89,7 @@ public class ProcurementInformation implements Serializable {
     // 付款方式(关联)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "payment_type")
+    @NotFound(action= NotFoundAction.IGNORE)
     private DictDetail dictDetail;
 
     // 创建时间
@@ -95,7 +99,10 @@ public class ProcurementInformation implements Serializable {
 
     @OneToOne
     @JoinColumn(name = "receipt_payment_account_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private ReceiptPaymentAccount receiptPaymentAccount;
+
+
     public void copy(ProcurementInformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

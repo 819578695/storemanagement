@@ -38,6 +38,8 @@ public class JwtUser implements UserDetails {
 
     private final long deptPid;
 
+    private  final String deptNo;
+
     private final String job;
 
     @JsonIgnore

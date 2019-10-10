@@ -70,5 +70,24 @@ public class LeaseContractDTO implements Serializable {
     // 截止日期
     private Timestamp rentFreeEndTime;
 
+    //支付周期
+    private Long payCycleId;
+
+    //支付周期名称
+    private String payCycleName;
+
+    //支付单价
+    private BigDecimal payPrice;
+
+    //是否启用
+    private String isEnable;
+
+    //创建时间
+    private Timestamp createTime;
+
+    //合同备注
+    private String remarks;
+
+
 
 }

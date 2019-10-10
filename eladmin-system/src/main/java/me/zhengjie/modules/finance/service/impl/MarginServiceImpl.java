@@ -1,26 +1,28 @@
 package me.zhengjie.modules.finance.service.impl;
 
-import io.netty.util.internal.StringUtil;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto;
+import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.finance.domain.FundMargin;
+import me.zhengjie.modules.finance.domain.Maintain;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.FundMarginDTO;
+import me.zhengjie.modules.finance.service.dto.MaintainDTO;
 import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
 import me.zhengjie.modules.finance.service.dto.TreeDTO;
+import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.modules.system.service.dto.DeptDTO;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import me.zhengjie.modules.system.service.impl.DeptServiceImpl;
-import me.zhengjie.utils.PageUtil;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,10 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -44,8 +42,6 @@ import java.util.*;
 public class MarginServiceImpl implements MarginService {
 
     @Autowired
-    private MarginRepository marginRepository;
-    @Autowired
     private DeptServiceImpl deptService;
     @Autowired
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
@@ -53,26 +49,22 @@ public class MarginServiceImpl implements MarginService {
     private DictDetailRepository dictDetailRepository;
     @Autowired
     private DictRepository dictRepository;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
 
     @PersistenceContext
     private EntityManager entityManager;
 
+
+
     //动态查询
     public Object query(MarginQueryCriteria criteria){
-        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
-        //收入ID
-        Long incomeId = null ;
-        for (DictDetail dictDetail : list) {
-            if ("收入".equals(dictDetail.getLabel())){
-                incomeId = dictDetail.getId();
-            }
-        }
         //查询主语句
         String sql = "select sum(f.money) AS money , d.id , d.label from fund_margin f left join dict_detail d on d.id = f.tally_type_id ";
         Map<String,Object> map = new HashMap<>();
         //拼接收入项
         sql += " where f.type_id =:incomeId ";
-        map.put("incomeId",incomeId);
+        map.put("incomeId",criteria.getTypeId());
         //拼接查询
         if (criteria.getDeptId() != null){
             sql += " and f.dept_id = :deptId ";
@@ -111,35 +103,69 @@ public class MarginServiceImpl implements MarginService {
         return fundMarginDTOS;
     }
 
-
-
-
-
     @Override
     public Object queryAll(MarginQueryCriteria criteria){
-        //获取收入ID
-        /*Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId();
-        List<FundMarginDTO> fundMarginDTOS = new ArrayList();
-        //传入部门ID及档口号
-        if (criteria.getDeptId() != null & criteria.getHouseId()!= null){
-            fundMarginDTOS = marginRepository.findByPevenueAllByDeptIdAndHouseNumber(criteria.getDeptId(),criteria.getHouseId(),typeId);
-        }else {
-            //传入部门ID
-            fundMarginDTOS = marginRepository.findByDeptIdAndAndMoney(criteria.getDeptId(), typeId);
+        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
+        Long incomeId = null ;
+        //收入ID
+        for (DictDetail dictDetail : list) {
+            if ("收入".equals(dictDetail.getLabel())){
+                incomeId = dictDetail.getId();
+            }
         }
-        return fundMarginDTOS;*/
+        criteria.setTypeId(incomeId);
         return this.query(criteria);
     }
 
     @Override
-    public List<TreeDTO> buildTree() {
+    public Object queryCostAll(MarginQueryCriteria criteria){
+        List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
+        Long incomeId = null ;
+        //收入ID
+        for (DictDetail dictDetail : list) {
+            if ("支出".equals(dictDetail.getLabel())){
+                incomeId = dictDetail.getId();
+            }
+        }
+        criteria.setTypeId(incomeId);
+        return this.query(criteria);
+    }
+    @Override
+    public List<TreeDTO> buildTree(MarginQueryCriteria criteria) {
         List<TreeDTO> trees = new ArrayList<>();
-        List<DeptDTO> deptDTOS = deptService.queryAll(new DeptQueryCriteria());
+        List<DeptDTO> deptDTOS;
+        if (criteria.getDeptId() != 1) {
+            DeptQueryCriteria criteria1 = new DeptQueryCriteria();
+            criteria1.setId(criteria.getDeptId());
+            deptDTOS = deptService.queryAll(criteria1);
+        }else {
+            deptDTOS = deptService.queryAll(new DeptQueryCriteria());
+        }
         for (DeptDTO deptDTO : deptDTOS) {
             List<ArchiveTreeDto> list = archivesmouthsmanagementRepository.queryByDeptAndId(deptDTO.getId());
             trees.add(new TreeDTO(deptDTO.getId(),deptDTO.getName(),list));
         }
         return trees;
+    }
+
+    @Override
+    public FundMarginDTO createByPostCost(ParkCost resources, String value, BigDecimal money, BigDecimal substactMoney) {
+        Dept dept = resources.getDept();//部门
+        DictDetail TradType = resources.getDictDetail();//支付方式
+        DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1");//支出
+        DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//支出
+        //根据部门id和支付方式查询账户金额
+        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+
+        //添加毛利
+       FundMargin fundMargin = new FundMargin();
+       fundMargin.setDept(dept);
+       fundMargin.setMoney(money);
+       fundMargin.setTallyType(tallyType);
+       fundMargin.setTradType(TradType);
+       fundMargin.setTradDate(resources.getCreateTime());
+
+        return null;
     }
 
 }

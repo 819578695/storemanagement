@@ -24,4 +24,9 @@ public class DeptSmallDTO implements Serializable {
      * 上级部门
      */
     private Long pid;
+
+    /**
+     * 部门编号
+     */
+    private String deptNo;
 }

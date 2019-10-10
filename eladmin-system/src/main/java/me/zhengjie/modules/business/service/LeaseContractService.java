@@ -65,4 +65,16 @@ public interface LeaseContractService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 查询定时任务更新档口以及租户
+     *
+     */
+    //@CacheEvict(allEntries = true)
+    Object findTask();
+
+
+
+
+
 }

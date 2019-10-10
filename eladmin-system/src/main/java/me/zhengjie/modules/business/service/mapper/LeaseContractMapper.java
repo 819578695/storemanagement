@@ -25,14 +25,17 @@ public interface LeaseContractMapper extends EntityMapper<LeaseContractDTO, Leas
 
     @Mappings({
             @Mapping(source = "leaseContract.id",target = "id"),
+            @Mapping(source = "leaseContract.createTime",target = "createTime"),
             @Mapping(source = "archivesmouthsmanagement.id",target = "stallId"),
             @Mapping(source = "archivesmouthsmanagement.housenumber",target = "houseNumber"),
             @Mapping(source = "tenantinformation.id",target = "tenementId"),
             @Mapping(source = "tenantinformation.linkman",target = "tenementName"),
             @Mapping(source = "dept.name",target = "deptName"),
             @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "payCycle.label",target = "payCycleName"),
+            @Mapping(source = "payCycle.id",target = "payCycleId"),
     })
-    LeaseContractDTO toDto(LeaseContract leaseContract, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, Tenantinformation tenantinformation);
+    LeaseContractDTO toDto(LeaseContract leaseContract, Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, Tenantinformation tenantinformation,DictDetail payCycle);
 
 
 }

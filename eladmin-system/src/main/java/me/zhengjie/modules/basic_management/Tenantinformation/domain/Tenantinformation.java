@@ -8,6 +8,8 @@ import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.system.domain.Dept;
 import me.zhengjie.modules.system.domain.DictDetail;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -29,18 +31,10 @@ public class Tenantinformation implements Serializable {
     @Column(name = "id")
     private Long id;
 
-    // 面积(m²)
-    @Column(name = "Area")
-    private String area;
-
-    // 档口/电商楼
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name = "stall_type")
-    private DictDetail dictDetail;
-
     // 房号(门牌号)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "stall_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Archivesmouthsmanagement Archivesmouthsmanagement;
 
     // 公司名称
@@ -67,11 +61,13 @@ public class Tenantinformation implements Serializable {
     //关联合同表
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "contract_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private LeaseContract LeaseContract;
 
     // 部门id
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "dept_id")
+    @NotFound(action= NotFoundAction.IGNORE)
     private Dept dept;
 
     // 创建时间

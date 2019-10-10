@@ -22,4 +22,7 @@ public class DeptQueryCriteria{
 
     @Query
     private Long pid;
+
+    @Query(type = Query.Type.EQUAL)
+    private Long id;
 }

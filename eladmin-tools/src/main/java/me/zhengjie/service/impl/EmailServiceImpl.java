@@ -2,13 +2,11 @@ package me.zhengjie.service.impl;
 
 import cn.hutool.extra.mail.Mail;
 import cn.hutool.extra.mail.MailAccount;
-import cn.hutool.extra.mail.MailUtil;
 import me.zhengjie.domain.EmailConfig;
 import me.zhengjie.domain.vo.EmailVo;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.repository.EmailRepository;
 import me.zhengjie.service.EmailService;
-import me.zhengjie.utils.ElAdminConstant;
 import me.zhengjie.utils.EncryptUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,8 +69,8 @@ public class EmailServiceImpl implements EmailService {
             throw new BadRequestException(e.getMessage());
         }
         account.setFrom(emailConfig.getUser()+"<"+emailConfig.getFromUser()+">");
-        //ssl方式发送
-        account.setStartttlsEnable(true);
+        /*//ssl方式发送
+        account.setStartttlsEnable(true);*/
         String content = emailVo.getContent();
         /**
          * 发送
