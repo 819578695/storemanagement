@@ -70,14 +70,12 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<LeaseContractDTO> leaseContractDTOS = new ArrayList<>();
         for (LeaseContract leaseContract : page.getContent()) {
-            List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractIdAndDeptId(leaseContract.getId(),leaseContract.getDept().getId());
+            List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractIdAndType(leaseContract.getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for(ParkPevenue parkPevenue : parkPevenues){
                 //bigdecimal 求和(未缴费用)
-                if(parkPevenue.getHouseRent()!=null){
-                    totalMoney = totalMoney.add(parkPevenue.getHouseRent());
-                    leaseContract.setPaymentedExpenses(totalMoney);
-                }
+                    totalMoney = totalMoney.add(new BigDecimal(StringUtils.isNotNullBigDecimal(parkPevenue.getHouseRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getPropertyRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getWaterRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getElectricityRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getSanitationRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLiquidatedRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getLateRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getGroundPoundRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getManagementRent())+StringUtils.isNotNullBigDecimal(parkPevenue.getParkingRent())));
+                    leaseContract.setUnpaidExpenses(totalMoney);
             }
             leaseContractDTOS.add(leaseContractMapper.toDto(leaseContract,leaseContract.getArchivesmouthsmanagement()==null?null:archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),leaseContract.getDept()==null?null:deptRepository.findById(leaseContract.getDept().getId()).get(),leaseContract.getTenantinformation()==null?null:tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get(),leaseContract.getPayCycle()==null?null:dictDetailRepository.findById(leaseContract.getPayCycle().getId()).get()));
         }
