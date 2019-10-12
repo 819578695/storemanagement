@@ -51,8 +51,8 @@ public class TenantinformationDTO implements Serializable {
     // 关联门牌
     private Long stallid;
 
-    /*// 门牌号
-    private String roomnumber;*/
+    // 门牌号
+    private String roomnumber;
 
     // 部门id
     private Long deptId;
