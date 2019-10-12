@@ -26,4 +26,7 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
      List<Archivesmouthsmanagement> findArchivesmouthsmanagementById(Long id);
      @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto(id , housenumber , dept.id ) from Archivesmouthsmanagement  where dept.id = :deptId")
     List<ArchiveTreeDto> queryByDeptAndId(@Param("deptId") Long deptId);
+
+    @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementSmallDTO(l.id,l.housenumber) from Archivesmouthsmanagement l where l.dept.id=?1")
+    List<Archivesmouthsmanagement> tenantinformationSmallDto(Long deptId);
 }
