@@ -4,6 +4,7 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
+import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.ParticularsDTO;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationQueryCriteria;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Before;
@@ -20,6 +21,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -41,6 +43,15 @@ public class TenantinformationController {
     @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")
     public ResponseEntity getTenantinformations(TenantinformationQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(tenantinformationService.queryAll(criteria,pageable),HttpStatus.OK);
+    }
+
+    @Log("查询档口")
+    @ApiOperation(value = "查询当前租户档口")
+    @GetMapping(value = "/particulars")
+    /*@PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")*/
+    public List<ParticularsDTO> getParticulars(Long id){
+        List<ParticularsDTO> particularsDTOS = tenantinformationService.queryParticulars(id);
+        return particularsDTOS;
     }
 
     @Log("新增Tenantinformation")

@@ -1,6 +1,7 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.service;
 
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
+import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.ParticularsDTO;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationDTO;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +31,8 @@ public interface TenantinformationService {
     */
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(TenantinformationQueryCriteria criteria);
+
+    List<ParticularsDTO> queryParticulars(Long id);
 
     Object findByDeptId(Long deptId);
 

@@ -90,7 +90,7 @@ public class ParkPevenue implements Serializable {
     @Column(name = "ground_pound_rent")
     private BigDecimal groundPoundRent;
 
-    // 类型(1 已付 2 欠款 3 补缴)
+    // 类型( 已付  欠款  补缴)
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "type")
     @NotFound(action= NotFoundAction.IGNORE)

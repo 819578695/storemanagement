@@ -18,14 +18,14 @@ public class TenantinformationDTO implements Serializable {
     // id
     private Long id;
 
-    // 面积(m²)
-    private String area;
+    /*// 面积(m²)
+    private String area;*/
 
-    // 档口/电商楼
+   /* // 档口/电商楼
     private Long stalltype;
 
     //档口名称
-    private String stalltypeName;
+    private String stalltypeName;*/
 
     // 公司名称
     private String companyname;
@@ -51,8 +51,8 @@ public class TenantinformationDTO implements Serializable {
     // 关联门牌
     private Long stallid;
 
-    // 门牌号
-    private String roomnumber;
+    /*// 门牌号
+    private String roomnumber;*/
 
     // 部门id
     private Long deptId;

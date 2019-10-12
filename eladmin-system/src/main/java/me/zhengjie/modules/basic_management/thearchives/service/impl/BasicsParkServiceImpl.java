@@ -96,7 +96,7 @@ public class BasicsParkServiceImpl implements BasicsParkService {
 
     @Override
     @Transactional(rollbackFor = Throwable.class)
-    public Picture updatesc(MultipartFile multipartFile,String username) {
+    public BasicsPark updatesc(MultipartFile multipartFile) {
         File file = FileUtil.toFile(multipartFile);
 
         HashMap<String, Object> paramMap = new HashMap<>(1);
@@ -105,15 +105,17 @@ public class BasicsParkServiceImpl implements BasicsParkService {
         String result= HttpUtil.post(ElAdminConstant.Url.SM_MS_URL, paramMap);
 
         JSONObject jsonObject = JSONUtil.parseObj(result);
-        Picture picture = null;
+        /*Picture picture = null;*/
+        BasicsPark picture = null;
         if(!jsonObject.get(CODE).toString().equals(SUCCESS)){
             throw new BadRequestException(jsonObject.get(MSG).toString());
         }
         //转成实体类
-        picture = JSON.parseObject(jsonObject.get("data").toString(), Picture.class);
-        picture.setSize(FileUtil.getSize(Integer.valueOf(picture.getSize())));
+        picture = JSON.parseObject(jsonObject.get("data").toString(), BasicsPark.class);
+        /*picture.setSize(FileUtil.getSize(Integer.valueOf(picture.getSize())));
         picture.setUsername(username);
-        picture.setFilename(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));
+        picture.setFilename(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*/
+        /*picture.setImageUpload(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*/
         //删除临时文件
         FileUtil.deleteFile(file);
         return picture;

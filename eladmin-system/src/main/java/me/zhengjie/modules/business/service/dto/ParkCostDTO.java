@@ -67,4 +67,10 @@ public class ParkCostDTO implements Serializable {
 
     //收付款类型名称
     private  String receiptPaymentAccountName;
+
+    //开始时间
+    private Timestamp startTime;
+
+    //结束时间
+    private Timestamp endTime;
 }

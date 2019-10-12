@@ -13,7 +13,10 @@ import java.util.List;
 * @date 2019-08-29
 */
 public interface LeaseContractRepository extends JpaRepository<LeaseContract, Long>, JpaSpecificationExecutor {
+    @Query(value = "select * FROM lease_contract where dept_id=?1 and is_enable=1  ",nativeQuery =true)
     List<LeaseContract> findByDeptId(Long deptId);
+
+    List<LeaseContract> findByTenantinformationId(Long id);
 
     List<LeaseContract> findByArchivesmouthsmanagementId(Long id);
 

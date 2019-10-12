@@ -78,7 +78,7 @@ public class BasicsParkController {
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_EDIT')")
     public ResponseEntity updatesc(@RequestParam MultipartFile file){
         String userName = SecurityUtils.getUsername();
-        Picture picture = basicsParkService.updatesc(file,userName);
+        BasicsPark picture = basicsParkService.updatesc(file);
         Map map = new HashMap(3);
         map.put("errno",0);
         map.put("data",new String[]{picture.getUrl()});

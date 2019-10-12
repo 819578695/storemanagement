@@ -62,7 +62,7 @@ public interface BasicsParkService {
      * @param
      */
     //@CacheEvict(allEntries = true)
-    Picture updatesc(MultipartFile file,String username);
+    BasicsPark updatesc(MultipartFile file);
 
     /**
      * delete

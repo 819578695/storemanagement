@@ -36,4 +36,6 @@ public class ArchiveDto implements Serializable {
 
     // 租戶名稱
     private String tenementName;
+    // 部门id
+    private Long deptId;
 }
