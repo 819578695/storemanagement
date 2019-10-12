@@ -1,7 +1,9 @@
 package me.zhengjie.modules.business.service.dto;
 
 import lombok.Data;
+
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 
 /**
@@ -17,23 +19,17 @@ public class ReceiptPaymentAccountDTO implements Serializable {
     private String name;
 
     // 部门id关联
-    private Long deptId;
+    private Long detailId;
 
-    // 付款账户名称
-    private String paymentAccount;
+    //余额
+    private BigDecimal remaining;
+
+    // 账户名称
+    private String accountName;
 
     // 付款账号
-    private String paymentAccountNum;
+    private String accountNum;
 
     // 付款开户行
-    private String paymentBank;
-
-    // 收款账户名称
-    private String receiptAccount;
-
-    // 收款账号
-    private String receiptAccountNum;
-
-    // 收款开户行
-    private String receiptBank;
+    private String bankName;
 }

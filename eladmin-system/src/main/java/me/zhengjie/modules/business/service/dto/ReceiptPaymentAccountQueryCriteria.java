@@ -12,6 +12,4 @@ public class ReceiptPaymentAccountQueryCriteria{
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
     private String name;
-    @Query(type = Query.Type.EQUAL)
-    private Long deptId;
 }
