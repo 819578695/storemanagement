@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -54,14 +57,11 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     }
     @Override
     public Object findByDeptId(Long dictailId,Long deptId) {
-        ReceiptPaymentAccount receiptPaymentAccount=new ReceiptPaymentAccount();
+        List<ReceiptPaymentAccount> receiptPaymentAccount=new ArrayList<>();
         if (dictailId!=null&&deptId!=null){
             MaintarinDetail maintarinDetail = maintarinDetailRepository.findByTradTypeIdAndDeptId(dictailId, deptId);
             if (maintarinDetail!=null){
                  receiptPaymentAccount = receiptPaymentAccountRepository.findByDetailId(maintarinDetail.getId());
-            }
-            else{
-                throw new BadRequestException("请先新建账户");
             }
 
         }

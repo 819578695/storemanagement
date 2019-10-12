@@ -17,6 +17,6 @@ public interface ReceiptPaymentAccountRepository extends JpaRepository<ReceiptPa
     //List<ReceiptPaymentAccount> findByDeptId(Long deptId);
 
     //根据账户详情id查询
-    ReceiptPaymentAccount findByDetailId(Long maintarinDetailId);
+    List<ReceiptPaymentAccount> findByDetailId(Long maintarinDetailId);
 
 }
