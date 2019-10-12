@@ -1,6 +1,9 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
@@ -30,6 +33,8 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
 
     @Autowired
     private ReceiptPaymentAccountMapper receiptPaymentAccountMapper;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
 
     @Override
     public Object queryAll(Pageable pageable) {
@@ -48,8 +53,23 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
     @Override
-    public Object findByDeptId(Long deptId) {
-            return receiptPaymentAccountMapper.toDto(deptId==1?receiptPaymentAccountRepository.findAll():receiptPaymentAccountRepository.findByDeptId(deptId));
+    public Object findByDeptId(Long dictailId,Long deptId) {
+        ReceiptPaymentAccount receiptPaymentAccount=new ReceiptPaymentAccount();
+        if (dictailId!=null&&deptId!=null){
+            MaintarinDetail maintarinDetail = maintarinDetailRepository.findByTradTypeIdAndDeptId(dictailId, deptId);
+            if (maintarinDetail!=null){
+                 receiptPaymentAccount = receiptPaymentAccountRepository.findByDetailId(maintarinDetail.getId());
+            }
+            else{
+                throw new BadRequestException("请先新建账户");
+            }
+
+        }
+        else{
+            throw new BadRequestException("请先选择支付方式");
+        }
+
+        return receiptPaymentAccountMapper.toDto(receiptPaymentAccount);
     }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {
