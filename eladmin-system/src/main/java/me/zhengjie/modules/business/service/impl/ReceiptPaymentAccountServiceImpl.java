@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,7 +34,7 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     private ReceiptPaymentAccountMapper receiptPaymentAccountMapper;
 
     @Override
-    public Object queryAll(Pageable pageable) {
+    public Object queryAll(Pageable pageable ) {
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll(pageable).getContent());
     }
 
@@ -49,7 +51,8 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     }
     @Override
     public Object findByDeptId(Long deptId) {
-            return receiptPaymentAccountMapper.toDto(deptId==1?receiptPaymentAccountRepository.findAll():receiptPaymentAccountRepository.findByDeptId(deptId));
+        return "";
+        //return receiptPaymentAccountMapper.toDto(deptId==1?receiptPaymentAccountRepository.findAll():receiptPaymentAccountRepository.findByDeptId(deptId));
     }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {
