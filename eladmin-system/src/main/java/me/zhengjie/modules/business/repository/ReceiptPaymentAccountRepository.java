@@ -11,12 +11,11 @@ import java.util.Set;
 * @date 2019-08-21
 */
 public interface ReceiptPaymentAccountRepository extends JpaRepository<ReceiptPaymentAccount, Long>, JpaSpecificationExecutor {
-    //@Query(value = "select * from receipt_payment_account where id = ?1",nativeQuery = true)
-    //ReceiptPaymentAccount findAllById(Long id);
+//    @Query(value = "select * from receipt_payment_account where id = ?1",nativeQuery = true)
+//    ReceiptPaymentAccount findAllById(Long id);
 
-    //List<ReceiptPaymentAccount> findByDeptId(Long deptId);
+//    List<ReceiptPaymentAccount> findByDeptId(Long deptId);
 
     //根据账户详情id查询
-    ReceiptPaymentAccount findByDetailId(Long maintarinDetailId);
-
+    List<ReceiptPaymentAccount> findByDetailId(Long maintarinDetailId);
 }
