@@ -1,6 +1,7 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.repository;
 
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
+import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationSmallDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -18,23 +19,6 @@ public interface TenantinformationRepository extends JpaRepository<Tenantinforma
     @Query(value = "select * from basics_tenement where stall_id=?1",nativeQuery = true)
     Tenantinformation findByArchivesmouthsmanagementId(Long archivesmouthsmanagementId);
 
-    /*@Query(value = "SELECT\n" +
-            "(\n" +
-            "  IFNULL(p.house_rent,0) +\n" +
-            "\tIFNULL(p.property_rent,0) +\n" +
-            "\tIFNULL(p.water_rent,0) +\n" +
-            "\tIFNULL(p.electricity_rent,0) +\n" +
-            "\tIFNULL(p.sanitation_rent,0) +\n" +
-            "\tIFNULL(p.liquidated_rent,0) +\n" +
-            "\tIFNULL(p.late_rent,0) +\n" +
-            "\tIFNULL(p.ground_pound_rent,0) +\n" +
-            "\tIFNULL(p.management_rent,0) +\n" +
-            "\tIFNULL(p.parking_rent,0) \n" +
-            ") num\n" +
-            "FROM\n" +
-            "\tbasics_tenement b\n" +
-            "LEFT JOIN basics_stall s ON b.stall_id = s.id\n" +
-            "LEFT JOIN dict_detail d ON b.stall_type = d.id\n" +
-            "LEFT JOIN park_pevenue p ON p.archives_mouths_id = s.id AND p.type = 41",nativeQuery = true)
-    List<Integer> findByamountinarear();*/
+    @Query(value = "select new me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationSmallDTO(l.id,l.linkman) from Tenantinformation l where l.dept.id=?1")
+    List<TenantinformationSmallDTO> tenantinformationSmallDto(Long deptId);
 }

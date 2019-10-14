@@ -1,6 +1,9 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -32,9 +36,11 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
 
     @Autowired
     private ReceiptPaymentAccountMapper receiptPaymentAccountMapper;
+    @Autowired
+    private MaintarinDetailRepository maintarinDetailRepository;
 
     @Override
-    public Object queryAll(Pageable pageable ) {
+    public Object queryAll(Pageable pageable) {
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll(pageable).getContent());
     }
 
@@ -50,9 +56,20 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
     @Override
-    public Object findByDeptId(Long deptId) {
-        return "";
-        //return receiptPaymentAccountMapper.toDto(deptId==1?receiptPaymentAccountRepository.findAll():receiptPaymentAccountRepository.findByDeptId(deptId));
+    public Object findByDeptId(Long dictailId,Long deptId) {
+        List<ReceiptPaymentAccount> receiptPaymentAccount=new ArrayList<>();
+        if (dictailId!=null&&deptId!=null){
+            MaintarinDetail maintarinDetail = maintarinDetailRepository.findByTradTypeIdAndDeptId(dictailId, deptId);
+            if (maintarinDetail!=null){
+                 receiptPaymentAccount = receiptPaymentAccountRepository.findByDetailId(maintarinDetail.getId());
+            }
+
+        }
+        else{
+            throw new BadRequestException("请先选择支付方式");
+        }
+
+        return receiptPaymentAccountMapper.toDto(receiptPaymentAccount);
     }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {

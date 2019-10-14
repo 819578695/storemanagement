@@ -47,9 +47,9 @@ public class TenantinformationController {
 
     @Log("查询档口")
     @ApiOperation(value = "查询当前租户档口")
-    @GetMapping(value = "/particulars")
+    @GetMapping(value = "/particulars/{id}")
     /*@PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")*/
-    public List<ParticularsDTO> getParticulars(Long id){
+    public List<ParticularsDTO> getParticulars(@PathVariable Long id){
         List<ParticularsDTO> particularsDTOS = tenantinformationService.queryParticulars(id);
         return particularsDTOS;
     }

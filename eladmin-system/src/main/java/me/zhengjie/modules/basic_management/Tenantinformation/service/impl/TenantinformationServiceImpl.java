@@ -62,9 +62,6 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     private LeaseContractRepository LeaseContractRepository;
 
     @Autowired
-    private ArchivesmouthsmanagementRepository ArchivesmouthsmanagementRepository;
-
-    @Autowired
     private  ParkPevenueRepository parkPevenueRepository;
 
     @Autowired

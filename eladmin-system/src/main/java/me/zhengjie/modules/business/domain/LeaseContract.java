@@ -99,6 +99,10 @@ public class LeaseContract implements Serializable {
     @Column(name = "file_name")
     private String fileName;
 
+    // 备注
+    @Column(name = "remarks")
+    private String remarks;
+
     // 合同支付周期
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "pay_cycle")

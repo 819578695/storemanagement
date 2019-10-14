@@ -200,9 +200,9 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                     fundFlowing.setTradType(TradType);//支付方式
                     fundFlowing.setTypeDict(typeDict);//交易类型
                     fundFlowing.setTallyType(tallyType);//收入支出项
-                    fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getPaymentAccount());//付款信息
-                    fundFlowing.setBackAccount(receiptPaymentAccount.getPaymentBank());//开户名
-                    fundFlowing.setBackNum(receiptPaymentAccount.getPaymentAccountNum());//银行账号
+                    fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getAccountName());//收付款信息
+                    fundFlowing.setBackAccount(receiptPaymentAccount.getAccountNum());//银行账号
+                    fundFlowing.setBackNum(receiptPaymentAccount.getBankName()==null?null:receiptPaymentAccount.getBankName());//开户名
                     maintarinDetailRepository.save(maintarinDetail);
                 }
             else{
@@ -245,9 +245,9 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                 }
             }
             ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
-            fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getReceiptAccount());//收付款信息
-            fundFlowing.setBackAccount(receiptPaymentAccount.getReceiptAccountNum());//银行账号
-            fundFlowing.setBackNum(receiptPaymentAccount.getReceiptBank());//开户名
+            fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getAccountName());//收付款信息
+            fundFlowing.setBackAccount(receiptPaymentAccount.getAccountNum());//银行账号
+            fundFlowing.setBackNum(receiptPaymentAccount.getBankName()==null?null:receiptPaymentAccount.getBankName());//开户名
             fundFlowing.setUrrentBalance(a);//发生交易后的金额
             fundFlowing.setDept(dept);//部门
             fundFlowing.setParkCostPevenueId(resources.getId());//成本收入id

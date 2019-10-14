@@ -10,6 +10,8 @@ import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ProcurementPaymentInfo;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.repository.ProcurementPaymentInfoRepository;
+import me.zhengjie.modules.business.service.dto.LeaseContractSmallDTO;
+import me.zhengjie.modules.business.service.mapper.LeaseContractSmallMapper;
 import me.zhengjie.modules.security.security.JwtUser;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
@@ -46,6 +48,8 @@ public class LeaseContractServiceImpl implements LeaseContractService {
 
     @Autowired
     private LeaseContractMapper leaseContractMapper;
+    @Autowired
+    private LeaseContractSmallMapper leaseContractSmallMapper;
 
     @Autowired
     private DeptRepository deptRepository;
@@ -89,7 +93,20 @@ public class LeaseContractServiceImpl implements LeaseContractService {
 
     @Override
     public Object findByDeptId(Long deptId) {
-        return leaseContractMapper.toDto(deptId==1?leaseContractRepository.findAll():leaseContractRepository.findByDeptId(deptId));
+        List<LeaseContract> leaseContractList = new ArrayList<>();
+   List<LeaseContractSmallDTO> leaseContractDTOS = leaseContractRepository.findbyleaseContractSmall(deptId);
+        //List<LeaseContractSmallDTO> leaseContractDTOS = new ArrayList<>();
+
+       /* if (deptId==1){
+            leaseContractList=leaseContractRepository.findAll();
+        }
+        else{
+            leaseContractList=leaseContractRepository.findByDeptId(deptId);
+        }
+        for (LeaseContract leaseContract : leaseContractList) {
+            leaseContractDTOS.add(leaseContractSmallMapper.toDto(leaseContract,leaseContract.getArchivesmouthsmanagement()==null?null:archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get(),leaseContract.getTenantinformation()==null?null:tenantinformationRepository.findById(leaseContract.getTenantinformation().getId()).get()));
+        }*/
+        return  leaseContractDTOS;
     }
 
     @Override
