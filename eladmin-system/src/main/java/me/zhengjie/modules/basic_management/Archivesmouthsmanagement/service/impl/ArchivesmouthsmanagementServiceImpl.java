@@ -1,5 +1,6 @@
 package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
@@ -15,6 +16,7 @@ import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @Service
@@ -108,17 +111,25 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
-        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
+        try {
+            return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
+        }catch (DataIntegrityViolationException s){
+            throw new BadRequestException("您输入的档口已经存在,无法进行添加");
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Archivesmouthsmanagement resources) {
-        Optional<Archivesmouthsmanagement> optionalTenantinformation = archivesmouthsmanagementRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalTenantinformation,"Archivesmouthsmanagement","id",resources.getId());
-        Archivesmouthsmanagement archivesmouthsmanagement = optionalTenantinformation.get();
-        archivesmouthsmanagement.copy(resources);
-        archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+        try {
+            Optional<Archivesmouthsmanagement> optionalTenantinformation = archivesmouthsmanagementRepository.findById(resources.getId());
+            ValidationUtil.isNull( optionalTenantinformation,"Archivesmouthsmanagement","id",resources.getId());
+            Archivesmouthsmanagement archivesmouthsmanagement = optionalTenantinformation.get();
+            archivesmouthsmanagement.copy(resources);
+            archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+        }catch (DataIntegrityViolationException s){
+            throw new BadRequestException("您输入的档口已经存在,无法进行修改");
+        }
     }
 
     @Override
