@@ -5,8 +5,10 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -68,5 +70,14 @@ public interface ArchivesmouthsmanagementService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 上传文件
+     *
+     * @param multipartRequest
+     * @return
+     * @throws IOException
+     */
+    String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception;
 
 }

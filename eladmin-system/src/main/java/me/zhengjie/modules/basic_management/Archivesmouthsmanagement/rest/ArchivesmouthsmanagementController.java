@@ -4,6 +4,7 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 @Api(tags = "Tenantinformation管理")
@@ -95,8 +97,16 @@ public class ArchivesmouthsmanagementController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-
-
+    @Log("上传图片")
+    @ApiOperation(value = "上传RentContract")
+    @PostMapping(value="/uploadPictureExamine/{contractNo}")
+    public ResponseEntity uploadPictureExamine(MultipartHttpServletRequest multipartRequest, @PathVariable String contractNo) throws Exception{
+        String path = archivesmouthsmanagementService.uploadPictureExamine(multipartRequest,contractNo);
+        if (!StringUtils.isEmpty(path)) {
+            return new ResponseEntity(path,HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     /*@GetMapping(value = "/index")
     public ResponseModel index(String iv, String encryptedData, String code) {

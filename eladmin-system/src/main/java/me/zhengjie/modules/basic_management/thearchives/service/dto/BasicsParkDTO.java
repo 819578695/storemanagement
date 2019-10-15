@@ -43,7 +43,7 @@ public class BasicsParkDTO implements Serializable {
     private String theContractInformation;
 
     // 图片上传
-    private String url;
+    private String fileName;
 
     // 创建时间
     private Timestamp parkdate;

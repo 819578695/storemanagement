@@ -9,6 +9,9 @@ import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQu
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.io.IOException;
 
 /**
 * @author zlk
@@ -62,7 +65,16 @@ public interface BasicsParkService {
      * @param
      */
     //@CacheEvict(allEntries = true)
-    BasicsPark updatesc(MultipartFile file);
+    /*BasicsPark updatesc(MultipartFile file);*/
+
+    /**
+     * 上传文件
+     *
+     * @param multipartRequest
+     * @return
+     * @throws IOException
+     */
+    String uploadPicture(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception;
 
     /**
      * delete

@@ -7,6 +7,7 @@ import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkServic
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
 import me.zhengjie.service.PictureService;
 import me.zhengjie.utils.SecurityUtils;
+import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +74,7 @@ public class BasicsParkController {
     }
 
 
-    @Log("修改BasicsPark")
+    /*@Log("修改BasicsPark")
     @ApiOperation(value = "修改BasicsPark")
     @PostMapping(value = "/basicsParksc")
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_EDIT')")
@@ -83,7 +85,7 @@ public class BasicsParkController {
         map.put("errno",0);
         map.put("data",new String[]{picture.getUrl()});
         return new ResponseEntity(map,HttpStatus.OK);
-    }
+    }*/
 
     @Log("删除BasicsPark")
     @ApiOperation(value = "删除BasicsPark")
@@ -92,5 +94,16 @@ public class BasicsParkController {
     public ResponseEntity delete(@PathVariable Long id){
         basicsParkService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("上传图片")
+    @ApiOperation(value = "上传RentContract")
+    @PostMapping(value="/uploadPicture/{contractNo}")
+    public ResponseEntity uploadPicture(MultipartHttpServletRequest multipartRequest, @PathVariable String contractNo) throws Exception{
+        String path = basicsParkService.uploadPicture(multipartRequest,contractNo);
+        if (!StringUtils.isEmpty(path)) {
+            return new ResponseEntity(path,HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

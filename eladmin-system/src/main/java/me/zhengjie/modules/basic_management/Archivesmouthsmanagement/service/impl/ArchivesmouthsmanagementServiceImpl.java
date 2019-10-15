@@ -12,16 +12,19 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.map
 import me.zhengjie.modules.basic_management.city.repository.CityRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLIntegrityConstraintViolationException;
@@ -49,6 +52,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private DeptRepository deptRepository;
     @Autowired
     private CityRepository cityRepository;
+
+    @Value("${httpUrl}")
+    private String httpUrl; //服务器文件地址
+    @Value("${filePath}")
+    private String filePath; //文件路径
 
     @Override
     public  Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
@@ -136,6 +144,17 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         archivesmouthsmanagementRepository.deleteById(id);
+    }
+
+    @Override
+    public String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/pictureExamine",contractNo );
+        try {
+            return imgUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
