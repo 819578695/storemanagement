@@ -51,4 +51,7 @@ public class ProcurementInformationDTO implements Serializable {
 
     // 是否启用
     private String isEnable;
+
+    // 是否删除
+    private String isDelete;
 }

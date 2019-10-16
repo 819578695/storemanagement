@@ -71,6 +71,10 @@ public class ProcurementPaymentInfo implements Serializable {
     @Column(name = "due_date")
     private Timestamp dueDate;
 
+    // 是否删除
+    @Column(name = "is_delete")
+    private String isDelete;
+
     public void copy(ProcurementPaymentInfo source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

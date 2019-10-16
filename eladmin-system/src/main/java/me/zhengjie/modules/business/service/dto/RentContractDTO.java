@@ -71,4 +71,7 @@ public class RentContractDTO implements Serializable {
     //创建时间
     private Timestamp createTime;
 
+    // 是否删除
+    private String isDelete;
+
 }

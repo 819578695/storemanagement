@@ -140,6 +140,10 @@ public class ParkPevenue implements Serializable {
     @NotFound(action= NotFoundAction.IGNORE)
     private Tenantinformation tenantinformation;
 
+    // 是否删除
+    @Column(name = "is_delete")
+    private String isDelete;
+
     public void copy(ParkPevenue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

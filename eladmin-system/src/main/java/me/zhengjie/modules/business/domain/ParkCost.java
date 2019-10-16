@@ -109,6 +109,10 @@ public class ParkCost implements Serializable {
     @Column(name = "end_time")
     private Timestamp endTime;
 
+    // 是否删除
+    @Column(name = "is_delete")
+    private String isDelete;
+
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
