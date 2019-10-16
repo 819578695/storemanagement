@@ -1,5 +1,6 @@
 package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
@@ -11,17 +12,22 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.map
 import me.zhengjie.modules.basic_management.city.repository.CityRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
 import me.zhengjie.utils.ValidationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @Service
@@ -46,6 +52,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private DeptRepository deptRepository;
     @Autowired
     private CityRepository cityRepository;
+
+    @Value("${httpUrl}")
+    private String httpUrl; //服务器文件地址
+    @Value("${filePath}")
+    private String filePath; //文件路径
 
     @Override
     public  Object queryAll(ArchivesmouthsmanagementQueryCriteria criteria, Pageable pageable){
@@ -108,23 +119,42 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
-        return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
+        try {
+            return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
+        }catch (DataIntegrityViolationException s){
+            throw new BadRequestException("您输入的档口已经存在,无法进行添加");
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Archivesmouthsmanagement resources) {
-        Optional<Archivesmouthsmanagement> optionalTenantinformation = archivesmouthsmanagementRepository.findById(resources.getId());
-        ValidationUtil.isNull( optionalTenantinformation,"Archivesmouthsmanagement","id",resources.getId());
-        Archivesmouthsmanagement archivesmouthsmanagement = optionalTenantinformation.get();
-        archivesmouthsmanagement.copy(resources);
-        archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+        try {
+            Optional<Archivesmouthsmanagement> optionalTenantinformation = archivesmouthsmanagementRepository.findById(resources.getId());
+            ValidationUtil.isNull( optionalTenantinformation,"Archivesmouthsmanagement","id",resources.getId());
+            Archivesmouthsmanagement archivesmouthsmanagement = optionalTenantinformation.get();
+            archivesmouthsmanagement.copy(resources);
+            archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+        }catch (DataIntegrityViolationException s){
+            throw new BadRequestException("您输入的档口已经存在,无法进行修改");
+        }
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         archivesmouthsmanagementRepository.deleteById(id);
+    }
+
+    @Override
+    public String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/pictureExamine",contractNo );
+        try {
+            return imgUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -28,7 +28,7 @@ public class ParticularsDTO implements Serializable {
     //合同关联
     private Long contractid;
 
-    //过期时间
+    //过期状态
     private String Pastdue;
 
     //合同创建时间

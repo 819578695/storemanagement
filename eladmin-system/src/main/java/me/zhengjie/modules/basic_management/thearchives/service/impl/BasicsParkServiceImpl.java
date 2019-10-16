@@ -15,6 +15,7 @@ import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkDT
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
 import me.zhengjie.modules.basic_management.thearchives.service.mapper.BasicsParkMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +28,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 /**
 * @author zlk
@@ -50,6 +52,11 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     public static final String CODE = "code";
 
     public static final String MSG = "msg";
+
+    @Value("${httpUrl}")
+    private String httpUrl; //服务器文件地址
+    @Value("${filePath}")
+    private String filePath; //文件路径
 
     @Override
     public Object queryAll(BasicsParkQueryCriteria criteria, Pageable pageable){
@@ -94,7 +101,7 @@ public class BasicsParkServiceImpl implements BasicsParkService {
         basicsParkRepository.save(basicsPark);
     }
 
-    @Override
+    /*@Override
     @Transactional(rollbackFor = Throwable.class)
     public BasicsPark updatesc(MultipartFile multipartFile) {
         File file = FileUtil.toFile(multipartFile);
@@ -105,20 +112,31 @@ public class BasicsParkServiceImpl implements BasicsParkService {
         String result= HttpUtil.post(ElAdminConstant.Url.SM_MS_URL, paramMap);
 
         JSONObject jsonObject = JSONUtil.parseObj(result);
-        /*Picture picture = null;*/
+        *//*Picture picture = null;*//*
         BasicsPark picture = null;
         if(!jsonObject.get(CODE).toString().equals(SUCCESS)){
             throw new BadRequestException(jsonObject.get(MSG).toString());
         }
         //转成实体类
         picture = JSON.parseObject(jsonObject.get("data").toString(), BasicsPark.class);
-        /*picture.setSize(FileUtil.getSize(Integer.valueOf(picture.getSize())));
+        *//*picture.setSize(FileUtil.getSize(Integer.valueOf(picture.getSize())));
         picture.setUsername(username);
-        picture.setFilename(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*/
-        /*picture.setImageUpload(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*/
+        picture.setFilename(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*//*
+        *//*picture.setImageUpload(FileUtil.getFileNameNoEx(multipartFile.getOriginalFilename())+"."+FileUtil.getExtensionName(multipartFile.getOriginalFilename()));*//*
         //删除临时文件
         FileUtil.deleteFile(file);
         return picture;
+    }*/
+
+    @Override
+    public String uploadPicture(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/picture",contractNo );
+        try {
+            return imgUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

@@ -70,7 +70,7 @@ public class BasicsPark implements Serializable {
 
     // 图片上传
     @Column(name = "url")
-    private String url;
+    private String fileName;
 
     // 创建时间
     @CreationTimestamp
