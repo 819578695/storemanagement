@@ -2,6 +2,7 @@ package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountSmallDTO;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.utils.ValidationUtil;
@@ -57,19 +58,15 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     }
     @Override
     public Object findByDeptId(Long dictailId,Long deptId) {
-        List<ReceiptPaymentAccount> receiptPaymentAccount=new ArrayList<>();
+        List<ReceiptPaymentAccountSmallDTO> receiptPaymentAccount=new ArrayList<>();
         if (dictailId!=null&&deptId!=null){
-            MaintarinDetail maintarinDetail = maintarinDetailRepository.findByTradTypeIdAndDeptId(dictailId, deptId);
-            if (maintarinDetail!=null){
-                 receiptPaymentAccount = receiptPaymentAccountRepository.findByDetailId(maintarinDetail.getId());
-            }
-
+            receiptPaymentAccount=receiptPaymentAccountRepository.findByTradTypeIdAndDeptId(dictailId,deptId);
         }
         else{
             throw new BadRequestException("请先选择支付方式");
         }
 
-        return receiptPaymentAccountMapper.toDto(receiptPaymentAccount);
+        return receiptPaymentAccount;
     }
     @Override
     public ReceiptPaymentAccountDTO findById(Long id) {
