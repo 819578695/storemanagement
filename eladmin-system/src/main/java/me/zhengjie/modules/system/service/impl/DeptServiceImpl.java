@@ -135,7 +135,6 @@ public class DeptServiceImpl implements DeptService {
         for (DictDetail dictDetail : detailList) {
             //添加详情
             MaintarinDetail maintarinDetail = new MaintarinDetail();
-            maintarinDetail.setRemaining(BigDecimal.ZERO);
             maintarinDetail.setMaintainId(maintainDTO.getId());
             maintarinDetail.setTransactionDate(new Timestamp(System.currentTimeMillis()));
             maintarinDetail.setDept(dept);

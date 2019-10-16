@@ -35,10 +35,6 @@ public class MaintarinDetail implements Serializable {
     @Column(name = "maintain_id")
     private Long maintainId;
 
-    // 余额
-    @Column(name = "remaining")
-    private BigDecimal remaining;
-
     // 最近交易日期
     @Column(name = "transaction_date")
     private Timestamp transactionDate;

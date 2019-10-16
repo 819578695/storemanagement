@@ -4,9 +4,8 @@ import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
-import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
-import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
+import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
@@ -15,7 +14,6 @@ import me.zhengjie.modules.finance.service.dto.FundFlowingDTO;
 import me.zhengjie.modules.finance.service.dto.FundFlowingExportDTO;
 import me.zhengjie.modules.finance.service.mapper.FundFlowingMapper;
 import me.zhengjie.modules.system.domain.Dept;
-import me.zhengjie.modules.system.domain.Dict;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
@@ -79,6 +77,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     private MaintarinDetailService maintarinDetailService;
     @Autowired
     private DeptService deptService;
+
     @Override
     public Object queryExportAll(FundFlowingQueryCriteria criteria) {
         DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -107,7 +106,6 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                 e.printStackTrace();
             }
         }
-
         return fundFlowingExportDTOlist;
     }
 
@@ -136,7 +134,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FundFlowingDTO create(FundFlowing resources) {
-        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
+        /*MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
         if (maintarinDetail!=null){
             BigDecimal remaining = maintarinDetail.getRemaining();
             DictDetailDTO dictDetailDTO = dictDetailService.findById(resources.getTypeDict().getId());
@@ -145,6 +143,8 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                 resources.setUrrentBalance(remaining);
                 maintarinDetail.setRemaining(remaining);
                 maintarinDetailService.update(maintarinDetail);
+
+
             }else if(dictDetailDTO.getLabel().equals("支出")) {
                 remaining = remaining.subtract(resources.getMoney());
                 resources.setUrrentBalance(remaining);
@@ -154,7 +154,8 @@ public class FundFlowingServiceImpl implements FundFlowingService {
         }else {
             throw new BadRequestException("请先新建账户余额");
         }
-        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));
+        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));*/
+        return  null;
     }
 
     @Override
@@ -165,26 +166,29 @@ public class FundFlowingServiceImpl implements FundFlowingService {
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1");//支出
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//支出
         //根据部门id和支付方式查询账户金额
-        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+//        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+        //查询账户详情
+        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
+
         FundFlowing fundFlowing= fundFlowingRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId(),resources.getId());
-        if (maintarinDetail!=null)
+        if (receiptPaymentAccount!=null)
         {
             //默认修改(根据资金流水里的金额和修改之后的金额并修改后的账户余额)
             BigDecimal a = new BigDecimal(0);
             //账户余额和支出金额判断
-            if (maintarinDetail.getRemaining().doubleValue()>=substactMoney.doubleValue())
+            if (receiptPaymentAccount.getRemaining().doubleValue()>=substactMoney.doubleValue())
                 {
                     //根据交易类型以及成本id查询是否有对应费用
                     //如果为空则添加
                     if (fundFlowing==null){
-                        a = maintarinDetail.getRemaining().subtract(money);
+                        a = receiptPaymentAccount.getRemaining().subtract(money);
                         fundFlowing=new FundFlowing();
-                        maintarinDetail.setRemaining(maintarinDetail.getRemaining().subtract(money));
+                        receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().subtract(money));
                     }
                     else{
                         a = fundFlowing.getMoney().subtract(money).add(fundFlowing.getUrrentBalance());
-                        if (maintarinDetail.getRemaining().subtract(substactMoney).signum()!=-1) {
-                            maintarinDetail.setRemaining(maintarinDetail.getRemaining().subtract(substactMoney));
+                        if (receiptPaymentAccount.getRemaining().subtract(substactMoney).signum()!=-1) {
+                            receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().subtract(substactMoney));
                         }
                         else{
                             throw new BadRequestException("账户余额不足,无法操作");
@@ -192,7 +196,6 @@ public class FundFlowingServiceImpl implements FundFlowingService {
 
                     }
                     //查询收付款信息
-                    ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
                     fundFlowing.setUrrentBalance(a);//发生交易后的金额
                     fundFlowing.setDept(dept);//部门
                     fundFlowing.setParkCostPevenueId(resources.getId());//成本收入id
@@ -203,7 +206,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
                     fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getAccountName());//收付款信息
                     fundFlowing.setBackAccount(receiptPaymentAccount.getAccountNum());//银行账号
                     fundFlowing.setBackNum(receiptPaymentAccount.getBankName()==null?null:receiptPaymentAccount.getBankName());//开户名
-                    maintarinDetailRepository.save(maintarinDetail);
+                    receiptPaymentAccountRepository.save(receiptPaymentAccount);
                 }
             else{
                 throw new BadRequestException("账户余额不足,无法操作");
@@ -222,29 +225,30 @@ public class FundFlowingServiceImpl implements FundFlowingService {
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0");//收入
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);
         //根据部门id和支付方式查询账户金额
-        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+//        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
+        //查询账户详情
+        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
         //根据交易类型以及收入id查询是否有对应费用
         FundFlowing fundFlowing= fundFlowingRepository.findByTallyTypeIdAndTypeDictIdAndParkCostPevenueId(dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value).getId(),dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0").getId(),resources.getId());
-        if (maintarinDetail!=null){
+        if (receiptPaymentAccount!=null){
             //默认修改(根据资金流水里的金额和修改之后的金额并修改后的账户余额)
             BigDecimal a = new BigDecimal(0);
             //如果为空则添加
             if (fundFlowing==null){
                 //账户余额添加金额
-                a = maintarinDetail.getRemaining().add(money);
+                a = receiptPaymentAccount.getRemaining().add(money);
                 fundFlowing=new FundFlowing();
-                maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(money));
+                receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().add(money));
             }
             else{
                 a = money.subtract(fundFlowing.getMoney()).add(fundFlowing.getUrrentBalance());
-                if (maintarinDetail.getRemaining().subtract(substactMoney).signum()!=-1) {
-                    maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(substactMoney));
+                if (receiptPaymentAccount.getRemaining().subtract(substactMoney).signum()!=-1) {
+                    receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().add(substactMoney));
                 }
                 else{
                     throw new BadRequestException("账户余额不足,无法操作");
                 }
             }
-            ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
             fundFlowing.setReceiptPaymentName(receiptPaymentAccount.getAccountName());//收付款信息
             fundFlowing.setBackAccount(receiptPaymentAccount.getAccountNum());//银行账号
             fundFlowing.setBackNum(receiptPaymentAccount.getBankName()==null?null:receiptPaymentAccount.getBankName());//开户名
@@ -255,7 +259,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
             fundFlowing.setTradType(TradType);//支付方式
             fundFlowing.setTypeDict(typeDict);//交易类型
             fundFlowing.setTallyType(tallyType);//收入支出项
-            maintarinDetailRepository.save(maintarinDetail);
+            receiptPaymentAccountRepository.save(receiptPaymentAccount);
         }
         else{
             throw new BadRequestException("请先新建账户余额");
