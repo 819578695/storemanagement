@@ -5,7 +5,6 @@ import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
-import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
@@ -134,28 +133,28 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FundFlowingDTO create(FundFlowing resources) {
-        /*MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
-        if (maintarinDetail!=null){
-            BigDecimal remaining = maintarinDetail.getRemaining();
+        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
+        //查询账户详情
+        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(maintarinDetail.getId()).get();
+        if (receiptPaymentAccount!=null){
+            BigDecimal remaining = receiptPaymentAccount.getRemaining();
             DictDetailDTO dictDetailDTO = dictDetailService.findById(resources.getTypeDict().getId());
             if (dictDetailDTO.getLabel().equals("收入")){
                 remaining = remaining.add(resources.getMoney());
                 resources.setUrrentBalance(remaining);
-                maintarinDetail.setRemaining(remaining);
-                maintarinDetailService.update(maintarinDetail);
-
+                receiptPaymentAccount.setRemaining(remaining);
+                receiptPaymentAccountRepository.save(receiptPaymentAccount);
 
             }else if(dictDetailDTO.getLabel().equals("支出")) {
                 remaining = remaining.subtract(resources.getMoney());
                 resources.setUrrentBalance(remaining);
-                maintarinDetail.setRemaining(remaining);
-                maintarinDetailService.update(maintarinDetail);
+                receiptPaymentAccount.setRemaining(remaining);
+                receiptPaymentAccountRepository.save(receiptPaymentAccount);
             }
         }else {
             throw new BadRequestException("请先新建账户余额");
         }
-        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));*/
-        return  null;
+        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));
     }
 
     @Override
