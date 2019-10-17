@@ -4,6 +4,7 @@ import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.MaintarinDetailService;
+import me.zhengjie.modules.finance.service.dto.DetailDTO;
 import me.zhengjie.modules.finance.service.dto.MaintarinDetailDTO;
 import me.zhengjie.modules.finance.service.dto.MaintarinDetailQueryCriteria;
 import me.zhengjie.modules.finance.service.mapper.MaintarinDetailMapper;
@@ -42,17 +43,13 @@ public class MaintarinDetailServiceImpl implements MaintarinDetailService {
     @Autowired
     private DictDetailRepository dictDetailRepository;
 
+
     @Override
     public Object queryAll(MaintarinDetailQueryCriteria criteria, Pageable pageable){
         Page<MaintarinDetail> page = maintarinDetailRepository.findAllByDeptId(criteria.getDeptId(),pageable);
-        List<MaintarinDetailDTO> maintarinDetailDTOS = new ArrayList<>();
-        for (MaintarinDetail maintarinDetail : page.getContent()) {
-            MaintarinDetailDTO dto = maintarinDetailMapper.toDTO(maintarinDetail, dictDetailRepository.findById(maintarinDetail.getTradType().getId()).get());
-            dto.setDeptId(maintarinDetail.getDept().getId());
-            dto.setDeptName(maintarinDetail.getDept().getName());
-            maintarinDetailDTOS.add(dto);
-        }
-        return PageUtil.toPage(maintarinDetailDTOS,page.getTotalElements());
+        List<DetailDTO> detailDTOS = maintarinDetailRepository.queryRemainings(criteria.getDeptId());
+        PageUtil.toPage(detailDTOS,page.getTotalElements());
+        return PageUtil.toPage(detailDTOS,page.getTotalElements());
     }
 
     @Override

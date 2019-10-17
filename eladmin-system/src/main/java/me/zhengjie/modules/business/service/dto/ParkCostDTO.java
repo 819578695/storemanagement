@@ -73,4 +73,7 @@ public class ParkCostDTO implements Serializable {
 
     //结束时间
     private Timestamp endTime;
+
+    // 是否删除
+    private String isDelete;
 }

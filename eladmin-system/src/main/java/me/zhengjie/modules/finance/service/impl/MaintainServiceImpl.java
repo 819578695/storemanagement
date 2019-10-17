@@ -1,6 +1,9 @@
 package me.zhengjie.modules.finance.service.impl;
 
+import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
+import me.zhengjie.modules.business.service.ReceiptPaymentAccountService;
 import me.zhengjie.modules.finance.domain.Maintain;
+import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintainRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.MaintainService;
@@ -41,13 +44,16 @@ public class MaintainServiceImpl implements MaintainService {
     @Autowired
     private MaintarinDetailRepository maintarinDetailRepository;
 
+    @Autowired
+    private ReceiptPaymentAccountRepository receiptPaymentAccountRepository;
+
     @Override
     public Object queryAll(MaintainQueryCriteria criteria, Pageable pageable){
             Page<Maintain> page = maintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
             List<MaintainDTO> MaintainDTOs = new ArrayList<>();
             for (Maintain maintain : page.getContent()) {
                 MaintainDTO dto = maintainMapper.toDTO(maintain, maintain.getDept());
-                BigDecimal maintainSum = maintarinDetailRepository.findByMaintainId(dto.getDeptId());
+                BigDecimal maintainSum = receiptPaymentAccountRepository.findByMaintain(dto.getDeptId());
                 dto.setRemaining(maintainSum);
                 MaintainDTOs.add(dto);
             }

@@ -5,9 +5,11 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Arch
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.business.repository.RentContractRepository;
+import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountDTO;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.FundFlowingRepository;
@@ -112,11 +114,12 @@ public class ParkCostServiceImpl implements ParkCostService {
       ParkCost p =resources ;
       if (resources!=null){
            //根据支付方式和部门查询账户详情
-            MaintarinDetail financeMaintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
-            if (financeMaintarinDetails!=null){
+//            MaintarinDetail financeMaintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+          ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
+          if (receiptPaymentAccount!=null){
                 //修改账户详情的余额
                 Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
-                if(financeMaintarinDetails.getRemaining().doubleValue()>=price){
+                if(receiptPaymentAccount.getRemaining().doubleValue()>=price){
                     parkCostRepository.save(resources);
 
                     //房租
@@ -244,10 +247,12 @@ public class ParkCostServiceImpl implements ParkCostService {
       if (typeId!=null){
           //删除资金流水
           List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
-          //当前账户支付方式余额
-          MaintarinDetail maintarinDetail=maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+          //当前账户支付方式
+//          MaintarinDetail maintarinDetail=maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+          //当前账户支付方式详情
+          ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(p.getReceiptPaymentAccount().getId()).get();
           BigDecimal totalMoney = new BigDecimal(0);
-          if(maintarinDetail!=null){
+          if(receiptPaymentAccount!=null){
               for (FundFlowing fundFlowing : fundFlowingList) {
                   if (fundFlowing.getMoney()!=null){
                       totalMoney = totalMoney.add(fundFlowing.getMoney());
@@ -256,8 +261,8 @@ public class ParkCostServiceImpl implements ParkCostService {
                       fundFlowingRepository.delete(fundFlowing);
                   }
               }
-              maintarinDetail.setRemaining(maintarinDetail.getRemaining().add(totalMoney));
-              maintainDetailRepository.save(maintarinDetail);
+              receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().add(totalMoney));
+              receiptPaymentAccountRepository.save(receiptPaymentAccount);
           }
           else{
               throw new BadRequestException("请先新建账户余额");

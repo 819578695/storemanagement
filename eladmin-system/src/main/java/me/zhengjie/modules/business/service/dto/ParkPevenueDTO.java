@@ -112,6 +112,9 @@ public class ParkPevenueDTO implements Serializable {
     //租户信息id
     private  Long tenementId;
 
+    // 是否删除
+    private String isDelete;
+
 
 
 

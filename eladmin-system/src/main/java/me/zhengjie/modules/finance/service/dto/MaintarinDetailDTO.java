@@ -27,9 +27,6 @@ public class MaintarinDetailDTO implements Serializable {
     // 账户维护关联
     private Long maintainId;
 
-    // 余额
-    private BigDecimal remaining;
-
     // 最近交易日期
     private Timestamp transactionDate;
 

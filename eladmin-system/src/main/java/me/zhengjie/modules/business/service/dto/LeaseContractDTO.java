@@ -88,6 +88,9 @@ public class LeaseContractDTO implements Serializable {
     //合同备注
     private String remarks;
 
+    // 是否删除
+    private String isDelete;
+
 
 
 }

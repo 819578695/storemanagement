@@ -83,6 +83,10 @@ public class ProcurementInformation implements Serializable {
     @Column(name = "is_enable")
     private String isEnable;
 
+    // 是否删除
+    @Column(name = "is_delete")
+    private String isDelete;
+
 
     public void copy(ProcurementInformation source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

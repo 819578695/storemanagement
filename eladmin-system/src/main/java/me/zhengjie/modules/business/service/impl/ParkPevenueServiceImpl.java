@@ -5,6 +5,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.
 import me.zhengjie.modules.basic_management.Tenantinformation.repository.TenantinformationRepository;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkPevenue;
+import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ReceiptPaymentAccountRepository;
 import me.zhengjie.modules.finance.domain.FundFlowing;
@@ -268,9 +269,11 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
             //删除资金流水
             List<FundFlowing> fundFlowingList= fundFlowingRepository.findByTypeDictIdAndParkCostPevenueId(typeId,id);
             //当前账户支付方式余额
-            MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+//            MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+            //当前账户支付方式详情
+            ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(p.getReceiptPaymentAccount().getId()).get();
             BigDecimal totalMoney = new BigDecimal(0);
-            if(maintarinDetail!=null){
+            if(receiptPaymentAccount!=null){
                 for (FundFlowing fundFlowing : fundFlowingList) {
                     if (fundFlowing.getMoney()!=null){
                         totalMoney = totalMoney.add(fundFlowing.getMoney());
@@ -279,9 +282,9 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                         fundFlowingRepository.delete(fundFlowing);
                     }
                 }
-                if(maintarinDetail.getRemaining().subtract(totalMoney).signum()!=-1){
-                    maintarinDetail.setRemaining(maintarinDetail.getRemaining().subtract(totalMoney));
-                    maintainDetailRepository.save(maintarinDetail);
+                if(receiptPaymentAccount.getRemaining().subtract(totalMoney).signum()!=-1){
+                    receiptPaymentAccount.setRemaining(receiptPaymentAccount.getRemaining().subtract(totalMoney));
+                    receiptPaymentAccountRepository.save(receiptPaymentAccount);
                 }
                 else{
                     throw new BadRequestException("账户余额不足,无法操作");

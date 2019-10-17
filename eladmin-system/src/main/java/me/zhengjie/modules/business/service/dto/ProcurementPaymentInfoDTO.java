@@ -49,4 +49,7 @@ public class ProcurementPaymentInfoDTO implements Serializable {
 
     // 应付日期
     private Timestamp dueDate;
+
+    // 是否删除
+    private String isDelete;
 }
