@@ -1,5 +1,7 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
@@ -53,6 +55,8 @@ public class RentContractServiceImpl implements RentContractService {
     private DictDetailRepository dictDetailRepository;
     @Autowired
     private RedisService redisService;
+    @Autowired
+    private BasicsParkRepository basicsParkRepository;
 
     @Value("${httpUrl}")
     private String httpUrl; //服务器文件地址
@@ -108,6 +112,12 @@ public class RentContractServiceImpl implements RentContractService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public RentContractDTO create(RentContract resources) {
+
+        /*RentContract rentContract = rentContractRepository.findById(resources.getDept().getId()).get();
+        BasicsPark basicsPark = basicsParkRepository.findById(resources.getDept().getId()).get();
+        if (basicsPark.getDept().getId() == rentContract.getDept().getId()){
+            rentContract.setParkId(basicsPark.getId());
+        }*/
         JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
         Long no = 0001l;
         if (rentContractRepository.findByNewcontractNo(resources.getDept().getId())!=null){

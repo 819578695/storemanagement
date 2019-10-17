@@ -7,6 +7,10 @@ import com.alibaba.fastjson.JSON;
 import me.zhengjie.domain.Picture;
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkContractDTO;
+import me.zhengjie.modules.basic_management.thearchives.service.mapper.BasicsParkContractMapper;
+import me.zhengjie.modules.business.domain.RentContract;
+import me.zhengjie.modules.business.repository.RentContractRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.utils.*;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
@@ -21,6 +25,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -45,6 +50,12 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     private BasicsParkMapper basicsParkMapper;
 
     @Autowired
+    private BasicsParkContractMapper basicsParkContractMapper;
+
+    @Autowired
+    private RentContractRepository rentContractRepository;
+
+    @Autowired
     private DeptRepository deptRepository;
 
     public static final String SUCCESS = "success";
@@ -66,6 +77,17 @@ public class BasicsParkServiceImpl implements BasicsParkService {
             basicsParkDTOS.add(basicsParkMapper.toDto(basicsPark,deptRepository.findById(basicsPark.getDept().getId()).get()));
         }
         return PageUtil.toPage(basicsParkDTOS,page.getTotalElements());
+    }
+
+    @Override
+    public List<BasicsParkContractDTO> basicsParkContract(Long deptId){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        List<RentContract> list = rentContractRepository.findByDeptId(deptId);
+        List<BasicsParkContractDTO> list1 = new ArrayList<>();
+        for (RentContract rentContract : list){
+            list1.add(basicsParkContractMapper.toDto(rentContract));
+        }
+        return list1;
     }
 
     @Override

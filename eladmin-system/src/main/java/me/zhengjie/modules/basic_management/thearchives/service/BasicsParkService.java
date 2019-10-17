@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.thearchives.service;
 
 import me.zhengjie.domain.Picture;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkContractDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
 //import org.springframework.cache.annotation.CacheConfig;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
 * @author zlk
@@ -28,6 +30,9 @@ public interface BasicsParkService {
     */
     //@Cacheable(keyGenerator = "keyGenerator")
     Object queryAll(BasicsParkQueryCriteria criteria, Pageable pageable);
+
+    public List<BasicsParkContractDTO> basicsParkContract(Long deptId);
+
     Object findByDeptId(Long deptId);
     /**
     * queryAll 不分页

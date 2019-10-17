@@ -18,6 +18,7 @@ public interface BasicsParkMapper extends EntityMapper<BasicsParkDTO, BasicsPark
     @Mappings({
             @Mapping(source = "tenantinformation.id",target = "id"),
             @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "dept.name",target = "deptName"),
     })
     BasicsParkDTO toDto(BasicsPark tenantinformation, Dept dept);
 

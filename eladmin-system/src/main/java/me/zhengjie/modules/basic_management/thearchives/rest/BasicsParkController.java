@@ -4,6 +4,7 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.domain.Picture;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.service.BasicsParkService;
+import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkContractDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
 import me.zhengjie.service.PictureService;
 import me.zhengjie.utils.SecurityUtils;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -41,6 +43,15 @@ public class BasicsParkController {
     public ResponseEntity getBasicsParks(BasicsParkQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(basicsParkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
+
+    @Log("查询合同")
+    @ApiOperation(value = "查询合同")
+    @GetMapping(value = "/basicsParkContract/{deptId}")
+    public List<BasicsParkContractDTO> basicsParkContract(@PathVariable Long deptId){
+        List<BasicsParkContractDTO> list = basicsParkService.basicsParkContract(deptId);
+        return list;
+    }
+
     @Log("查询BasicsPark")
     @ApiOperation(value = "查询BasicsPark")
     @GetMapping(value = "/gettenantinformationAll")

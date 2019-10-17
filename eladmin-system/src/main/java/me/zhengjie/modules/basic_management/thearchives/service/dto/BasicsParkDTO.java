@@ -50,4 +50,7 @@ public class BasicsParkDTO implements Serializable {
 
     // 部门id
     private Long deptId;
+
+    //部门名称
+    private String deptName;
 }
