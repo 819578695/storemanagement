@@ -20,4 +20,6 @@ public interface DictDetailRepository extends JpaRepository<DictDetail, Long>, J
     DictDetail findByDictIdAndValue(Long id,String value);
     //根据字典ID查询对应详情信息
     List<DictDetail> findAllByDictId(Long dictId);
+
+    DictDetail findByDictId(Long aLong);
 }

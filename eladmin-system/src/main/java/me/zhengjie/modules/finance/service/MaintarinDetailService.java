@@ -1,6 +1,7 @@
 package me.zhengjie.modules.finance.service;
 
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.service.dto.AccountAllotDTO;
 import me.zhengjie.modules.finance.service.dto.MaintarinDetailDTO;
 import me.zhengjie.modules.finance.service.dto.MaintarinDetailQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -65,4 +66,10 @@ public interface MaintarinDetailService {
      * @return
      */
     Object getMoney(MaintarinDetailQueryCriteria criteria);
+
+    /**
+     * 资金调拨
+     * @param resources
+     */
+    void createDetail(AccountAllotDTO resources);
 }

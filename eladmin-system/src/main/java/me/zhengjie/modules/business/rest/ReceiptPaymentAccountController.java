@@ -89,4 +89,12 @@ public class ReceiptPaymentAccountController {
         receiptPaymentAccountService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("部门查询ReceiptPaymentAccount")
+    @ApiOperation(value = "根据部门ReceiptPaymentAccount")
+    @GetMapping(value = "/receiptPaymentAccount/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    public ResponseEntity queryByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(receiptPaymentAccountService.queryByDeptId(deptId),HttpStatus.OK);
+    }
 }
