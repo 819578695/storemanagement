@@ -63,7 +63,6 @@ public class RentContractController {
     @Log("上传RentContract")
     @ApiOperation(value = "上传RentContract")
     @PostMapping(value="/upload/{contractNo}")
-    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL')")
     public ResponseEntity uploadRentContract(MultipartHttpServletRequest multipartRequest,@PathVariable String contractNo) throws Exception{
         String path = rentContractService.uploadFile(multipartRequest,contractNo);
         if (!StringUtils.isEmpty(path)) {

@@ -28,7 +28,6 @@ public class ProcurementPaymentInfoController {
     @Log("查询ProcurementPaymentInfo")
     @ApiOperation(value = "查询ProcurementPaymentInfo")
     @GetMapping(value = "/procurementPaymentInfo")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTPAYMENTINFO_ALL','PROCUREMENTPAYMENTINFO_SELECT')")
     public ResponseEntity getProcurementPaymentInfos(ProcurementPaymentInfoQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(procurementPaymentInfoService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -36,7 +35,6 @@ public class ProcurementPaymentInfoController {
     @Log("根据采购id查询ProcurementPaymentInfo")
     @ApiOperation(value = "根据采购id查询ProcurementPaymentInfo")
     @GetMapping(value = "/procurementPaymentInfoById/{procurementInformationId}")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTPAYMENTINFO_ALL','PROCUREMENTPAYMENTINFO_SELECT')")
     public ResponseEntity getProcurementPaymentInfoById(@PathVariable Long procurementInformationId){
         return new ResponseEntity(procurementPaymentInfoService.findByProcurement(procurementInformationId),HttpStatus.OK);
     }
@@ -45,7 +43,6 @@ public class ProcurementPaymentInfoController {
     @Log("新增ProcurementPaymentInfo")
     @ApiOperation(value = "新增ProcurementPaymentInfo")
     @PostMapping(value = "/procurementPaymentInfo")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTPAYMENTINFO_ALL','PROCUREMENTPAYMENTINFO_CREATE')")
     public ResponseEntity create(@Validated @RequestBody ProcurementPaymentInfo resources){
         return new ResponseEntity(procurementPaymentInfoService.create(resources),HttpStatus.CREATED);
     }
@@ -53,7 +50,6 @@ public class ProcurementPaymentInfoController {
     @Log("修改ProcurementPaymentInfo")
     @ApiOperation(value = "修改ProcurementPaymentInfo")
     @PutMapping(value = "/procurementPaymentInfo")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTPAYMENTINFO_ALL','PROCUREMENTPAYMENTINFO_EDIT')")
     public ResponseEntity update(@Validated @RequestBody ProcurementPaymentInfo resources){
         procurementPaymentInfoService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -62,7 +58,6 @@ public class ProcurementPaymentInfoController {
     @Log("删除ProcurementPaymentInfo")
     @ApiOperation(value = "删除ProcurementPaymentInfo")
     @DeleteMapping(value = "/procurementPaymentInfo/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTPAYMENTINFO_ALL','PROCUREMENTPAYMENTINFO_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         procurementPaymentInfoService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
