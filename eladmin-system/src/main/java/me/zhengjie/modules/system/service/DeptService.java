@@ -8,6 +8,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -24,6 +25,8 @@ public interface DeptService {
      */
     @Cacheable(keyGenerator = "keyGenerator")
     List<DeptDTO> queryAll(DeptQueryCriteria criteria);
+
+    public Map WechatDeptAll(DeptQueryCriteria criteria);
 
     /**
      * findById

@@ -70,10 +70,9 @@ public class TenantinformationController {
         tenantinformationService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-    @Log("查询TenantinformationByDeptId")
-    @ApiOperation(value = "查询TenantinformationByDeptId")
+    @Log("部门查询TenantinformationByDeptId")
+    @ApiOperation(value = "部门查询TenantinformationByDeptId")
     @GetMapping(value = "/tenantinformationByDeptId/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_DELETE')")
     public ResponseEntity tenantinformationByDeptId(@PathVariable Long deptId){
         return new ResponseEntity(tenantinformationService.findByDeptId(deptId),HttpStatus.OK);
     }

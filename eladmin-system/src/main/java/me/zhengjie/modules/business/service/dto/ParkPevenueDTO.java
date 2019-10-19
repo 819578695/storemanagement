@@ -115,6 +115,9 @@ public class ParkPevenueDTO implements Serializable {
     // 是否删除
     private String isDelete;
 
+    // 审核状态
+    private int  isVertify;
+
 
 
 

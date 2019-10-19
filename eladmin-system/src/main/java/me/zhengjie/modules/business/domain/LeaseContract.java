@@ -117,9 +117,9 @@ public class LeaseContract implements Serializable {
     @Column(name = "is_enable")
     private String isEnable;
 
-    // 是否删除
+    /*// 是否删除
     @Column(name = "is_delete")
-    private String isDelete;
+    private String isDelete;*/
 
     //创建时间
     @CreationTimestamp

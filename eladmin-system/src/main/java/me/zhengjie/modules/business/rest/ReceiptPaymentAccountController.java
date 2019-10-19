@@ -51,7 +51,6 @@ public class ReceiptPaymentAccountController {
     @Log("根据支付方式以及部门查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据部门ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountByDeptId/{dictailId}/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
     public ResponseEntity receiptPaymentAccountByDeptId(@PathVariable Long dictailId,@PathVariable Long deptId){
         return new ResponseEntity(receiptPaymentAccountService.findByDeptId(dictailId,deptId),HttpStatus.OK);
     }
@@ -59,7 +58,6 @@ public class ReceiptPaymentAccountController {
     @Log("根据Id查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据Id查询ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountById/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
     public ResponseEntity receiptPaymentAccountById(@PathVariable Long id){
         return new ResponseEntity(receiptPaymentAccountService.findById(id),HttpStatus.OK);
     }

@@ -12,6 +12,8 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.User
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.Wxpoid;
 import me.zhengjie.modules.basic_management.client.domain.BasicsClient;
 import me.zhengjie.modules.basic_management.client.service.BasicsClientService;
+import me.zhengjie.modules.system.service.DeptService;
+import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -37,6 +39,8 @@ public class wechatController {
     private ArchivesmouthsmanagementService archivesmouthsmanagementService;
     @Autowired
     private BasicsClientService basicsClientService;
+    @Autowired
+    private DeptService deptService;
 
     @Log("微信小程序")
     @ApiOperation(value = "微信小程序查询")
@@ -52,6 +56,14 @@ public class wechatController {
     public List<ArchivesmouthsmanagementDTO> publicWechatId(ArchivesmouthsmanagementQueryCriteria criteria){
         List<ArchivesmouthsmanagementDTO> list = archivesmouthsmanagementService.publicWechatId(criteria);
         return list;
+    }
+
+    @Log("查询所有")
+    @GetMapping(value = "/WechatDeptAll")
+    public Map WechatDeptAll(DeptQueryCriteria criteria){
+        /*new ResponseEntity(deptService.queryAll(criteria),HttpStatus.OK)*/
+        Map map = deptService.WechatDeptAll(criteria);
+        return map;
     }
 
     @Log("微信返回openid")

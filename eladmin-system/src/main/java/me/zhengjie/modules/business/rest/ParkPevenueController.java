@@ -48,6 +48,15 @@ public class ParkPevenueController {
         return new ResponseEntity(parkPevenueService.create(resources),HttpStatus.CREATED);
     }
 
+    @Log("审核ParkPevenue")
+    @ApiOperation(value = "审核ParkPevenue")
+    @PostMapping(value = "/pevenueVertify")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_VERTIFY')")
+    public ResponseEntity vertify( @RequestBody Long[] vertifys, @RequestParam Integer  status){
+        parkPevenueService.vertify(vertifys,status);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
     @Log("修改ParkPevenue")
     @ApiOperation(value = "修改ParkPevenue")
     @PutMapping(value = "/parkPevenue")

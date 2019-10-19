@@ -76,4 +76,12 @@ public interface ParkPevenueService {
      */
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object findPevenueMoney(Long deptId);
+
+
+    /**
+     * 审核
+     * @param vertifys
+     * @return
+     */
+    void vertify(Long[] vertifys,Integer  status);
 }

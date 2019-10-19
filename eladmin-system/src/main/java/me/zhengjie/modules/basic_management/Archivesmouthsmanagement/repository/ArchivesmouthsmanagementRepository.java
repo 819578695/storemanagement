@@ -18,7 +18,7 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
 
       List<Archivesmouthsmanagement> findByTenementNameIsNull();//未出租档口
       List<Archivesmouthsmanagement> findByTenementNameIsNotNull();//已出租档口
-     @Query(value = "SELECT * FROM basics_stall b  WHERE b.area_id = ?1", nativeQuery = true)
+     @Query(value = "SELECT * FROM basics_stall b  WHERE b.dept_id = ?1", nativeQuery = true)
      List<Archivesmouthsmanagement> findByAreaId(Long id);
      @Query(value = "SELECT COUNT(1) num FROM basics_stall b  WHERE b.area_id = ?1", nativeQuery = true)
      int findBycoum(Long id);

@@ -19,6 +19,7 @@ public interface ArchivesmouthsmanagementMapper extends EntityMapper<Archivesmou
             @Mapping(source = "dictDetail.id",target = "stalltype"),
             @Mapping(source = "dictDetail.label",target = "stalltypeName"),
             @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "dept.name",target = "name"),
     })
     ArchivesmouthsmanagementDTO toDto(Archivesmouthsmanagement archivesmouthsmanagement, Dept dept, DictDetail dictDetail);
 }

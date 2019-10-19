@@ -38,4 +38,8 @@ public interface ParkCostMapper extends EntityMapper<ParkCostDTO, ParkCost> {
     })
     ParkCostDTO toDto(ParkCost parkCost, Dept dept, DictDetail dictDetail,  RentContract rentContract, ReceiptPaymentAccount receiptPaymentAccount);
 
+
+
+
+
 }

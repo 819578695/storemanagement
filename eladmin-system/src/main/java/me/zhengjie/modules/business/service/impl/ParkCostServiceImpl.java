@@ -16,6 +16,7 @@ import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintainRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.service.FundFlowingService;
+import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.modules.system.repository.DictRepository;
@@ -76,6 +77,8 @@ public class ParkCostServiceImpl implements ParkCostService {
     private FundFlowingService fundFlowingService;
     @Autowired
     private ArchivesmouthsmanagementRepository archivesmouthsmanagementRepository;
+    @Autowired
+    private MarginService marginService;
 
     @Override
     public Object queryAll(ParkCostQueryCriteria criteria, Pageable pageable){
@@ -114,52 +117,13 @@ public class ParkCostServiceImpl implements ParkCostService {
       ParkCost p =resources ;
       if (resources!=null){
            //根据支付方式和部门查询账户详情
-//            MaintarinDetail financeMaintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
+//      MaintarinDetail financeMaintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(p.getDictDetail().getId(),p.getDept().getId());
           ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
           if (receiptPaymentAccount!=null){
                 //修改账户详情的余额
                 Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
                 if(receiptPaymentAccount.getRemaining().doubleValue()>=price){
                     parkCostRepository.save(resources);
-
-                    //房租
-                    if ( resources.getSiteRent()!=null){
-                        if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
-                            fundFlowingService.createByPostCost(p,"1",resources.getSiteRent(),new BigDecimal(0.00));
-                        }
-                    }
-                    //水费
-                    if (resources.getWaterRent()!=null ){
-                        if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
-                            fundFlowingService.createByPostCost(p,"7",resources.getWaterRent(),new BigDecimal(0.00));
-                        }
-                    }
-                    //电费
-                    if (resources.getElectricityRent()!=null){
-                        if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-                            fundFlowingService.createByPostCost(p,"8",resources.getElectricityRent(),new BigDecimal(0.00));
-                        }
-                    }
-                    //物业费
-                    if (resources.getPropertyRent()!=null){
-                        if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
-                            fundFlowingService.createByPostCost(p,"10",resources.getPropertyRent(),new BigDecimal(0.00));
-                        }
-                    }
-                    //税赋成本
-                    if (resources.getTaxCost()!=null) {
-                        if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
-                            fundFlowingService.createByPostCost(p, "11", resources.getTaxCost(),new BigDecimal(0.00));
-                        }
-                    }
-                    //其他费用
-                    if (resources.getOtherRent()!=null){
-                        if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
-                            fundFlowingService.createByPostCost(p, "9", resources.getOtherRent(),new BigDecimal(0.00));
-                        }
-                    }
-                    /*financeMaintarinDetails.setRemaining(new BigDecimal(financeMaintarinDetails.getRemaining().doubleValue()-price));
-                    maintainDetailRepository.save(financeMaintarinDetails);*/
                 }
                 else{
                     throw new BadRequestException("账户余额不足,请更换支付方式");
@@ -180,55 +144,20 @@ public class ParkCostServiceImpl implements ParkCostService {
         Optional<ParkCost> optionalParkCost = parkCostRepository.findById(resources.getId());
         ValidationUtil.isNull( optionalParkCost,"ParkCost","id",resources.getId());
         ParkCost parkCost = optionalParkCost.get();
-
         if(parkCost!=null){
             //根据支付方式和账户id查询账户详情
-            MaintarinDetail maintarinDetails =maintainDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
-            if (maintarinDetails!=null){
-                //修改之后的余额
-                //Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
-                //修改之前的余额
-                //Double beforePrice=(StringUtils.isNotNullBigDecimal(parkCostBefore.getElectricityRent())+StringUtils.isNotNullBigDecimal(parkCostBefore.getOtherRent())+StringUtils.isNotNullBigDecimal(parkCostBefore.getPropertyRent())+StringUtils.isNotNullBigDecimal(parkCostBefore.getSiteRent())+StringUtils.isNotNullBigDecimal(parkCostBefore.getWaterRent())+StringUtils.isNotNullBigDecimal(parkCostBefore.getTaxCost()));
-                //判断当前帐户余额和修改后的金额,如果为负数就不做修改
-                    //修改资金流水(判断金额如果相同则不做修改)
-                    if ( resources.getSiteRent()!=null&&resources.getSiteRent().compareTo(parkCost.getSiteRent()==null?new BigDecimal(0.00):parkCost.getSiteRent())!=0){
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getSiteRent()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getSiteRent()))));
-                            fundFlowingService.createByPostCost(resources,"1",resources.getSiteRent(),Difference);
+            ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(resources.getReceiptPaymentAccount().getId()).get();
 
-                    }
-                    //水费
-                    if (resources.getWaterRent()!=null&&resources.getWaterRent().compareTo(parkCost.getWaterRent()==null?new BigDecimal(0.00):parkCost.getWaterRent())!=0 ){
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getWaterRent()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getWaterRent()))));
-                            fundFlowingService.createByPostCost(resources,"7",resources.getWaterRent(),Difference);
-
-                    }
-                    //电费
-                    if (resources.getElectricityRent()!=null&&resources.getElectricityRent().compareTo(parkCost.getElectricityRent()==null?new BigDecimal(0.00):parkCost.getElectricityRent())!=0){
-                        if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getElectricityRent()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getElectricityRent()))));
-                            fundFlowingService.createByPostCost(resources,"8",resources.getElectricityRent(),Difference);
-
-                        }
-                    }
-                    //物业费
-                    if (resources.getPropertyRent()!=null&&resources.getPropertyRent().compareTo(parkCost.getPropertyRent()==null?new BigDecimal(0.00):parkCost.getPropertyRent())!=0){
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getPropertyRent()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getPropertyRent()))));
-                            fundFlowingService.createByPostCost(resources,"10",resources.getPropertyRent(),Difference);
-                    }
-                    //税赋成本
-                    if (resources.getTaxCost()!=null&&resources.getTaxCost().compareTo(parkCost.getTaxCost()==null?new BigDecimal(0.00):parkCost.getTaxCost())!=0) {
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getTaxCost()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getTaxCost()))));
-                            fundFlowingService.createByPostCost(resources,"11",resources.getTaxCost(),Difference);
-
-                    }
-                    //其他费用
-                    if (resources.getOtherRent()!=null&&resources.getOtherRent().compareTo(parkCost.getOtherRent()==null?new BigDecimal(0.00):parkCost.getOtherRent())!=0){
-                            BigDecimal Difference = new BigDecimal( (StringUtils.isNotNullBigDecimal(resources.getOtherRent()) - (StringUtils.isNotNullBigDecimal(parkCostBefore.getOtherRent()))));
-                            fundFlowingService.createByPostCost(resources,"9",resources.getOtherRent(),Difference);
-
-                    }
+            if (receiptPaymentAccount!=null){
+                //修改账户详情的余额
+                Double price=(StringUtils.isNotNullBigDecimal(resources.getElectricityRent())+StringUtils.isNotNullBigDecimal(resources.getOtherRent())+StringUtils.isNotNullBigDecimal(resources.getPropertyRent())+StringUtils.isNotNullBigDecimal(resources.getSiteRent())+StringUtils.isNotNullBigDecimal(resources.getWaterRent())+StringUtils.isNotNullBigDecimal(resources.getTaxCost()));
+                if(receiptPaymentAccount.getRemaining().doubleValue()>=price){
                     parkCost.copy(resources);
                     parkCostRepository.save(parkCost);
+                }
+                else{
+                    throw new BadRequestException("账户余额不足,请更换支付方式");
+                }
             }
             else{
                     throw new BadRequestException("请先新建账户余额");
@@ -241,7 +170,7 @@ public class ParkCostServiceImpl implements ParkCostService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        ParkCost p = parkCostRepository.findById(id).get();
+        /*ParkCost p = parkCostRepository.findById(id).get();
         //根据支付类型和支出id查询对应的资金流水后
         Long typeId = dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1").getId();
       if (typeId!=null){
@@ -267,7 +196,7 @@ public class ParkCostServiceImpl implements ParkCostService {
           else{
               throw new BadRequestException("请先新建账户余额");
           }
-      }
+      }*/
         parkCostRepository.deleteById(id);
     }
 
@@ -275,5 +204,115 @@ public class ParkCostServiceImpl implements ParkCostService {
     public Object findCostsMoney(Long deptId) {
 
         return parkCostRepository.findByDeptIdSumRent(deptId);
+    }
+
+    /*审核*/
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void vertify(Long[] vertifys,Integer status) {
+            if (vertifys.length>0){
+                for (Long id : vertifys) {
+                    ParkCost resources = parkCostRepository.findById(id).get();
+                    /* 状态为审核中才能审核*/
+                   if (resources.getIsVertify()==0){
+                       //审核未通过
+                       if (status==1){
+                           resources.setIsVertify(1);
+                           parkCostRepository.updateByVertify1(resources.getId());
+                       }
+                       //审核通过
+                       if (status==2){
+                           resources.setIsVertify(2);
+                           parkCostRepository.updateByVertify2(resources.getId());
+                           //需要插入资金流水
+                           addFinance(resources);
+                           addFundMargin(resources);//默认会向毛利表插入
+                       }
+                   }
+                   else{
+                       throw new BadRequestException("请勿重复审核");
+                   }
+                }
+            }
+    }
+
+    /*新增资金流水*/
+    public void addFinance (ParkCost resources){
+        //房租
+        if ( resources.getSiteRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+                fundFlowingService.createByPostCost(resources,"1",resources.getSiteRent(),new BigDecimal(0.00));
+            }
+        }
+        //水费
+        if (resources.getWaterRent()!=null ){
+            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+                fundFlowingService.createByPostCost(resources,"7",resources.getWaterRent(),new BigDecimal(0.00));
+            }
+        }
+        //电费
+        if (resources.getElectricityRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+                fundFlowingService.createByPostCost(resources,"8",resources.getElectricityRent(),new BigDecimal(0.00));
+            }
+        }
+        //物业费
+        if (resources.getPropertyRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+                fundFlowingService.createByPostCost(resources,"10",resources.getPropertyRent(),new BigDecimal(0.00));
+            }
+        }
+        //税赋成本
+        if (resources.getTaxCost()!=null) {
+            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+                fundFlowingService.createByPostCost(resources, "11", resources.getTaxCost(),new BigDecimal(0.00));
+            }
+        }
+        //其他费用
+        if (resources.getOtherRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+                fundFlowingService.createByPostCost(resources, "9", resources.getOtherRent(),new BigDecimal(0.00));
+            }
+        }
+    }
+
+    /*新增毛利表*/
+    public void addFundMargin (ParkCost resources){
+        //房租
+        if ( resources.getSiteRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getSiteRent())){
+                marginService.createByParkCost(resources,"1",resources.getSiteRent());
+            }
+        }
+        //水费
+        if (resources.getWaterRent()!=null ){
+            if (StringUtils.iseqBigDecimal(resources.getWaterRent())){
+                marginService.createByParkCost(resources,"7",resources.getWaterRent());
+            }
+        }
+        //电费
+        if (resources.getElectricityRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getElectricityRent())){
+                marginService.createByParkCost(resources,"8",resources.getElectricityRent());
+            }
+        }
+        //物业费
+        if (resources.getPropertyRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getPropertyRent())){
+                marginService.createByParkCost(resources,"10",resources.getPropertyRent());
+            }
+        }
+        //税赋成本
+        if (resources.getTaxCost()!=null) {
+            if (StringUtils.iseqBigDecimal(resources.getTaxCost())) {
+                marginService.createByParkCost(resources, "11", resources.getTaxCost());
+            }
+        }
+        //其他费用
+        if (resources.getOtherRent()!=null){
+            if (StringUtils.iseqBigDecimal(resources.getOtherRent())) {
+                marginService.createByParkCost(resources, "9", resources.getOtherRent());
+            }
+        }
     }
 }

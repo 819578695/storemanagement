@@ -4,6 +4,7 @@ import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.service.dto.ParkPevenueDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.math.BigDecimal;
@@ -31,4 +32,14 @@ public interface ParkPevenueRepository extends JpaRepository<ParkPevenue, Long>,
 
 
     List<ParkPevenue> findByArchivesmouthsmanagementIdAndPayTypeId(Long archivesmouthsmanagementId,Long payTypeId);
+
+    /*审核未通过*/
+    @Modifying
+    @Query(value = "update park_pevenue set is_vertify=1 where id=?1",nativeQuery = true)
+    void updateByVertify1(Long id);
+
+    /*审核通过*/
+    @Modifying
+    @Query(value = "update park_pevenue set is_vertify=2 where id=?1",nativeQuery = true)
+    void updateByVertify2(Long id);
 }

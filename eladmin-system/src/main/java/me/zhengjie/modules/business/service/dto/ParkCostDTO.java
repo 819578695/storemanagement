@@ -15,9 +15,9 @@ public class ParkCostDTO implements Serializable {
 
     // 主键
     private Long id;
-
+/*
     // 档口Id
-    private Long archivesMouthsId;
+    private Long archivesMouthsId;*/
 
     // 场地租金
     private BigDecimal siteRent;
@@ -53,8 +53,8 @@ public class ParkCostDTO implements Serializable {
     //付款方式名称
     private String paymentTypeName;
 
-    //门牌号
-    private Long houseNumber;
+    /*//门牌号
+    private Long houseNumber;*/
 
     //合同名称
     private String rentContractName;
@@ -76,4 +76,7 @@ public class ParkCostDTO implements Serializable {
 
     // 是否删除
     private String isDelete;
+
+    // 审核状态
+    private int  isVertify;
 }

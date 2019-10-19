@@ -15,4 +15,7 @@ public class RentContractQueryCriteria{
     private String deptName;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
+
+    @Query(type = Query.Type.INNER_LIKE)
+    private String contractNo;
 }

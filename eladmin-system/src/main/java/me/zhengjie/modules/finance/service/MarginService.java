@@ -1,6 +1,7 @@
 package me.zhengjie.modules.finance.service;
 
 import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.finance.service.dto.*;
 import me.zhengjie.modules.system.service.dto.DeptDTO;
 import org.springframework.cache.annotation.Cacheable;
@@ -41,5 +42,13 @@ public interface MarginService {
      * @return
      */
     //@CacheEvict(allEntries = true)新增成本
-    FundMarginDTO createByPostCost(ParkCost resources, String value, BigDecimal money, BigDecimal substactMoney);
+    public void  createByParkCost(ParkCost resources, String value, BigDecimal money);
+
+    /**
+     * create
+     * @param resources
+     * @return
+     */
+    //@CacheEvict(allEntries = true)新增收入
+    public void  createByParkPevenue(ParkPevenue resources, String value, BigDecimal money);
 }

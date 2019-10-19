@@ -66,9 +66,6 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     @Autowired
     private DictDetailRepository dictDetailRepository;
 
-
-
-
     @Override
     public Object queryAll(LeaseContractQueryCriteria criteria, Pageable pageable){
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
