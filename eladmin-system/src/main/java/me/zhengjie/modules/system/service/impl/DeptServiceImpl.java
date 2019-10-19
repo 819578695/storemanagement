@@ -67,6 +67,14 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public Map WechatDeptAll(DeptQueryCriteria criteria) {
+        Map map = new HashMap();
+        List<DeptDTO> list = deptMapper.toDto(deptRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        map.put("list",list);
+        return map;
+    }
+
+    @Override
     public DeptDTO findById(Long id) {
         Optional<Dept> dept = deptRepository.findById(id);
         ValidationUtil.isNull(dept,"Dept","id",id);
