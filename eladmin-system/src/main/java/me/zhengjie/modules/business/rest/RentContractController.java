@@ -38,7 +38,6 @@ public class RentContractController {
     @Log("根据部门查询RentContract")
     @ApiOperation(value = "根据部门RentContract")
     @GetMapping(value = "/rentContractByDeptId/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_SELECT')")
     public ResponseEntity rentContractByDeptId(@PathVariable Long deptId){
         return new ResponseEntity(rentContractService.findByDeptId(deptId),HttpStatus.OK);
     }
@@ -64,7 +63,7 @@ public class RentContractController {
     @Log("上传RentContract")
     @ApiOperation(value = "上传RentContract")
     @PostMapping(value="/upload/{contractNo}")
-    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL')")
     public ResponseEntity uploadRentContract(MultipartHttpServletRequest multipartRequest,@PathVariable String contractNo) throws Exception{
         String path = rentContractService.uploadFile(multipartRequest,contractNo);
         if (!StringUtils.isEmpty(path)) {

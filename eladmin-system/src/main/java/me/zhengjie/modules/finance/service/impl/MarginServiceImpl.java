@@ -3,9 +3,12 @@ package me.zhengjie.modules.finance.service.impl;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto;
 import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.finance.domain.FundMargin;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
+import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
+import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.finance.service.MarginService;
 import me.zhengjie.modules.finance.service.dto.FundMarginDTO;
 import me.zhengjie.modules.finance.service.dto.MarginQueryCriteria;
@@ -46,6 +49,8 @@ public class MarginServiceImpl implements MarginService {
     private DictDetailRepository dictDetailRepository;
     @Autowired
     private DictRepository dictRepository;
+    @Autowired
+    private MarginRepository marginRepository;
     @Autowired
     private MaintarinDetailRepository maintarinDetailRepository;
 
@@ -146,23 +151,34 @@ public class MarginServiceImpl implements MarginService {
     }
 
     @Override
-    public FundMarginDTO createByPostCost(ParkCost resources, String value, BigDecimal money, BigDecimal substactMoney) {
+    /*添加成本*/
+    public void createByParkCost(ParkCost resources, String value, BigDecimal money) {
         Dept dept = resources.getDept();//部门
-        DictDetail TradType = resources.getDictDetail();//支付方式
         DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"1");//支出
         DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//支出
-        //根据部门id和支付方式查询账户金额
-        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getDictDetail().getId(),resources.getDept().getId());
-
         //添加毛利
-       FundMargin fundMargin = new FundMargin();
-       fundMargin.setDept(dept);
-       fundMargin.setMoney(money);
-       fundMargin.setTallyType(tallyType);
-       fundMargin.setTradType(TradType);
-       fundMargin.setTradDate(resources.getCreateTime());
+        FundMargin fundMargin = new FundMargin();
+        fundMargin.setDept(dept);
+        fundMargin.setMoney(money);
+        fundMargin.setTallyType(tallyType);
+        fundMargin.setTradType(typeDict);
+        marginRepository.save(fundMargin);
+    }
 
-        return null;
+    @Override
+    /*添加收入*/
+    public void createByParkPevenue(ParkPevenue resources, String value, BigDecimal money) {
+        Dept dept = resources.getDept();//部门
+        DictDetail typeDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("trade_type").getId(),"0");//收入
+        DictDetail tallyType =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("transaction_type").getId(),value);//房租等
+        //添加毛利
+        FundMargin fundMargin = new FundMargin();
+        fundMargin.setDept(dept);
+        fundMargin.setMoney(money);
+        fundMargin.setTallyType(tallyType);
+        fundMargin.setHouseId(resources.getArchivesmouthsmanagement().getId());
+        fundMargin.setTradType(typeDict);
+        marginRepository.save(fundMargin);
     }
 
 }
