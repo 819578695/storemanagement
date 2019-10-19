@@ -29,7 +29,7 @@ public class MaintarinDetailController {
     @Log("查询FinanceMaintarinDetail")
     @ApiOperation(value = "查询FinanceMaintarinDetail")
     @GetMapping(value = "/maintarinDetail")
-    @PreAuthorize("hasAnyRole('ADMIN','MaintarinDetail_ALL','MaintarinDetail_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_SELECT','ACCOUNT_SELECT')")
     public ResponseEntity getMaintarinDetails(MaintarinDetailQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(maintarinDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -46,16 +46,16 @@ public class MaintarinDetailController {
     @Log("资金调拨")
     @ApiOperation(value = "资金调拨MaintarinDetail")
     @PostMapping(value = "/maintarinDetailAdd")
-    @PreAuthorize("hasAnyRole('ADMIN','MaintarinDetail_ALL','MaintarinDetail_ALLOT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALLOT')")
     public ResponseEntity createDetail(@Validated @RequestBody AccountAllotDTO resources){
         maintarinDetailService.createDetail(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("修改MaintarinDetail")
+/*    @Log("修改MaintarinDetail")
     @ApiOperation(value = "修改MaintarinDetail")
     @PutMapping(value = "/maintarinDetail")
-    @PreAuthorize("hasAnyRole('ADMIN','MaintarinDetail_ALL','MaintarinDetail_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAINTAINDETAIL_ALL','MAINTAINDETAIL_EDIT')")
     public ResponseEntity update(@Validated @RequestBody MaintarinDetail resources){
         maintarinDetailService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -64,15 +64,15 @@ public class MaintarinDetailController {
     @Log("删除MaintarinDetail")
     @ApiOperation(value = "删除MaintarinDetail")
     @DeleteMapping(value = "/maintarinDetail/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','MaintarinDetail_ALL','MaintarinDetail_DELETE')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAINTAINDETAIL_ALL','MAINTAINDETAIL_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         maintarinDetailService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
-    }
+    }*/
 
     @Log("查询金额")
     @GetMapping(value = "/getMoney")
-    @PreAuthorize("hasAnyRole('ADMIN','MaintarinDetail_ALL','MaintarinDetail_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_SELECT','ACCOUNT_SELECT')")
     public  ResponseEntity getMoney(MaintarinDetailQueryCriteria criteria){
         return new ResponseEntity(maintarinDetailService.getMoney(criteria),HttpStatus.OK);
     }
