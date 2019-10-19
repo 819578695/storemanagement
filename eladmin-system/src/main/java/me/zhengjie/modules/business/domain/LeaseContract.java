@@ -113,7 +113,7 @@ public class LeaseContract implements Serializable {
     @Column(name = "pay_price")
     private BigDecimal payPrice;
 
-    // 合同支付单价
+    // 是否启用
     @Column(name = "is_enable")
     private String isEnable;
 

@@ -169,15 +169,10 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
                        //修改资金流水
                        updateFinance(resources,parkPevenueBefore);
                    }*/
-                if(receiptPaymentAccount.getRemaining().doubleValue()>=price){
                     parkPevenue.copy(resources);
                     parkPevenue.setIsVertify(0);
                     parkPevenue.setUpdateTime(new Timestamp(System.currentTimeMillis()));//修改时间为当前日期
                     parkPevenueRepository.save(parkPevenue);
-                }
-                else{
-                    throw new BadRequestException("账户余额不足,请更换支付方式");
-                }
             } else {
                 throw new BadRequestException("请先新建账户余额");
             }

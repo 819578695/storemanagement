@@ -21,6 +21,9 @@ public interface LeaseContractRepository extends JpaRepository<LeaseContract, Lo
 
     List<LeaseContract> findByArchivesmouthsmanagementId(Long id);
 
+    @Query(value = "select * FROM lease_contract where stall_id=?1  and is_enable='1' ",nativeQuery =true)
+    LeaseContract findByArchivesmouthsmanagementIdAndIsEnable(Long id);
+
     /*查询最新的流水编号*/
     @Query(value = "select right(contract_no,4) FROM lease_contract where dept_id=?1 ORDER BY id DESC LIMIT 0,1  ",nativeQuery =true)
     String findByNewcontractNo(Long deptId);

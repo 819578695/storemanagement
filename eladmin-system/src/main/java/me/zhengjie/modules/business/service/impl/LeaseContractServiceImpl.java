@@ -142,37 +142,21 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     public void update(LeaseContract resources) {
         Optional<LeaseContract> optionalLeaseContract = leaseContractRepository.findById(resources.getId());
         ValidationUtil.isNull( optionalLeaseContract,"LeaseContract","id",resources.getId());
-        LeaseContract leaseContract = optionalLeaseContract.get();
-        if (resources!=null&&resources!=leaseContract){
-            //新增合同會綁定租戶和檔口
-            Archivesmouthsmanagement archivesmouthsmanagement = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();
-            Tenantinformation tenantinformation= tenantinformationRepository.findById(resources.getTenantinformation().getId()).get();
-           if (resources.getArchivesmouthsmanagement()!=null){
-               //修改合同对应的档口和租户
-               //如果档口修改则将修改的id进行判断
-               if(resources.getArchivesmouthsmanagement().getId()!=leaseContract.getArchivesmouthsmanagement().getId()){
-                   List<LeaseContract> leaseContractList = leaseContractRepository.findByArchivesmouthsmanagementId(resources.getArchivesmouthsmanagement().getId());
-                   if(leaseContractList.size()>0){
-                       throw new BadRequestException("您选择的档口已经出租,无法进行修改");
-                   }
-                   else{
-                       if(tenantinformation!=null){
-                           tenantinformation.setArchivesmouthsmanagement(archivesmouthsmanagement);
-                           tenantinformationRepository.save(tenantinformation);
-                       }
-                   }
-               }
-           }
-           if (resources.getTenantinformation()!=null){
-               //如果租户信息修改则将修改的id进行判断
-               if(resources.getTenantinformation().getId()!=leaseContract.getTenantinformation().getId()){
-                   if(archivesmouthsmanagement!=null){
-                       archivesmouthsmanagement.setTenementName(tenantinformation.getLinkman());
-                       archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
-                   }
-               }
-           }
+        LeaseContract leaseContract = optionalLeaseContract.get();//数据库对应的对象
 
+        if (resources!=null){
+            //(建议写关联表)
+            //修改后的档口信息
+            Archivesmouthsmanagement archivesmouthsmanagementAfter = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();//
+            archivesmouthsmanagementAfter.setTenementName(tenantinformationRepository.findById(resources.getTenantinformation().getId()).get().getLinkman());
+
+            //如果修改后档口不同应该将之后的档口更新，将之前的档口释放
+            if (resources.getArchivesmouthsmanagement().getId()!=leaseContract.getArchivesmouthsmanagement().getId()){
+                Archivesmouthsmanagement archivesmouthsmanagementBefore = archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get();//
+                archivesmouthsmanagementBefore.setTenementName(null);
+            }
+
+            //新增合同會綁定租戶和檔口
 
         }
         leaseContract.copy(resources);
@@ -187,8 +171,18 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                 if(parkPevenueList.size()>0){
                     throw new BadRequestException("该合同下还有相关的收入信息,请先删除相关收入信息");
                 }
+           LeaseContract leaseContract = leaseContractRepository.findById(id).get();
+                //当合同启用是会释放档口
+                if(leaseContract.getIsEnable().equals("1")){
+                    Archivesmouthsmanagement archivesmouthsmanagement = archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get();
+                    archivesmouthsmanagement.setTenementName(null);
+                    archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
+                }
+
+
+            leaseContractRepository.deleteById(id);
         }
-        leaseContractRepository.deleteById(id);
+
     }
 
     @Override
