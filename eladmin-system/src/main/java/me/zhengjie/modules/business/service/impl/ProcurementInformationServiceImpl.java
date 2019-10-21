@@ -79,11 +79,14 @@ public class ProcurementInformationServiceImpl implements ProcurementInformation
     @Transactional(rollbackFor = Exception.class)
     public ProcurementInformationDTO create(ProcurementInformation resources) {
 
+        //获取登录的用户信息
         JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
-        Long no = 0001l;
+        Long no = 0001l;//编号默认为000111
+        //判断当前部门下是否有合同 如果有则往后自增
         if (procurementInformationRepository.findByNewcontractNo(resources.getDept().getId())!=null){
             no=Long.valueOf(procurementInformationRepository.findByNewcontractNo(resources.getDept().getId()))+0001l;
         }
+        //自动生成合同编号
         resources.setPno(jwtUser.getDeptNo()+ StringUtils.getCurentDate()+new DecimalFormat("0000").format(no));
         return procurementInformationMapper.toDto(procurementInformationRepository.save(resources));
     }
