@@ -72,4 +72,10 @@ public class DeptController {
         deptService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("查询非总部网点")
+    @GetMapping(value = "/getDeptAlls")
+    public ResponseEntity getDeptAlls(){
+        return new ResponseEntity(deptService.queryALLs(),HttpStatus.OK);
+    }
 }

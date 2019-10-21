@@ -92,6 +92,11 @@ public class DeptServiceImpl implements DeptService {
     }
 
     @Override
+    public Object queryALLs() {
+        return  deptMapper.toDto(deptRepository.findByPidNot(0L));
+    }
+
+    @Override
     public Object buildTree(List<DeptDTO> deptDTOS) {
         Set<DeptDTO> trees = new LinkedHashSet<>();
         Set<DeptDTO> depts= new LinkedHashSet<>();

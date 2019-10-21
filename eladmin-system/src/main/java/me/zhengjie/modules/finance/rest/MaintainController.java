@@ -28,7 +28,6 @@ public class MaintainController {
     @Log("查询FinanceMaintain")
     @ApiOperation(value = "查询FinanceMaintain")
     @GetMapping(value = "/maintain")
-    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECTDEPT')")
     public ResponseEntity getFinanceMaintains(MaintainQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(maintainService.queryAll(criteria,pageable),HttpStatus.OK);
     }

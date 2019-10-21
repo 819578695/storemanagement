@@ -75,4 +75,10 @@ public interface DeptService {
     List<Dept> findByPid(long pid);
 
     Set<Dept> findByRoleIds(Long id);
+
+    /**
+     * 登陆session存储查询
+     * @return
+     */
+    Object queryALLs();
 }

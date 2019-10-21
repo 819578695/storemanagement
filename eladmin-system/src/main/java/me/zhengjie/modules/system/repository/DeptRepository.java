@@ -29,4 +29,5 @@ public interface DeptRepository extends JpaRepository<Dept, Long>, JpaSpecificat
     @Query(value = "select * from dept where id = ?1",nativeQuery = true)
     Dept findAllById(Long id);
 
+    List<Dept> findByPidNot(Long pid);
 }
