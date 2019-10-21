@@ -113,6 +113,11 @@ public class ParkCost implements Serializable {
     @Column(name = "is_delete")
     private String isDelete;
 
+    // 审核状态
+    @Column(name = "is_vertify")
+    private int isVertify;
+
+
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

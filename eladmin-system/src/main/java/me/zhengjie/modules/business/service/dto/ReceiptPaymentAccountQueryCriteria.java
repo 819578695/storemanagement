@@ -20,4 +20,7 @@ public class ReceiptPaymentAccountQueryCriteria{
     //查询账户详情
     @Query(type = Query.Type.EQUAL)
     private Long detailId;
+    //部门查询
+    @Query(type = Query.Type.EQUAL)
+    private Long deptId;
 }

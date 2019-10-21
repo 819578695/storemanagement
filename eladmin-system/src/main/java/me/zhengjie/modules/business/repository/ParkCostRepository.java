@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.lang.Nullable;
 
@@ -34,5 +35,15 @@ public interface ParkCostRepository extends JpaRepository<ParkCost, Long>, JpaSp
             "left join RentContract c on p.rentContractId=c.id\n" +
             "left join DictDetail dd on p.paymentType=dd.id")
     Page<ParkCostDTO> findAlls(@Nullable Specification<ParkCostDTO> spec, Pageable pageable);*/
+
+    /*审核未通过*/
+    @Modifying
+    @Query(value = "update park_cost set is_vertify=1 where id=?1",nativeQuery = true)
+    void updateByVertify1(Long id);
+
+    /*审核通过*/
+    @Modifying
+    @Query(value = "update park_cost set is_vertify=2 where id=?1",nativeQuery = true)
+    void updateByVertify2(Long id);
 
 }

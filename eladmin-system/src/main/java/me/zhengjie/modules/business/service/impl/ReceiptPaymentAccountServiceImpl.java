@@ -2,6 +2,7 @@ package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.service.dto.AccountsDTO;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountSmallDTO;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
@@ -95,5 +96,27 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         receiptPaymentAccountRepository.deleteById(id);
+    }
+
+    @Override
+    public Object queryByDeptId(Long deptId) {
+        List<MaintarinDetail> byDeptId = maintarinDetailRepository.findByDeptId(deptId);
+        List list = new ArrayList<>();
+        for (MaintarinDetail maintarinDetail : byDeptId) {
+            AccountsDTO accountsDTO = new AccountsDTO();
+            accountsDTO.setValue(maintarinDetail.getId());
+            accountsDTO.setLabel(maintarinDetail.getTradType().getLabel());
+            List<AccountsDTO>childrens = new ArrayList<>();
+            List<ReceiptPaymentAccount> byDetailId = receiptPaymentAccountRepository.findByDetailId(maintarinDetail.getId());
+            for (ReceiptPaymentAccount receiptPaymentAccount : byDetailId) {
+                AccountsDTO childrenAccountsDTO = new AccountsDTO();
+                childrenAccountsDTO.setValue(receiptPaymentAccount.getId());
+                childrenAccountsDTO.setLabel(receiptPaymentAccount.getName());
+                childrens.add(childrenAccountsDTO);
+            }
+            accountsDTO.setChildren(childrens);
+            list.add(accountsDTO);
+        }
+        return list;
     }
 }

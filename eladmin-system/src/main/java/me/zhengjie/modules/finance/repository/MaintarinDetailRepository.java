@@ -37,4 +37,5 @@ public interface MaintarinDetailRepository extends JpaRepository<MaintarinDetail
     //查询二级下金额总额
     @Query(value = "select new me.zhengjie.modules.finance.service.dto.DetailDTO(f.id , dt.name , d.label , sum(r.remaining) ) from MaintarinDetail f left join DictDetail d on d.id = f.tradType.id left join Dept dt on dt.id = f.dept.id left join ReceiptPaymentAccount r on r.detailId = f.id where f.dept.id = :deptId GROUP BY f.id")
     List<DetailDTO> queryRemainings(@Param("deptId")Long deptId );
+
 }

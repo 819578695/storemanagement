@@ -36,6 +36,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -133,7 +134,8 @@ public class FundFlowingServiceImpl implements FundFlowingService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public FundFlowingDTO create(FundFlowing resources) {
-        MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
+        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));
+        /*MaintarinDetail maintarinDetail=maintarinDetailRepository.findByTradTypeIdAndDeptId(resources.getTradType().getId(),resources.getDept().getId());
         //查询账户详情
         ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(maintarinDetail.getId()).get();
         if (receiptPaymentAccount!=null){
@@ -154,7 +156,7 @@ public class FundFlowingServiceImpl implements FundFlowingService {
         }else {
             throw new BadRequestException("请先新建账户余额");
         }
-        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));
+        return fundFlowingMapper.toDto(fundFlowingRepository.save(resources));*/
     }
 
     @Override

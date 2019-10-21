@@ -8,6 +8,8 @@ import me.zhengjie.modules.business.service.dto.ParkCostQueryCriteria;
 //import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
+
 /**
 * @author kang
 * @date 2019-08-22
@@ -78,4 +80,12 @@ public interface ParkCostService {
      */
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object findCostsMoney(Long deptId);
+
+
+    /**
+     * 审核
+     * @param vertifys
+     * @return
+     */
+    void vertify(Long[] vertifys,Integer  status);
 }

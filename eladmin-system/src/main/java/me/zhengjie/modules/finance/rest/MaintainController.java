@@ -28,15 +28,14 @@ public class MaintainController {
     @Log("查询FinanceMaintain")
     @ApiOperation(value = "查询FinanceMaintain")
     @GetMapping(value = "/maintain")
-    @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
     public ResponseEntity getFinanceMaintains(MaintainQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(maintainService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("新增FinanceMaintain")
+/*   @Log("新增FinanceMaintain")
     @ApiOperation(value = "新增FinanceMaintain")
     @PostMapping(value = "/maintain")
-    @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_CREATE')")
     public ResponseEntity create(@Validated @RequestBody Maintain resources){
         return new ResponseEntity(maintainService.create(resources),HttpStatus.CREATED);
     }
@@ -44,7 +43,7 @@ public class MaintainController {
     @Log("修改FinanceMaintain")
     @ApiOperation(value = "修改FinanceMaintain")
     @PutMapping(value = "/maintain")
-    @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAINTAIN_ALL','MAINTAIN_EDIT')")
     public ResponseEntity update(@Validated @RequestBody Maintain resources){
         maintainService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -53,9 +52,9 @@ public class MaintainController {
     @Log("删除FinanceMaintain")
     @ApiOperation(value = "删除FinanceMaintain")
     @DeleteMapping(value = "/maintain/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','FINANCEMAINTAIN_ALL','FINANCEMAINTAIN_DELETE')")
+    @PreAuthorize("hasAnyRole('ADMIN','MAINTAIN_ALL','MAINTAIN_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         maintainService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
-    }
+    }*/
 }

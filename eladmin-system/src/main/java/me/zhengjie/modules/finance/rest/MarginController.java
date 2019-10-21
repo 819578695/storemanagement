@@ -29,20 +29,20 @@ public class MarginController {
     @Log("查询收入Margin")
     @ApiOperation(value = "查询Margin")
     @GetMapping(value = "/margin")
-    @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','MARGIN_ALL','MARGIN_SELECT')")
     public ResponseEntity getFinaceMargins(MarginQueryCriteria criteria){
         return new ResponseEntity(marginService.queryAll(criteria),HttpStatus.OK);
     }
     @Log("查询成本Margin")
     @ApiOperation(value = "查询Margin")
     @GetMapping(value = "/marginCost")
-    @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','MARGIN_ALL','MARGIN_SELECT')")
     public ResponseEntity getFinaceMarginsCost(MarginQueryCriteria criteria){
         return new ResponseEntity(marginService.queryCostAll(criteria),HttpStatus.OK);
     }
     @Log("查询deptTree")
     @GetMapping(value = "/marginTree")
-    @PreAuthorize("hasAnyRole('ADMIN','FINACEMARGIN_ALL','FINACEMARGIN_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','MARGIN_ALL','MARGIN_SELECT')")
     public  ResponseEntity getMarginTree(MarginQueryCriteria criteria){
         return new ResponseEntity(marginService.buildTree(criteria), HttpStatus.OK);
     }

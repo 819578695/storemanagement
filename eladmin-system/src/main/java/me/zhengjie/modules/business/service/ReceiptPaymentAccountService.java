@@ -69,4 +69,11 @@ public interface ReceiptPaymentAccountService {
      */
     //@CacheEvict(allEntries = true)
     void delete(Long id);
+
+    /**
+     * 根据部门id查询所有账户详情
+     * @param deptId
+     * @return
+     */
+    Object queryByDeptId(Long deptId);
 }

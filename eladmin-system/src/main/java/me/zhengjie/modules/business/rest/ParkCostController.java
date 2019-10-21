@@ -3,6 +3,7 @@ package me.zhengjie.modules.business.rest;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.service.ParkCostService;
+import me.zhengjie.modules.business.service.dto.ParkCostDTO;
 import me.zhengjie.modules.business.service.dto.ParkCostQueryCriteria;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
+
+import java.util.List;
 
 /**
 * @author kang
@@ -65,6 +68,15 @@ public class ParkCostController {
     public ResponseEntity update(@Validated @RequestBody ParkCost resources){
         parkCostService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @Log("审核ParkCost")
+    @ApiOperation(value = "审核ParkCost")
+    @PostMapping(value = "/vertify")
+    @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_VERTIFY')")
+    public ResponseEntity vertify( @RequestBody Long[] vertifys, @RequestParam Integer  status){
+        parkCostService.vertify(vertifys,status);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @Log("删除ParkCost")

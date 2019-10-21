@@ -28,4 +28,10 @@ public class ParkPevenueQueryCriteria{
     private Date tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)
     private Date tradDateEnd;
+    @Query(type = Query.Type.EQUAL)
+    private Integer isVertify;
+    @Query(type = Query.Type.GREATER_THAN_DATE)
+    private Date createTimeStart;
+    @Query(type = Query.Type.LESS_THAN_DATE)
+    private Date createTimeEnd;
 }

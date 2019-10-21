@@ -102,9 +102,6 @@ public class RentContract implements Serializable {
     @Column(name = "create_time")
     private Timestamp createTime;
 
-    // 是否删除
-    @Column(name = "is_delete")
-    private String isDelete;
 
     public void copy(RentContract source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

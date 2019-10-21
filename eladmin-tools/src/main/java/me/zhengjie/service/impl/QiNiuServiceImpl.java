@@ -1,6 +1,6 @@
 package me.zhengjie.service.impl;
 
-import com.google.gson.Gson;
+/*import com.google.gson.Gson;*/
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;
@@ -73,7 +73,7 @@ public class QiNiuServiceImpl implements QiNiuService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public QiniuContent upload(MultipartFile file, QiniuConfig qiniuConfig) {
-
+/*
         Long size = maxSize * 1024 * 1024;
         if(file.getSize() > size){
             throw new BadRequestException("文件超出规定大小");
@@ -81,9 +81,9 @@ public class QiNiuServiceImpl implements QiNiuService {
         if(qiniuConfig.getId() == null){
             throw new BadRequestException("请先添加相应配置，再操作");
         }
-        /**
+        *//**
          * 构造一个带指定Zone对象的配置类
-         */
+         *//*
         Configuration cfg = QiNiuUtil.getConfiguration(qiniuConfig.getZone());
         UploadManager uploadManager = new UploadManager(cfg);
         Auth auth = Auth.create(qiniuConfig.getAccessKey(), qiniuConfig.getSecretKey());
@@ -95,7 +95,9 @@ public class QiNiuServiceImpl implements QiNiuService {
             }
             Response response = uploadManager.put(file.getBytes(), key, upToken);
             //解析上传成功的结果
+*//*
             DefaultPutRet putRet = new Gson().fromJson(response.bodyString(), DefaultPutRet.class);
+*//*
             //存入数据库
             QiniuContent qiniuContent = new QiniuContent();
             qiniuContent.setBucket(qiniuConfig.getBucket());
@@ -106,7 +108,8 @@ public class QiNiuServiceImpl implements QiNiuService {
             return qiniuContentRepository.save(qiniuContent);
         } catch (Exception e) {
            throw new BadRequestException(e.getMessage());
-        }
+        }*/
+        return null;
     }
 
     @Override

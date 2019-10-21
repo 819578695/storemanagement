@@ -36,7 +36,7 @@ public class ReceiptPaymentAccountController {
     @Log("查询所有ReceiptPaymentAccount")
     @ApiOperation(value = "查询所有ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccount/all")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
     public ResponseEntity getAll(@PageableDefault(value = 2000, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity(receiptPaymentAccountService.queryAll(pageable),HttpStatus.OK);
     }
@@ -44,14 +44,13 @@ public class ReceiptPaymentAccountController {
     @Log("查询ReceiptPaymentAccount")
     @ApiOperation(value = "查询ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccount")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
     public ResponseEntity getReceiptPaymentAccounts(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(receiptPaymentAccountService.queryAll(criteria,pageable),HttpStatus.OK);
     }
     @Log("根据支付方式以及部门查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据部门ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountByDeptId/{dictailId}/{deptId}")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
     public ResponseEntity receiptPaymentAccountByDeptId(@PathVariable Long dictailId,@PathVariable Long deptId){
         return new ResponseEntity(receiptPaymentAccountService.findByDeptId(dictailId,deptId),HttpStatus.OK);
     }
@@ -59,7 +58,6 @@ public class ReceiptPaymentAccountController {
     @Log("根据Id查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据Id查询ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountById/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_SELECT')")
     public ResponseEntity receiptPaymentAccountById(@PathVariable Long id){
         return new ResponseEntity(receiptPaymentAccountService.findById(id),HttpStatus.OK);
     }
@@ -67,7 +65,7 @@ public class ReceiptPaymentAccountController {
     @Log("新增ReceiptPaymentAccount")
     @ApiOperation(value = "新增ReceiptPaymentAccount")
     @PostMapping(value = "/receiptPaymentAccount")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_CREATE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_CREATE')")
     public ResponseEntity create(@Validated @RequestBody ReceiptPaymentAccount resources){
         return new ResponseEntity(receiptPaymentAccountService.create(resources),HttpStatus.CREATED);
     }
@@ -75,7 +73,7 @@ public class ReceiptPaymentAccountController {
     @Log("修改ReceiptPaymentAccount")
     @ApiOperation(value = "修改ReceiptPaymentAccount")
     @PutMapping(value = "/receiptPaymentAccount")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody ReceiptPaymentAccount resources){
         receiptPaymentAccountService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -84,9 +82,17 @@ public class ReceiptPaymentAccountController {
     @Log("删除ReceiptPaymentAccount")
     @ApiOperation(value = "删除ReceiptPaymentAccount")
     @DeleteMapping(value = "/receiptPaymentAccount/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','RECEIPTPAYMENTACCOUNT_ALL','RECEIPTPAYMENTACCOUNT_DELETE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         receiptPaymentAccountService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("部门查询ReceiptPaymentAccount")
+    @ApiOperation(value = "根据部门ReceiptPaymentAccount")
+    @GetMapping(value = "/receiptPaymentAccount/{deptId}")
+    @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
+    public ResponseEntity queryByDeptId(@PathVariable Long deptId){
+        return new ResponseEntity(receiptPaymentAccountService.queryByDeptId(deptId),HttpStatus.OK);
     }
 }

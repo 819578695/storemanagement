@@ -29,7 +29,7 @@ public class FundFlowingController {
     @Log("查询所有FundFlowing")
     @ApiOperation(value = "查询所有FundFlowing")
     @GetMapping(value = "/fundFlowingAll")
-    @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_SELECT')")
     public ResponseEntity fundFlowingAll(FundFlowingQueryCriteria criteria){
         return new ResponseEntity(fundFlowingService.queryExportAll(criteria),HttpStatus.OK);
     }
@@ -37,7 +37,7 @@ public class FundFlowingController {
     @Log("查询FundFlowing")
     @ApiOperation(value = "查询FundFlowing")
     @GetMapping(value = "/fundFlowing")
-    @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_SELECT')")
+    @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_SELECT')")
     public ResponseEntity getJournalAccountOfCapitals(FundFlowingQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(fundFlowingService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -45,7 +45,7 @@ public class FundFlowingController {
     @Log("新增FundFlowing")
     @ApiOperation(value = "新增FundFlowing")
     @PostMapping(value = "/fundFlowing")
-    @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_CREATE')")
+    @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_CREATE')")
     public ResponseEntity create(@Validated @RequestBody FundFlowing resources){
         return new ResponseEntity(fundFlowingService.create(resources),HttpStatus.CREATED);
     }
@@ -53,7 +53,7 @@ public class FundFlowingController {
     @Log("修改FundFlowing")
     @ApiOperation(value = "修改FundFlowing")
     @PutMapping(value = "/fundFlowing")
-    @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_EDIT')")
+    @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_EDIT')")
     public ResponseEntity update(@Validated @RequestBody FundFlowing resources){
         fundFlowingService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -62,7 +62,7 @@ public class FundFlowingController {
     @Log("删除FundFlowing")
     @ApiOperation(value = "删除FundFlowing")
     @DeleteMapping(value = "/fundFlowing/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','JOURNALACCOUNTOFCAPITAL_ALL','JOURNALACCOUNTOFCAPITAL_DELETE')")
+    @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_DELETE')")
     public ResponseEntity delete(@PathVariable Long id){
         fundFlowingService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
