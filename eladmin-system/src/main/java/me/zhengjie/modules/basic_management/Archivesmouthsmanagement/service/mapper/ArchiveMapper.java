@@ -17,9 +17,7 @@ public interface ArchiveMapper extends EntityMapper<ArchiveDto, Archivesmouthsma
             @Mapping(source = "archivesmouthsmanagement.id",target = "id"),
             @Mapping(source = "dictDetail.id",target = "stalltype"),
             @Mapping(source = "dictDetail.label",target = "stalltypeName"),
-            @Mapping(source = "city.areaId",target = "areaId"),
-            @Mapping(source = "city.areaName",target = "areaName"),
             @Mapping(source = "dept.id",target = "deptId")
     })
-    ArchiveDto toDtos(Archivesmouthsmanagement archivesmouthsmanagement, DictDetail dictDetail, City city, Dept dept);
+    ArchiveDto toDtos(Archivesmouthsmanagement archivesmouthsmanagement, DictDetail dictDetail, Dept dept);
 }
