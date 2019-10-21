@@ -147,17 +147,14 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         if (resources!=null){
             //(建议写关联表)
             //修改后的档口信息
+            //合同會綁定租戶和檔口
             Archivesmouthsmanagement archivesmouthsmanagementAfter = archivesmouthsmanagementRepository.findById(resources.getArchivesmouthsmanagement().getId()).get();//
             archivesmouthsmanagementAfter.setTenementName(tenantinformationRepository.findById(resources.getTenantinformation().getId()).get().getLinkman());
-
             //如果修改后档口不同应该将之后的档口更新，将之前的档口释放
             if (resources.getArchivesmouthsmanagement().getId()!=leaseContract.getArchivesmouthsmanagement().getId()){
                 Archivesmouthsmanagement archivesmouthsmanagementBefore = archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get();//
                 archivesmouthsmanagementBefore.setTenementName(null);
             }
-
-            //新增合同會綁定租戶和檔口
-
         }
         leaseContract.copy(resources);
         leaseContractRepository.save(leaseContract);
@@ -178,14 +175,13 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                     archivesmouthsmanagement.setTenementName(null);
                     archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
                 }
-
-
             leaseContractRepository.deleteById(id);
         }
 
     }
 
     @Override
+    //合同到期的定时任务查询
     public Object findTask() {
         //修改合同信息
         List<LeaseContract> leaseContractList = leaseContractRepository.findAll();
