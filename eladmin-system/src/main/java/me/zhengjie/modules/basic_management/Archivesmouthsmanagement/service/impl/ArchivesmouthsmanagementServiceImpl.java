@@ -70,6 +70,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
 
     @Override
     public  Map publiccity(Long id){
+        //微信小程序获得所有信息和总和
         Map map = new HashMap();
         List<Archivesmouthsmanagement> list = archivesmouthsmanagementRepository.findByAreaId(id);
         /*int num = archivesmouthsmanagementRepository.findBycoum(id);*/
@@ -119,6 +120,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
+        //判断档口是否唯一
         try {
             return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
         }catch (DataIntegrityViolationException s){
@@ -129,6 +131,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void update(Archivesmouthsmanagement resources) {
+        //判断档口是否唯一
         try {
             Optional<Archivesmouthsmanagement> optionalTenantinformation = archivesmouthsmanagementRepository.findById(resources.getId());
             ValidationUtil.isNull( optionalTenantinformation,"Archivesmouthsmanagement","id",resources.getId());
@@ -148,6 +151,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
 
     @Override
     public String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        //上传文件
         String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/pictureExamine",contractNo );
         try {
             return imgUrl;

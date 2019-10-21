@@ -123,6 +123,7 @@ public class BasicsParkServiceImpl implements BasicsParkService {
         basicsParkRepository.save(basicsPark);
     }
 
+//原来七牛云上传文件或图片
     /*@Override
     @Transactional(rollbackFor = Throwable.class)
     public BasicsPark updatesc(MultipartFile multipartFile) {
@@ -152,6 +153,7 @@ public class BasicsParkServiceImpl implements BasicsParkService {
 
     @Override
     public String uploadPicture(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        //图片上传到服务器
         String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/contract/picture",contractNo );
         try {
             return imgUrl;
