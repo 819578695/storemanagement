@@ -49,6 +49,7 @@ public class MaintainServiceImpl implements MaintainService {
 
     @Override
     public Object queryAll(MaintainQueryCriteria criteria, Pageable pageable){
+        if (criteria.getDeptId() != 1){
             Page<Maintain> page = maintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, criteria, criteriaBuilder), pageable);
             List<MaintainDTO> MaintainDTOs = new ArrayList<>();
             for (Maintain maintain : page.getContent()) {
@@ -58,6 +59,17 @@ public class MaintainServiceImpl implements MaintainService {
                 MaintainDTOs.add(dto);
             }
             return PageUtil.toPage(MaintainDTOs, page.getTotalElements());
+        }
+        //如果是总部查询所有
+        Page<Maintain> page = maintainRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root, new MaintainQueryCriteria(), criteriaBuilder), pageable);
+        List<MaintainDTO> MaintainDTOs = new ArrayList<>();
+        for (Maintain maintain : page.getContent()) {
+            MaintainDTO dto = maintainMapper.toDTO(maintain, maintain.getDept());
+            BigDecimal maintainSum = receiptPaymentAccountRepository.findByMaintain(dto.getDeptId());
+            dto.setRemaining(maintainSum);
+            MaintainDTOs.add(dto);
+        }
+        return PageUtil.toPage(MaintainDTOs, page.getTotalElements());
     }
 
     @Override
