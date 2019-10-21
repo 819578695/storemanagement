@@ -7,7 +7,7 @@ import me.zhengjie.annotation.Query;
 public class ArchivesmouthsmanagementQueryCriteria {
 
     // 模糊
-    @Query(type = Query.Type.INNER_LIKE)
+    @Query(type = Query.Type.EQUAL)
     private Long id;
 
     // 模糊
