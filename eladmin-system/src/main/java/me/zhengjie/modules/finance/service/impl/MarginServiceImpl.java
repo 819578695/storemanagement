@@ -5,8 +5,6 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.finance.domain.FundMargin;
-import me.zhengjie.modules.finance.domain.MaintarinDetail;
-import me.zhengjie.modules.finance.repository.FundFlowingRepository;
 import me.zhengjie.modules.finance.repository.MaintarinDetailRepository;
 import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.finance.service.MarginService;
@@ -68,7 +66,7 @@ public class MarginServiceImpl implements MarginService {
         sql += " where f.type_id =:incomeId ";
         map.put("incomeId",criteria.getTypeId());
         //拼接查询
-        if (criteria.getDeptId() != null){
+        if (criteria.getDeptId() != null && criteria.getDeptId() != 1){
             sql += " and f.dept_id = :deptId ";
             map.put("deptId",criteria.getDeptId());
         }
@@ -130,7 +128,7 @@ public class MarginServiceImpl implements MarginService {
             }
         }
         criteria.setTypeId(incomeId);
-        return this.query(criteria);
+        return query(criteria);
     }
     @Override
     public List<TreeDTO> buildTree(MarginQueryCriteria criteria) {

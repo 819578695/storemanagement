@@ -68,9 +68,6 @@ public class MaintarinDetailServiceImpl implements MaintarinDetailService {
     private DictDetailRepository DictDetailRepository;
 
     @Autowired
-    private FundFlowingMapper fundFlowingMapper;
-
-    @Autowired
     private DeptRepository deptRepository;
     @Override
     public Object queryAll(MaintarinDetailQueryCriteria criteria, Pageable pageable){
@@ -153,7 +150,11 @@ public class MaintarinDetailServiceImpl implements MaintarinDetailService {
         //扣除源账户金额
         if (s == "subtract" ){
             remaining = origin.getRemaining().subtract(remaing);
+            if (remaining.doubleValue() < 0 ){
+                throw new BadRequestException("源目标账户余额不足");
+            }
             DictDetail tradeType = DictDetailRepository.findByDictIdAndValue(DictRepository.findByName("trade_type").getId(), "1");
+
             flowing.setTypeDict(tradeType);
         }else {
             //添加金额
