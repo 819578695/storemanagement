@@ -21,4 +21,5 @@ public class LeaseContractQueryCriteria{
     private Date endDate;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
+
 }

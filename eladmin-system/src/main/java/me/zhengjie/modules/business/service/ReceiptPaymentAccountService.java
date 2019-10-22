@@ -38,6 +38,7 @@ public interface ReceiptPaymentAccountService {
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(ReceiptPaymentAccountQueryCriteria criteria);
 
+    //根据部门id和支付id查询
     Object findByDeptId(Long dictailId,Long deptId);
 
     /**

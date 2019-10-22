@@ -200,6 +200,7 @@ public class ParkCostServiceImpl implements ParkCostService {
         parkCostRepository.deleteById(id);
     }
 
+    /*图表查询*/
     @Override
     public Object findCostsMoney(Long deptId) {
 
