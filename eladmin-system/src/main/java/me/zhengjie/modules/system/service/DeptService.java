@@ -80,5 +80,6 @@ public interface DeptService {
      * 登陆session存储查询
      * @return
      */
+    @Cacheable(keyGenerator = "keyGenerator" , unless="#result == null" )
     Object queryALLs();
 }
