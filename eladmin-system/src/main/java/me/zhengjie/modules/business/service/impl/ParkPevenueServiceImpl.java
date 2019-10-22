@@ -307,7 +307,7 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
         }*/
         parkPevenueRepository.deleteById(id);
     }
-
+/*图表统计*/
     @Override
     public Object findPevenueMoney(Long deptId) {
         return parkPevenueRepository.findByDeptIdSumRent(deptId);

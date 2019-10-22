@@ -71,6 +71,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
         Page<LeaseContract> page = leaseContractRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
         List<LeaseContractDTO> leaseContractDTOS = new ArrayList<>();
         for (LeaseContract leaseContract : page.getContent()) {
+            //查询合同的欠款
             List<ParkPevenue> parkPevenues =parkPevenueRepository.findByLeaseContractIdAndType(leaseContract.getId());
             BigDecimal totalMoney = new BigDecimal(0);
             for(ParkPevenue parkPevenue : parkPevenues){
@@ -89,6 +90,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
     }
 
     @Override
+   //根据部门id查询
     public Object findByDeptId(Long deptId) {
         List<LeaseContract> leaseContractList = new ArrayList<>();
    List<LeaseContractSmallDTO> leaseContractDTOS = leaseContractRepository.findbyleaseContractSmall(deptId);
@@ -127,11 +129,13 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                 archivesmouthsmanagementRepository.save(archivesmouthsmanagement);
                 tenantinformationRepository.save(tenantinformation);
            }
+           //自动生成合同编号
             JwtUser jwtUser =(JwtUser) SecurityUtils.getUserDetails();
             Long no = 0001l;
             if (leaseContractRepository.findByNewcontractNo(resources.getDept().getId())!=null){
                 no=Long.valueOf(leaseContractRepository.findByNewcontractNo(resources.getDept().getId()))+0001l;
             }
+            //部门编号+当前时间+流水号
             resources.setContractNo(jwtUser.getDeptNo()+ StringUtils.getCurentDate()+new DecimalFormat("0000").format(no));
         }
         return leaseContractMapper.toDto(leaseContractRepository.save(resources));
