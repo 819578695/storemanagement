@@ -28,7 +28,6 @@ public class BasicsClientController {
     @Log("查询BasicsClient")
     @ApiOperation(value = "查询BasicsClient")
     @GetMapping(value = "/basicsClient")
-    @PreAuthorize("hasAnyRole('ADMIN','BASICSCLIENT_ALL','BASICSCLIENT_SELECT')")
     public ResponseEntity getBasicsClients(BasicsClientQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(basicsClientService.queryAll(criteria,pageable),HttpStatus.OK);
     }
@@ -36,7 +35,6 @@ public class BasicsClientController {
     @Log("新增BasicsClient")
     @ApiOperation(value = "新增BasicsClient")
     @PostMapping(value = "/basicsClient")
-    @PreAuthorize("hasAnyRole('ADMIN','BASICSCLIENT_ALL','BASICSCLIENT_CREATE')")
     public ResponseEntity create(@Validated @RequestBody BasicsClient resources){
         return new ResponseEntity(basicsClientService.create(resources),HttpStatus.CREATED);
     }
@@ -44,7 +42,6 @@ public class BasicsClientController {
     @Log("修改BasicsClient")
     @ApiOperation(value = "修改BasicsClient")
     @PutMapping(value = "/basicsClient")
-    @PreAuthorize("hasAnyRole('ADMIN','BASICSCLIENT_ALL','BASICSCLIENT_EDIT')")
     public ResponseEntity update(@Validated @RequestBody BasicsClient resources){
         basicsClientService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
@@ -53,7 +50,6 @@ public class BasicsClientController {
     @Log("删除BasicsClient")
     @ApiOperation(value = "删除BasicsClient")
     @DeleteMapping(value = "/basicsClient/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','BASICSCLIENT_ALL','BASICSCLIENT_DELETE')")
     public ResponseEntity delete(@PathVariable Integer id){
         basicsClientService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
