@@ -23,10 +23,13 @@ public class ArchivesmouthsmanagementQueryCriteria {
     // 模糊
     @Query(type = Query.Type.INNER_LIKE)
     private String leasetype;
-
     //部门id
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
+
+    //类型id
+    @Query(propName = "id",joinName = "dictDetail" ,type = Query.Type.EQUAL)
+    private Long stallType;
 
     //是否租出\
     @Query(type = Query.Type.IF_RENT)
