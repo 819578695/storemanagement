@@ -115,6 +115,12 @@ public class ParkPevenueServiceImpl implements ParkPevenueService {
     @Transactional(rollbackFor = Exception.class)
     public ParkPevenueDTO create(ParkPevenue resources) {
         ParkPevenue p =resources;
+      if(p.getStartTime()==null){
+          p.setStartTime(new Timestamp(System.currentTimeMillis()));
+      }
+        if(p.getEndTime()==null){
+            p.setEndTime(new Timestamp(System.currentTimeMillis()));
+        }
         DictDetail underDict =dictDetailRepository.findByDictIdAndValue(dictRepository.findByName("pevenue_status").getId(),"PEVENUE_UNDER");//欠付
         if (p!=null)
         {

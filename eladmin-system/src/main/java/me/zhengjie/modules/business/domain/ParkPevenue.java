@@ -148,6 +148,10 @@ public class ParkPevenue implements Serializable {
     @Column(name = "is_vertify")
     private int isVertify;
 
+    // 备注
+    @Column(name = "pevenue_remarks")
+    private String pevenueaRemarks;
+
     public void copy(ParkPevenue source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }
