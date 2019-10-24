@@ -118,6 +118,9 @@ public class ParkPevenueDTO implements Serializable {
     // 审核状态
     private int  isVertify;
 
+    // 备注
+    private String pevenueaRemarks;
+
 
 
 

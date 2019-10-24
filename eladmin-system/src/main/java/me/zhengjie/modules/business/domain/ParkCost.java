@@ -117,6 +117,10 @@ public class ParkCost implements Serializable {
     @Column(name = "is_vertify")
     private int isVertify;
 
+    // 备注
+    @Column(name = "cost_remarks")
+    private String costRemarks;
+
 
     public void copy(ParkCost source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));

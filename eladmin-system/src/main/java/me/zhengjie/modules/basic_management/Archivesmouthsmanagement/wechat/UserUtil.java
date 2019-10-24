@@ -12,8 +12,8 @@ public class UserUtil {
     //  获取微信id的方法
     public static String getopenid(String code) {
         BufferedReader in = null;
-        String appid="wxd42d014406bc753a";
-        String secret="0ded69891c5e9b98b35cc3b09d0c07b6";
+        String appid="wxe25e753cef1e6846";
+        String secret="daa1b8490f19aebe6a2a96c05f27fbde";
         //appid和secret是开发者分别是小程序ID和小程序密钥，开发者通过微信公众平台-》设置-》开发设置就可以直接获取，
         String url="https://api.weixin.qq.com/sns/jscode2session?appid="
                 +appid+"&secret="+secret+"&js_code="+code+"&grant_type=authorization_code";
