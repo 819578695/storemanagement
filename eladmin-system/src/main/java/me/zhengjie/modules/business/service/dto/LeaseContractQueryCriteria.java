@@ -14,7 +14,7 @@ import me.zhengjie.annotation.Query;
 @Data
 public class LeaseContractQueryCriteria{
     @Query(propName = "housenumber",joinName = "archivesmouthsmanagement" ,type = Query.Type.INNER_LIKE)
-    private Long houseNumber;
+    private String houseNumber;
     @Query(type = Query.Type.GREATER_THAN)
     private Date startDate;
     @Query(type = Query.Type.LESS_THAN)

@@ -50,10 +50,10 @@ public class LeaseContractSmallDTO implements Serializable {
     private Long stallId;
 
     //门牌号
-    private Long houseNumber;
+    private String houseNumber;
 
 
-    public LeaseContractSmallDTO(Long id, String contractNo, String contractName, String remarks, Date startDate, Date endDate, Date rentFreeStartTime, Date rentFreeEndTime, Long tenementId, String tenementName, Long stallId, Long houseNumber) {
+    public LeaseContractSmallDTO(Long id, String contractNo, String contractName, String remarks, Date startDate, Date endDate, Date rentFreeStartTime, Date rentFreeEndTime, Long tenementId, String tenementName, Long stallId, String houseNumber) {
         this.id = id;
         this.contractNo = contractNo;
         this.contractName = contractName;

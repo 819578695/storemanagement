@@ -8,12 +8,12 @@ public class ArchiveTreeDto {
     private Long id;
 
     //门牌号
-    private Long name;
+    private String name;
 
-    //档口编号
+    //档口ID
     private Long deptId;
 
-    public ArchiveTreeDto(Long id, Long name,Long deptId) {
+    public ArchiveTreeDto(Long id, String name,Long deptId) {
         this.id = id;
         this.name = name;
         this.deptId = deptId;

@@ -10,9 +10,9 @@ public class ArchivesmouthsmanagementSmallDTO implements Serializable {
     private Long id;
 
     //门牌号
-    private Long housenumber;
+    private String housenumber;
 
-    public ArchivesmouthsmanagementSmallDTO(Long id, Long housenumber) {
+    public ArchivesmouthsmanagementSmallDTO(Long id, String housenumber) {
         this.id = id;
         this.housenumber = housenumber;
     }
