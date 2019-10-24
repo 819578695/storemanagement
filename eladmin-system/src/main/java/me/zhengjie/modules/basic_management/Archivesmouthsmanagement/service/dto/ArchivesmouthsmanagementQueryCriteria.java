@@ -3,6 +3,8 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dt
 import lombok.Data;
 import me.zhengjie.annotation.Query;
 
+import javax.validation.constraints.NotNull;
+
 @Data
 public class ArchivesmouthsmanagementQueryCriteria {
 
@@ -26,4 +28,7 @@ public class ArchivesmouthsmanagementQueryCriteria {
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
 
+    //是否租出\
+    @Query(type = Query.Type.IF_RENT)
+    private String tenementName;
 }
