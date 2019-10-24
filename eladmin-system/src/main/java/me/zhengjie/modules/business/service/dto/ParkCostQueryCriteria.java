@@ -20,7 +20,7 @@ public class ParkCostQueryCriteria{
     @Query(type = Query.Type.EQUAL)
     private Integer isVertify;
     @Query(propName = "housenumber",joinName = "archivesmouthsmanagement" ,type = Query.Type.INNER_LIKE)
-    private Long houseNumber;
+    private String houseNumber;
     @Query(type = Query.Type.GREATER_THAN_DATE)
     private Date tradDateStart;
     @Query(type = Query.Type.LESS_THAN_DATE)

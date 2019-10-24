@@ -65,7 +65,7 @@ public class ParkPevenueDTO implements Serializable {
     private Timestamp createTime;
 
     //门牌号
-    private Long houseNumber;
+    private String houseNumber;
 
     //部门名称
     private String deptName;

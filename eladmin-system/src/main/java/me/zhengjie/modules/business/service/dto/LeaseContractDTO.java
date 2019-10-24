@@ -56,7 +56,7 @@ public class LeaseContractDTO implements Serializable {
     private String fileName;
 
     //门牌号
-    private Long houseNumber;
+    private String houseNumber;
 
     //部门名称
     private String deptName;

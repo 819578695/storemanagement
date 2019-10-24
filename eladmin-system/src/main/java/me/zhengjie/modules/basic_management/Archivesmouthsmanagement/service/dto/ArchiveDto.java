@@ -11,7 +11,7 @@ public class ArchiveDto implements Serializable {
     private Long id;
 
     //门牌号
-    private Long housenumber;
+    private String housenumber;
 
     //面积
     private String acreage;

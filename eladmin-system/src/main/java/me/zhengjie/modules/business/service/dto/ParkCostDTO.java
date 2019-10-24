@@ -54,7 +54,7 @@ public class ParkCostDTO implements Serializable {
     private String paymentTypeName;
 
     /*//门牌号
-    private Long houseNumber;*/
+    private String houseNumber;*/
 
     //合同名称
     private String rentContractName;
