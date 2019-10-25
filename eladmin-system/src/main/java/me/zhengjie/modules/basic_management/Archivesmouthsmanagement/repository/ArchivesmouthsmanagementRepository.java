@@ -30,6 +30,11 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
     @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementSmallDTO(l.id,l.housenumber) from Archivesmouthsmanagement l where l.dept.id=?1")
     List<Archivesmouthsmanagement> tenantinformationSmallDto(Long deptId);
 
+    //微信接口 查询最低级信息
     @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.WechatStallDto(bs.housenumber, bs.acreage , d.label ,bs.picturetoview) from Archivesmouthsmanagement bs left join DictDetail d on d.id = bs.dictDetail.id where bs.id =?1")
     List wechatStall (Long id);
+
+    //判断在一个公司下 档口号是否存在
+    @Query(value = "select * from basics_stall where housenumber=?1 and dept_id=?2", nativeQuery = true)
+    Object HousenumberExistDeptId(String housenumber , Long deptId);
 }

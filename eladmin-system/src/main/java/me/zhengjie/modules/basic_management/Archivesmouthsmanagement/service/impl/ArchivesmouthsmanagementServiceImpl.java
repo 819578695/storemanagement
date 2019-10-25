@@ -121,12 +121,18 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
-        //判断档口是否唯一
-        try {
+        Object o = archivesmouthsmanagementRepository.HousenumberExistDeptId(resources.getHousenumber(), resources.getDept().getId());
+        if (o == null){
+            return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
+        }
+        throw new BadRequestException("您输入的档口已经存在,无法进行添加");
+
+        //判断档口是否唯一   注释后数据库索引已经删除
+        /*try {
             return archivesmouthsmanagementMapper.toDto(archivesmouthsmanagementRepository.save(resources));
         }catch (DataIntegrityViolationException s){
             throw new BadRequestException("您输入的档口已经存在,无法进行添加");
-        }
+        }*/
     }
 
     @Override
