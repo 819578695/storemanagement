@@ -55,7 +55,7 @@ public class RoleController {
         return new ResponseEntity(roleService.queryAll(pageable),HttpStatus.OK);
     }
 
-    @Log("查询角色")
+//    @Log("查询角色")
     @GetMapping(value = "/roles")
     @PreAuthorize("hasAnyRole('ADMIN','ROLES_ALL','ROLES_SELECT')")
     public ResponseEntity getRoles(CommonQueryCriteria criteria, Pageable pageable){

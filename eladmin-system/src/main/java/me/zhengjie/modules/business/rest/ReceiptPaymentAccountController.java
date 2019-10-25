@@ -33,7 +33,7 @@ public class ReceiptPaymentAccountController {
      * 返回全部的角色，新增用户时下拉选择
      * @return
      */
-    @Log("查询所有ReceiptPaymentAccount")
+//    @Log("查询所有ReceiptPaymentAccount")
     @ApiOperation(value = "查询所有ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccount/all")
     @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
@@ -41,21 +41,21 @@ public class ReceiptPaymentAccountController {
         return new ResponseEntity(receiptPaymentAccountService.queryAll(pageable),HttpStatus.OK);
     }
 
-    @Log("查询ReceiptPaymentAccount")
+//    @Log("查询ReceiptPaymentAccount")
     @ApiOperation(value = "查询ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccount")
     @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")
     public ResponseEntity getReceiptPaymentAccounts(ReceiptPaymentAccountQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(receiptPaymentAccountService.queryAll(criteria,pageable),HttpStatus.OK);
     }
-    @Log("根据支付方式以及部门查询ReceiptPaymentAccount")
+//    @Log("根据支付方式以及部门查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据部门ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountByDeptId/{dictailId}/{deptId}")
     public ResponseEntity receiptPaymentAccountByDeptId(@PathVariable Long dictailId,@PathVariable Long deptId){
         return new ResponseEntity(receiptPaymentAccountService.findByDeptId(dictailId,deptId),HttpStatus.OK);
     }
 
-    @Log("根据Id查询ReceiptPaymentAccount")
+//    @Log("根据Id查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据Id查询ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccountById/{id}")
     public ResponseEntity receiptPaymentAccountById(@PathVariable Long id){
@@ -88,7 +88,7 @@ public class ReceiptPaymentAccountController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("部门查询ReceiptPaymentAccount")
+//    @Log("部门查询ReceiptPaymentAccount")
     @ApiOperation(value = "根据部门ReceiptPaymentAccount")
     @GetMapping(value = "/receiptPaymentAccount/{deptId}")
     @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_ALL','ACCOUNT_SELECT')")

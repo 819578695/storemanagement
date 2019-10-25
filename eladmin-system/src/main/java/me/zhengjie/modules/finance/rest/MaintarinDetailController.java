@@ -1,7 +1,6 @@
 package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.finance.domain.MaintarinDetail;
 import me.zhengjie.modules.finance.service.MaintarinDetailService;
 import me.zhengjie.modules.finance.service.dto.AccountAllotDTO;
 import me.zhengjie.modules.finance.service.dto.MaintarinDetailQueryCriteria;
@@ -26,7 +25,7 @@ public class MaintarinDetailController {
     @Autowired
     private MaintarinDetailService maintarinDetailService;
 
-    @Log("查询FinanceMaintarinDetail")
+//    @Log("查询FinanceMaintarinDetail")
     @ApiOperation(value = "查询FinanceMaintarinDetail")
     @GetMapping(value = "/maintarinDetail")
     @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_SELECT','ACCOUNT_SELECT')")
@@ -70,7 +69,7 @@ public class MaintarinDetailController {
         return new ResponseEntity(HttpStatus.OK);
     }*/
 
-    @Log("查询金额")
+//    @Log("查询金额")
     @GetMapping(value = "/getMoney")
     @PreAuthorize("hasAnyRole('ADMIN','ACCOUNT_SELECT','ACCOUNT_SELECT')")
     public  ResponseEntity getMoney(MaintarinDetailQueryCriteria criteria){

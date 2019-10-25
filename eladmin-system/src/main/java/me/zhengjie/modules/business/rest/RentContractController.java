@@ -27,7 +27,7 @@ public class RentContractController {
     @Autowired
     private RentContractService rentContractService;
 
-    @Log("查询RentContract")
+//    @Log("查询RentContract")
     @ApiOperation(value = "查询RentContract")
     @GetMapping(value = "/rentContract")
     @PreAuthorize("hasAnyRole('ADMIN','RENTCONTRACT_ALL','RENTCONTRACT_SELECT')")
@@ -35,7 +35,7 @@ public class RentContractController {
         return new ResponseEntity(rentContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("根据部门查询RentContract")
+//    @Log("根据部门查询RentContract")
     @ApiOperation(value = "根据部门RentContract")
     @GetMapping(value = "/rentContractByDeptId/{deptId}")
     public ResponseEntity rentContractByDeptId(@PathVariable Long deptId){

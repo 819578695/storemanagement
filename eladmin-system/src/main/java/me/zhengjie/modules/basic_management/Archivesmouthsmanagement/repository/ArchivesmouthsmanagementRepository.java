@@ -29,4 +29,7 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
 
     @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementSmallDTO(l.id,l.housenumber) from Archivesmouthsmanagement l where l.dept.id=?1")
     List<Archivesmouthsmanagement> tenantinformationSmallDto(Long deptId);
+
+    @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.WechatStallDto(bs.housenumber, bs.acreage , d.label ,bs.picturetoview) from Archivesmouthsmanagement bs left join DictDetail d on d.id = bs.dictDetail.id where bs.id =?1")
+    List wechatStall (Long id);
 }

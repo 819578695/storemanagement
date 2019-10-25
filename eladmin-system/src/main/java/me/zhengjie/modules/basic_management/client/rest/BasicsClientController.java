@@ -25,7 +25,7 @@ public class BasicsClientController {
     @Autowired
     private BasicsClientService basicsClientService;
 
-    @Log("查询BasicsClient")
+//    @Log("查询BasicsClient")
     @ApiOperation(value = "查询BasicsClient")
     @GetMapping(value = "/basicsClient")
     public ResponseEntity getBasicsClients(BasicsClientQueryCriteria criteria, Pageable pageable){

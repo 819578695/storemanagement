@@ -1,7 +1,6 @@
 package me.zhengjie.modules.finance.rest;
 
 import me.zhengjie.aop.log.Log;
-import me.zhengjie.modules.business.service.dto.ProcurementInformationQueryCriteria;
 import me.zhengjie.modules.finance.domain.FundFlowing;
 import me.zhengjie.modules.finance.service.FundFlowingService;
 import me.zhengjie.modules.finance.service.dto.FundFlowingQueryCriteria;
@@ -26,7 +25,7 @@ public class FundFlowingController {
     @Autowired
     private FundFlowingService fundFlowingService;
 
-    @Log("查询所有FundFlowing")
+//    @Log("查询所有FundFlowing")
     @ApiOperation(value = "查询所有FundFlowing")
     @GetMapping(value = "/fundFlowingAll")
     @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_SELECT')")
@@ -34,7 +33,7 @@ public class FundFlowingController {
         return new ResponseEntity(fundFlowingService.queryExportAll(criteria),HttpStatus.OK);
     }
 
-    @Log("查询FundFlowing")
+//    @Log("查询FundFlowing")
     @ApiOperation(value = "查询FundFlowing")
     @GetMapping(value = "/fundFlowing")
     @PreAuthorize("hasAnyRole('ADMIN','FUNDFLOWING_ALL','FUNDFLOWING_SELECT')")

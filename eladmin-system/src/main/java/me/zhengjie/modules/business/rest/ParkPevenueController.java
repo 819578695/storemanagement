@@ -25,14 +25,14 @@ public class ParkPevenueController {
     @Autowired
     private ParkPevenueService parkPevenueService;
 
-    @Log("查询ParkPevenue")
+//    @Log("查询ParkPevenue")
     @ApiOperation(value = "查询ParkPevenue")
     @GetMapping(value = "/parkPevenue")
     @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_SELECT')")
     public ResponseEntity getParkPevenues(ParkPevenueQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(parkPevenueService.queryAll(criteria,pageable),HttpStatus.OK);
     }
-    @Log("查询所有ParkPevenue")
+//    @Log("查询所有ParkPevenue")
     @ApiOperation(value = "查询所有ParkPevenue")
     @GetMapping(value = "/parkPevenueAll")
     @PreAuthorize("hasAnyRole('ADMIN','PARKPEVENUE_ALL','PARKPEVENUE_EXPORT_ALL')")
@@ -84,7 +84,7 @@ public class ParkPevenueController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("查询ParkPevenue统计数据")
+//    @Log("查询ParkPevenue统计数据")
     @ApiOperation(value = "查询ParkPevenue统计数据")
     @GetMapping (value = "/findPevenueMoney/{deptId}")
     public ResponseEntity findPevenueMoney(@PathVariable Long deptId){

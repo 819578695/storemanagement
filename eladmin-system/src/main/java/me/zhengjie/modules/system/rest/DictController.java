@@ -26,7 +26,7 @@ public class DictController {
 
     private static final String ENTITY_NAME = "dict";
 
-    @Log("查询字典")
+//    @Log("查询字典")
     @GetMapping(value = "/dict")
     @PreAuthorize("hasAnyRole('ADMIN','DICT_ALL','DICT_SELECT')")
     public ResponseEntity getDicts(DictDTO resources, Pageable pageable){

@@ -30,14 +30,14 @@ public class ParkCostController {
     @Autowired
     private ParkCostService parkCostService;
 
-    @Log("查询ParkCost")
+//    @Log("查询ParkCost")
     @ApiOperation(value = "查询ParkCost")
     @GetMapping(value = "/parkCost/all")
     @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
     public ResponseEntity getParkCostALL(@PageableDefault(value = 2000, direction = Sort.Direction.ASC) Pageable pageable){
         return new ResponseEntity(parkCostService.queryAll(pageable),HttpStatus.OK);
     }
-    @Log("查询ParkCost")
+//    @Log("查询ParkCost")
     @ApiOperation(value = "查询ParkCost")
     @GetMapping(value = "/parkCost")
     @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_SELECT')")
@@ -45,7 +45,7 @@ public class ParkCostController {
         return new ResponseEntity(parkCostService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询所有ParkCost")
+//    @Log("查询所有ParkCost")
     @ApiOperation(value = "查询所有ParkCost")
     @GetMapping(value = "/parkCostAll")
     @PreAuthorize("hasAnyRole('ADMIN','PARKCOST_ALL','PARKCOST_EXPORT_ALL')")
@@ -88,7 +88,7 @@ public class ParkCostController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("查询ParkCost统计数据")
+//    @Log("查询ParkCost统计数据")
     @ApiOperation(value = "查询ParkCost统计数据")
     @GetMapping (value = "/findCostsMoney/{deptId}")
     public ResponseEntity findCostsMoney(@PathVariable Long deptId){

@@ -55,7 +55,7 @@ public class UserController {
     @Autowired
     private VerificationCodeService verificationCodeService;
 
-    @Log("查询用户")
+//    @Log("查询用户")
     @GetMapping(value = "/users")
     @PreAuthorize("hasAnyRole('ADMIN','USER_ALL','USER_SELECT')")
     public ResponseEntity getUsers(UserQueryCriteria criteria, Pageable pageable){
@@ -127,6 +127,7 @@ public class UserController {
      * @param user
      * @return
      */
+    @Log("修改密码")
     @PostMapping(value = "/users/updatePass")
     public ResponseEntity updatePass(@RequestBody UserPassVo user){
         UserDetails userDetails = SecurityUtils.getUserDetails();

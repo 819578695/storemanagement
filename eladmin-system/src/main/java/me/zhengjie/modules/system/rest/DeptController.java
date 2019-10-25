@@ -31,13 +31,13 @@ public class DeptController {
 
     private static final String ENTITY_NAME = "dept";
 
-    @Log("查询所有")
+//    @Log("查询所有")
     @GetMapping(value = "/depts")
     public ResponseEntity getDeptAll(DeptQueryCriteria criteria){
         return new ResponseEntity(deptService.queryAll(criteria),HttpStatus.OK);
     }
 
-    @Log("查询部门")
+//    @Log("查询部门")
     @GetMapping(value = "/dept")
     @PreAuthorize("hasAnyRole('ADMIN','USER_ALL','USER_SELECT','DEPT_ALL','DEPT_SELECT')")
     public ResponseEntity getDepts(DeptQueryCriteria criteria){
@@ -73,7 +73,7 @@ public class DeptController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @Log("查询非总部网点")
+//    @Log("查询非总部网点")
     @GetMapping(value = "/getDeptAlls")
     public ResponseEntity getDeptAlls(){
         return new ResponseEntity(deptService.queryALLs(),HttpStatus.OK);

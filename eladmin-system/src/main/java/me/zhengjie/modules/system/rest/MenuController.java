@@ -59,7 +59,7 @@ public class MenuController {
         return new ResponseEntity(menuService.getMenuTree(menuService.findByPid(0L)),HttpStatus.OK);
     }
 
-    @Log("查询菜单")
+//    @Log("查询菜单")
     @GetMapping(value = "/menus")
     @PreAuthorize("hasAnyRole('ADMIN','MENU_ALL','MENU_SELECT')")
     public ResponseEntity getMenus(CommonQueryCriteria criteria){

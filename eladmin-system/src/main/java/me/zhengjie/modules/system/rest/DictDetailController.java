@@ -33,7 +33,7 @@ public class DictDetailController {
 
     private static final String ENTITY_NAME = "dictDetail";
 
-    @Log("查询字典详情")
+//    @Log("查询字典详情")
     @GetMapping(value = "/dictDetail")
     public ResponseEntity getDictDetails(DictDetailQueryCriteria criteria,
                                          @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){
@@ -41,7 +41,7 @@ public class DictDetailController {
         return new ResponseEntity(dictDetailService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询多个字典详情")
+//    @Log("查询多个字典详情")
     @GetMapping(value = "/dictDetail/map")
     public ResponseEntity getDictDetailMaps(DictDetailQueryCriteria criteria,
         @PageableDefault(value = 10, sort = {"sort"}, direction = Sort.Direction.ASC) Pageable pageable){

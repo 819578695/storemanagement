@@ -37,7 +37,7 @@ public class TenantinformationController {
     private TenantinformationService tenantinformationService;
 
 
-    @Log("查询Tenantinformation")
+//    @Log("查询Tenantinformation")
     @ApiOperation(value = "查询Tenantinformation")
     @GetMapping(value = "/tenantinformation")
     @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")
@@ -45,7 +45,7 @@ public class TenantinformationController {
         return new ResponseEntity(tenantinformationService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询档口")
+//    @Log("查询档口")
     @ApiOperation(value = "查询当前租户档口")
     @GetMapping(value = "/particulars/{id}")
     /*@PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")*/
@@ -70,14 +70,14 @@ public class TenantinformationController {
         tenantinformationService.update(resources);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
-    @Log("部门查询TenantinformationByDeptId")
+//    @Log("部门查询TenantinformationByDeptId")
     @ApiOperation(value = "部门查询TenantinformationByDeptId")
     @GetMapping(value = "/tenantinformationByDeptId/{deptId}")
     public ResponseEntity tenantinformationByDeptId(@PathVariable Long deptId){
         return new ResponseEntity(tenantinformationService.findByDeptId(deptId),HttpStatus.OK);
     }
 
-    @Log("查询TenantinformationByArchivesmouthsmanagementId")
+//    @Log("查询TenantinformationByArchivesmouthsmanagementId")
     @ApiOperation(value = "查询TenantinformationArchivesmouthsmanagementId")
     @GetMapping(value = "/tenantinformationByArchivesmouthsmanagementId/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")

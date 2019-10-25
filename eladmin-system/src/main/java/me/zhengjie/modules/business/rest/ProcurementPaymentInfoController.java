@@ -25,14 +25,14 @@ public class ProcurementPaymentInfoController {
     @Autowired
     private ProcurementPaymentInfoService procurementPaymentInfoService;
 
-    @Log("查询ProcurementPaymentInfo")
+//    @Log("查询ProcurementPaymentInfo")
     @ApiOperation(value = "查询ProcurementPaymentInfo")
     @GetMapping(value = "/procurementPaymentInfo")
     public ResponseEntity getProcurementPaymentInfos(ProcurementPaymentInfoQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(procurementPaymentInfoService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("根据采购id查询ProcurementPaymentInfo")
+//    @Log("根据采购id查询ProcurementPaymentInfo")
     @ApiOperation(value = "根据采购id查询ProcurementPaymentInfo")
     @GetMapping(value = "/procurementPaymentInfoById/{procurementInformationId}")
     public ResponseEntity getProcurementPaymentInfoById(@PathVariable Long procurementInformationId){

@@ -28,7 +28,7 @@ public class QuartzJobController {
     @Autowired
     private QuartzJobService quartzJobService;
 
-    @Log("查询定时任务")
+//    @Log("查询定时任务")
     @GetMapping(value = "/jobs")
     @PreAuthorize("hasAnyRole('ADMIN','JOB_ALL','JOB_SELECT')")
     public ResponseEntity getJobs(JobQueryCriteria criteria, Pageable pageable){

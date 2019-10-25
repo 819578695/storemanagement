@@ -38,7 +38,7 @@ public class PermissionController {
         return new ResponseEntity(permissionService.getPermissionTree(permissionService.findByPid(0L)),HttpStatus.OK);
     }
 
-    @Log("查询权限")
+//    @Log("查询权限")
     @GetMapping(value = "/permissions")
     @PreAuthorize("hasAnyRole('ADMIN','PERMISSION_ALL','PERMISSION_SELECT')")
     public ResponseEntity getPermissions(CommonQueryCriteria criteria){

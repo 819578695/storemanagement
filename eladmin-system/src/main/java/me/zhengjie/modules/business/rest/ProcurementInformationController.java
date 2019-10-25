@@ -25,14 +25,14 @@ public class ProcurementInformationController {
     @Autowired
     private ProcurementInformationService procurementInformationService;
 
-    @Log("查询ProcurementInformation")
+//    @Log("查询ProcurementInformation")
     @ApiOperation(value = "查询ProcurementInformation")
     @GetMapping(value = "/procurementInformation")
     @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTINFORMATION_ALL','PROCUREMENTINFORMATION_SELECT')")
     public ResponseEntity getProcurementInformations(ProcurementInformationQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(procurementInformationService.queryAll(criteria,pageable),HttpStatus.OK);
     }
-    @Log("查询所有ProcurementInformation")
+//    @Log("查询所有ProcurementInformation")
     @ApiOperation(value = "查询所有ProcurementInformation")
     @GetMapping(value = "/procurementInformationAll")
     @PreAuthorize("hasAnyRole('ADMIN','PROCUREMENTINFORMATION_ALL','PROCUREMENTINFORMATION_EXPORT_ALL')")

@@ -25,7 +25,7 @@ public class LeaseContractController {
     @Autowired
     private LeaseContractService leaseContractService;
 
-    @Log("查询LeaseContract")
+//    @Log("查询LeaseContract")
     @ApiOperation(value = "查询LeaseContract")
     @GetMapping(value = "/leaseContract")
     @PreAuthorize("hasAnyRole('ADMIN','LEASECONTRACT_ALL','LEASECONTRACT_SELECT')")
@@ -33,21 +33,21 @@ public class LeaseContractController {
         return new ResponseEntity(leaseContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询LeaseContract不带权限")
+//    @Log("查询LeaseContract不带权限")
     @ApiOperation(value = "查询LeaseContract不带权限")
     @GetMapping(value = "/leaseContractNoRole")
     public ResponseEntity getLeaseContractsNoRole(LeaseContractQueryCriteria criteria, Pageable pageable){
         return new ResponseEntity(leaseContractService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("根据部门查询RentContract")
+//    @Log("根据部门查询RentContract")
     @ApiOperation(value = "根据部门RentContract")
     @GetMapping(value = "/leaseContractByDeptId/{deptId}")
     public ResponseEntity leaseContractByDeptId(@PathVariable Long deptId){
         return new ResponseEntity(leaseContractService.findByDeptId(deptId),HttpStatus.OK);
     }
 
-    @Log("根据id查询RentContract")
+//    @Log("根据id查询RentContract")
     @ApiOperation(value = "根据id查询RentContract")
     @GetMapping(value = "/leaseContractById/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','LEASECONTRACT_ALL','LEASECONTRACT_SELECT')")

@@ -36,7 +36,7 @@ public class BasicsParkController {
     @Autowired
     private BasicsParkService basicsParkService;
 
-    @Log("查询BasicsPark")
+//    @Log("查询BasicsPark")
     @ApiOperation(value = "查询BasicsPark")
     @GetMapping(value = "/basicsPark")
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_SELECT')")
@@ -44,7 +44,7 @@ public class BasicsParkController {
         return new ResponseEntity(basicsParkService.queryAll(criteria,pageable),HttpStatus.OK);
     }
 
-    @Log("查询合同")
+//    @Log("查询合同")
     @ApiOperation(value = "查询合同")
     @GetMapping(value = "/basicsParkContract/{deptId}")
     public List<BasicsParkContractDTO> basicsParkContract(@PathVariable Long deptId){
@@ -52,14 +52,14 @@ public class BasicsParkController {
         return list;
     }
 
-    @Log("查询BasicsPark")
+//    @Log("查询BasicsPark")
     @ApiOperation(value = "查询BasicsPark")
     @GetMapping(value = "/gettenantinformationAll")
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_SELECT')")
     public ResponseEntity gettenantinformationAll(BasicsParkQueryCriteria criteria){
         return new ResponseEntity(basicsParkService.queryAll(criteria),HttpStatus.OK);
     }
-    @Log("根据部门查询BasicsPark")
+//    @Log("根据部门查询BasicsPark")
     @ApiOperation(value = "根据部门BasicsPark")
     @GetMapping(value = "/basicsParkByDeptId/{deptId}")
     @PreAuthorize("hasAnyRole('ADMIN','BASICSPARK_ALL','BASICSPARK_CREATE')")

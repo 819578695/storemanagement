@@ -32,7 +32,7 @@ public class JobController {
 
     private static final String ENTITY_NAME = "job";
 
-    @Log("查询岗位")
+//    @Log("查询岗位")
     @GetMapping(value = "/job")
     @PreAuthorize("hasAnyRole('ADMIN','USERJOB_ALL','USERJOB_SELECT','USER_ALL','USER_SELECT')")
     public ResponseEntity getJobs(JobQueryCriteria criteria,
