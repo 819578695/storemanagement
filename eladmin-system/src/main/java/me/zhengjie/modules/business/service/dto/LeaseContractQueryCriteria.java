@@ -3,8 +3,6 @@ package me.zhengjie.modules.business.service.dto;
 import lombok.Data;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import java.math.BigDecimal;
 import me.zhengjie.annotation.Query;
 
 /**
@@ -21,5 +19,6 @@ public class LeaseContractQueryCriteria{
     private Date endDate;
     @Query(propName = "id",joinName = "dept" ,type = Query.Type.EQUAL)
     private Long deptId;
-
+    @Query(type = Query.Type.EQUAL)
+    private Long tenementId;
 }

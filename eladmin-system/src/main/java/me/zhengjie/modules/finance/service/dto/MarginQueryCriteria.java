@@ -19,5 +19,6 @@ public class MarginQueryCriteria {
     private Date createTimeEnd;
 
     private Long tradTypeId;
+    @Query(type = Query.Type.EQUAL)
     private Long houseId;
 }

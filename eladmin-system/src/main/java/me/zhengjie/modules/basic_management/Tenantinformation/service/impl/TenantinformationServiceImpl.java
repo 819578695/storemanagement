@@ -1,5 +1,6 @@
 package me.zhengjie.modules.basic_management.Tenantinformation.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Tenantinformation.domain.Tenantinformation;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.ParticularsDTO;
@@ -9,6 +10,8 @@ import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.business.repository.ParkPevenueRepository;
+import me.zhengjie.modules.business.service.dto.LeaseContractQueryCriteria;
+import me.zhengjie.modules.business.service.impl.LeaseContractServiceImpl;
 import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
@@ -67,6 +70,8 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Autowired
     private ParticularsMapper particularsMapper;
 
+    @Autowired
+    private LeaseContractServiceImpl leaseContractService;
     @Override
     public Object queryAll(TenantinformationQueryCriteria criteria, Pageable pageable){
         Page<Tenantinformation> page = tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder),pageable);
@@ -149,6 +154,11 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        LeaseContractQueryCriteria leaseContractQueryCriteria = new LeaseContractQueryCriteria();
+        leaseContractQueryCriteria.setTenementId(id);
+        if( leaseContractService.queryAll(leaseContractQueryCriteria) != null ){
+            throw new BadRequestException("当前租户已签订合同,请解除合同后再进行删除!");
+        }
         tenantinformationRepository.deleteById(id);
     }
 }

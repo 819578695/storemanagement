@@ -104,6 +104,7 @@ public class MarginServiceImpl implements MarginService {
     }
 
     @Override
+    //左侧收入
     public Object queryAll(MarginQueryCriteria criteria){
         List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
         Long incomeId = null ;
@@ -118,6 +119,7 @@ public class MarginServiceImpl implements MarginService {
     }
 
     @Override
+    //右侧子组件支出
     public Object queryCostAll(MarginQueryCriteria criteria){
         List<DictDetail> list = dictDetailRepository.findAllByDictId(dictRepository.findByName("trade_type").getId());
         Long incomeId = null ;
@@ -131,6 +133,7 @@ public class MarginServiceImpl implements MarginService {
         return query(criteria);
     }
     @Override
+    //左侧树形结构查询
     public List<TreeDTO> buildTree(MarginQueryCriteria criteria) {
         List<TreeDTO> trees = new ArrayList<>();
         List<DeptDTO> deptDTOS;
@@ -142,6 +145,10 @@ public class MarginServiceImpl implements MarginService {
             deptDTOS = deptService.queryAll(new DeptQueryCriteria());
         }
         for (DeptDTO deptDTO : deptDTOS) {
+            if (deptDTO.getPid() == 0){
+                trees.add(new TreeDTO(deptDTO.getId(),deptDTO.getName(),new ArrayList<>()));
+                continue;
+            }
             List<ArchiveTreeDto> list = archivesmouthsmanagementRepository.queryByDeptAndId(deptDTO.getId());
             trees.add(new TreeDTO(deptDTO.getId(),deptDTO.getName(),list));
         }

@@ -10,6 +10,8 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchiveMapper;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.basic_management.city.repository.CityRepository;
+import me.zhengjie.modules.business.repository.LeaseContractRepository;
+import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
 import me.zhengjie.utils.FileUtil;
@@ -26,8 +28,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.*;
 
 @Service
@@ -52,7 +52,10 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private DeptRepository deptRepository;
     @Autowired
     private CityRepository cityRepository;
-
+    @Autowired
+    private MarginRepository marginRepository;
+    @Autowired
+    private LeaseContractRepository leaseContractRepository;
     @Value("${httpUrl}")
     private String httpUrl; //服务器文件地址
     @Value("${filePath}")
@@ -153,6 +156,12 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
+        if (leaseContractRepository.findByStallId(id).size() != 0){
+            throw new BadRequestException("当前档口已出租,请解除绑定后删除!");
+        }
+        if( marginRepository.findByHouseId(id) != null ){
+            throw new BadRequestException("当前档口已产生资金流水无法删除,请联系管理员删除!");
+        }
         archivesmouthsmanagementRepository.deleteById(id);
     }
 

@@ -1,7 +1,6 @@
 package me.zhengjie.modules.business.repository;
 
 import me.zhengjie.modules.business.domain.LeaseContract;
-import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.service.dto.LeaseContractSmallDTO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -16,6 +15,8 @@ import java.util.List;
 public interface LeaseContractRepository extends JpaRepository<LeaseContract, Long>, JpaSpecificationExecutor {
     @Query(value = "select * FROM lease_contract where dept_id=?1 ",nativeQuery =true)
     List<LeaseContract> findByDeptId(Long deptId);
+    @Query(value = "select * from lease_contract where stall_id=?1 ",nativeQuery = true)
+    List<LeaseContract> findByStallId(Long stallId);
 
     List<LeaseContract> findByTenantinformationId(Long id);
 
@@ -31,5 +32,4 @@ public interface LeaseContractRepository extends JpaRepository<LeaseContract, Lo
     //下拉框选择合同
     @Query(value = "select new me.zhengjie.modules.business.service.dto.LeaseContractSmallDTO(l.id,l.contractNo,l.contractName,l.remarks,l.startDate,l.endDate,l.rentFreeStartTime,l.rentFreeEndTime,t.id,t.linkman,s.id,s.housenumber) from LeaseContract l left join Archivesmouthsmanagement s on l.archivesmouthsmanagement.id=s.id left join Tenantinformation t on l.tenantinformation.id=t.id where l.dept.id=?1")
     List<LeaseContractSmallDTO> findbyleaseContractSmall(Long deptId);
-
 }
