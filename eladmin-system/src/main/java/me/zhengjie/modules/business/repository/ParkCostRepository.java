@@ -47,4 +47,8 @@ public interface ParkCostRepository extends JpaRepository<ParkCost, Long>, JpaSp
     @Query(value = "update park_cost set is_vertify=2 where id=?1",nativeQuery = true)
     void updateByVertify2(Long id);
 
+    //查询该支付方式是否有绑定
+    @Query(value = "select * from park_cost where receipt_payment_account_id = ?1",nativeQuery = true)
+    Object findByReceiptPaymentAccount(Long id);
+
 }

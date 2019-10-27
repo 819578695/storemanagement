@@ -42,4 +42,7 @@ public interface ParkPevenueRepository extends JpaRepository<ParkPevenue, Long>,
     @Modifying
     @Query(value = "update park_pevenue set is_vertify=2 where id=?1",nativeQuery = true)
     void updateByVertify2(Long id);
+
+    @Query(value = "select * from park_pevenue where receipt_payment_account_id = ?1",nativeQuery = true)
+    Object findByReceiptPaymentAccount (Long id);
 }

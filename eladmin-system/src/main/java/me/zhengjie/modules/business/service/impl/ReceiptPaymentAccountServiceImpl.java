@@ -1,7 +1,11 @@
 package me.zhengjie.modules.business.service.impl;
 
 import me.zhengjie.exception.BadRequestException;
+import me.zhengjie.modules.business.domain.ParkCost;
+import me.zhengjie.modules.business.domain.ParkPevenue;
 import me.zhengjie.modules.business.domain.ReceiptPaymentAccount;
+import me.zhengjie.modules.business.repository.ParkCostRepository;
+import me.zhengjie.modules.business.repository.ParkPevenueRepository;
 import me.zhengjie.modules.business.service.dto.AccountsDTO;
 import me.zhengjie.modules.business.service.dto.ReceiptPaymentAccountSmallDTO;
 import me.zhengjie.modules.finance.domain.MaintarinDetail;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,7 +45,10 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     private ReceiptPaymentAccountMapper receiptPaymentAccountMapper;
     @Autowired
     private MaintarinDetailRepository maintarinDetailRepository;
-
+    @Autowired
+    private ParkCostRepository parkCostRepository;
+    @Autowired
+    private ParkPevenueRepository parkPevenueRepository;
     @Override
     public Object queryAll(Pageable pageable) {
         return receiptPaymentAccountMapper.toDto(receiptPaymentAccountRepository.findAll(pageable).getContent());
@@ -95,14 +103,19 @@ public class ReceiptPaymentAccountServiceImpl implements ReceiptPaymentAccountSe
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        receiptPaymentAccountRepository.deleteById(id);
+        ReceiptPaymentAccount receiptPaymentAccount = receiptPaymentAccountRepository.findById(id).get();
+        if (receiptPaymentAccount.getRemaining().compareTo(BigDecimal.ZERO)==0 && parkCostRepository.findByReceiptPaymentAccount(id)==null && parkPevenueRepository.findByReceiptPaymentAccount(id) ==null ) {
+            receiptPaymentAccountRepository.deleteById(id);
+        }else {
+            throw new BadRequestException("账户余额不为空或存在关联关系,无法删除");
+        }
     }
 
     @Override
     public Object queryByDeptId(Long deptId) {
         List<MaintarinDetail> byDeptId = maintarinDetailRepository.findByDeptId(deptId);
         List list = new ArrayList<>();
-        for (MaintarinDetail maintarinDetail : byDeptId) {
+        for (MaintarinDetail maintarinDetail :byDeptId){
             AccountsDTO accountsDTO = new AccountsDTO();
             accountsDTO.setValue(maintarinDetail.getId());
             accountsDTO.setLabel(maintarinDetail.getTradType().getLabel());
