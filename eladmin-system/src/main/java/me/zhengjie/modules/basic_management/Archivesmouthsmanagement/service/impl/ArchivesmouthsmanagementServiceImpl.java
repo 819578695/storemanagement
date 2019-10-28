@@ -94,7 +94,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         map.put("list",list1);
         map.put("num",num);
         if(basicsPark!=null){
-            map.put("picture",basicsPark.getFileName()==""?null:basicsPark.getFileName());
+            map.put("picture",basicsPark.getFileName().equals("")?null:basicsPark.getFileName());
         }
         else{
             map.put("picture",null);
