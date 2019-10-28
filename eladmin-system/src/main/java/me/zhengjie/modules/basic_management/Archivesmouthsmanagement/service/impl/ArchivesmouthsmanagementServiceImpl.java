@@ -10,6 +10,8 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchiveMapper;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchivesmouthsmanagementMapper;
 import me.zhengjie.modules.basic_management.city.repository.CityRepository;
+import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
+import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.finance.repository.MarginRepository;
 import me.zhengjie.modules.system.repository.DeptRepository;
@@ -56,6 +58,9 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     private MarginRepository marginRepository;
     @Autowired
     private LeaseContractRepository leaseContractRepository;
+    @Autowired
+    private BasicsParkRepository basicsParkRepository;
+
     @Value("${httpUrl}")
     private String httpUrl; //服务器文件地址
     @Value("${filePath}")
@@ -76,6 +81,7 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         //微信小程序获得所有信息和总和
         Map map = new HashMap();
         List<Archivesmouthsmanagement> list = archivesmouthsmanagementRepository.findByAreaId(id);
+        BasicsPark basicsPark = basicsParkRepository.findByDept(id);
         /*int num = archivesmouthsmanagementRepository.findBycoum(id);*/
         int num = 0;
         List<ArchiveDto> list1 = new ArrayList<>();
@@ -83,10 +89,11 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
             if (lists.getTenementName()==null||lists.getTenementName().equals("")){
             list1.add(archivesMapper.toDtos(lists,dictDetailRepository.findById(lists.getDictDetail().getId()).get(),deptRepository.findById(lists.getDept().getId()).get()));
             num = num+1;
-                }
+          }
         }
         map.put("list",list1);
         map.put("num",num);
+        map.put("picture",basicsPark.getFileName()==null?null:basicsPark.getFileName());
         return map;
     }
     @Override

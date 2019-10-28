@@ -110,6 +110,10 @@ public class BasicsParkServiceImpl implements BasicsParkService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public BasicsParkDTO create(BasicsPark resources) {
+        List<BasicsPark> basicsParkList = basicsParkRepository.findByDeptId(resources.getDept().getId());
+        if(basicsParkList.size()>0){
+            throw new BadRequestException("请勿重复新建园区档案");
+        }
         return basicsParkMapper.toDto(basicsParkRepository.save(resources));
     }
 

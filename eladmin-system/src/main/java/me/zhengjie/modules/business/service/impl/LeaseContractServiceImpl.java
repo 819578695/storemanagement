@@ -159,6 +159,11 @@ public class LeaseContractServiceImpl implements LeaseContractService {
                 Archivesmouthsmanagement archivesmouthsmanagementBefore = archivesmouthsmanagementRepository.findById(leaseContract.getArchivesmouthsmanagement().getId()).get();//
                 archivesmouthsmanagementBefore.setTenementName(null);
             }
+            //当合同被改为禁用则需要修改合同状态
+            if(resources.getIsEnable().equals("2")){
+                archivesmouthsmanagementAfter.setTenementName(null);//合同修改为作废会将租户清空
+            }
+
         }
         leaseContract.copy(resources);
         leaseContractRepository.save(leaseContract);
