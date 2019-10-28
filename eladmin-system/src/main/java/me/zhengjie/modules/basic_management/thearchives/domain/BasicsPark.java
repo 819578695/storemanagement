@@ -50,19 +50,19 @@ public class BasicsPark implements Serializable {
 
     // 占用面积
     @Column(name = "occupied_area")
-    private String occupiedArea;
+    private Long occupiedArea;
 
     // 占地面积
     @Column(name = "floor_space")
-    private String floorSpace;
+    private Long floorSpace;
 
     // 建筑面积
     @Column(name = "covered_area")
-    private String coveredArea;
+    private Long coveredArea;
 
     // 可使用面积
     @Column(name = "usable_area")
-    private String usableArea;
+    private Long usableArea;
 
     // 合同信息
     @Column(name = "the_contract_information")

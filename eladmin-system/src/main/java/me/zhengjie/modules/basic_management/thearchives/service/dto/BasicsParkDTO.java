@@ -28,16 +28,16 @@ public class BasicsParkDTO implements Serializable {
     private Timestamp openingTime;
 
     // 占用面积
-    private String occupiedArea;
+    private Long occupiedArea;
 
     // 占地面积
-    private String floorSpace;
+    private Long floorSpace;
 
     // 建筑面积
-    private String coveredArea;
+    private Long coveredArea;
 
     // 可使用面积
-    private String usableArea;
+    private Long usableArea;
 
     // 合同信息
     private String theContractInformation;
