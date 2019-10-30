@@ -30,6 +30,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Api(tags = "Tenantinformation管理")
 @RestController
@@ -72,11 +73,13 @@ public class wechatController {
     public Map loginByopid(String code){
         Map<String,String> map = new HashMap<>();
         String openid = null ;
+        String token = UUID.randomUUID().toString();
         if (StringUtils.isNotEmpty(code)) {
             openid = UserUtil.getopenid(code);
             Wxpoid json = JSON.parseObject(openid, Wxpoid.class);
             map.put("openid", json.getOpenid());
             map.put("sessionKey", json.getSession_key());
+            map.put("token",token);
         }
         return map;
     }
