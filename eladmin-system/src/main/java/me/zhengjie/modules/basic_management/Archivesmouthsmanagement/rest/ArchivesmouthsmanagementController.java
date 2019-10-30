@@ -68,6 +68,12 @@ public class ArchivesmouthsmanagementController {
         return new ResponseEntity(archivesmouthsmanagementService.findByDeptIdAndTenementNameIsNull(deptId),HttpStatus.OK);
     }
 
+    @ApiOperation(value = "根据当前部门查询出租率-已出租面积除可出租面积")
+    @GetMapping(value = "/queryOccupancyRate/{deptId}")
+    public ResponseEntity queryOccupancyRate(@PathVariable Long deptId){
+        return  new ResponseEntity(archivesmouthsmanagementService.queryOccupancyRate(deptId),HttpStatus.OK);
+    }
+
     @Log("新增Archivesmouthsmanagement")
     @ApiOperation(value = "新增Archivesmouthsmanagement")
     @PostMapping(value = "/archivesmouthsmanagement")

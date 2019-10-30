@@ -37,4 +37,12 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
     //判断在一个公司下 档口号是否存在
     @Query(value = "select * from basics_stall where housenumber=?1 and dept_id=?2", nativeQuery = true)
     Object HousenumberExistDeptId(String housenumber , Long deptId);
+
+    //查询出租率(按部门查询)
+    @Query(value = "SELECT ROUND(T1.acreage /T2.usable_area * 100 ,2) FROM (SELECT sum(bs.acreage) as acreage FROM basics_stall bs WHERE dept_id = ?1 )T1,(SELECT bp.usable_area AS usable_area FROM basics_park bp WHERE dept_id = ?1 )T2;",nativeQuery = true)
+    Object findByOccupancyRate(Long deptId);
+
+    //查询所有出租率
+    @Query(value = "SELECT ROUND(T1.acreage /T2.usable_area * 100 ,2) FROM (SELECT sum(bs.acreage) as acreage FROM basics_stall bs )T1,(SELECT bp.usable_area AS usable_area FROM basics_park bp)T2;",nativeQuery = true)
+    Object findByOccupancyRateAll();
 }

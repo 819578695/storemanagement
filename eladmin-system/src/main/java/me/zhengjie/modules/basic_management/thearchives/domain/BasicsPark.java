@@ -64,6 +64,10 @@ public class BasicsPark implements Serializable {
     @Column(name = "usable_area")
     private Long usableArea;
 
+    //可租用面积
+    @Column(name="lettable_area")
+    private Long lettableArea;
+
     // 合同信息
     @Column(name = "the_contract_information")
     private String theContractInformation;

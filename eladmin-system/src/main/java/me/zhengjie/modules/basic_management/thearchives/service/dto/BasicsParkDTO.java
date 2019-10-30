@@ -1,6 +1,8 @@
 package me.zhengjie.modules.basic_management.thearchives.service.dto;
 
 import lombok.Data;
+
+import java.security.PrivateKey;
 import java.sql.Timestamp;
 import java.io.Serializable;
 
@@ -38,6 +40,9 @@ public class BasicsParkDTO implements Serializable {
 
     // 可使用面积
     private Long usableArea;
+
+    //可租用面积
+    private Long lettableArea;
 
     // 合同信息
     private String theContractInformation;

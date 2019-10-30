@@ -80,4 +80,9 @@ public interface ArchivesmouthsmanagementService {
      */
     String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception;
 
+    /**
+     * 计算出租率
+     * @param deptId
+     */
+    Object queryOccupancyRate(Long deptId);
 }

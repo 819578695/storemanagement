@@ -189,4 +189,16 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
         return null;
     }
 
+    @Override
+    public Object queryOccupancyRate(Long deptId) {
+        Object rate;
+        if (deptId!= 1){
+            //如非总部根据公司ID进行查询
+            rate = archivesmouthsmanagementRepository.findByOccupancyRate(deptId);
+        }else {
+            rate = archivesmouthsmanagementRepository.findByOccupancyRateAll();
+        }
+        return rate+"%";
+    }
+
 }
