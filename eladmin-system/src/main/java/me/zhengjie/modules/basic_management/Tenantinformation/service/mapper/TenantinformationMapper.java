@@ -28,6 +28,7 @@ public interface TenantinformationMapper extends EntityMapper<TenantinformationD
             /*@Mapping(source = "LeaseContract.archivesmouthsmanagement.id",target = "stallid"),
             @Mapping(source = "LeaseContract.archivesmouthsmanagement.housenumber",target = "roomnumber"),*/
             @Mapping(source = "dept.id",target = "deptId"),
+            @Mapping(source = "dept.name",target = "deptName")
     })
     TenantinformationDTO toDto(Tenantinformation tenantinformation, Dept dept, LeaseContract LeaseContract);
 }
