@@ -21,4 +21,6 @@ public class LeaseContractQueryCriteria{
     private Long deptId;
     @Query(type = Query.Type.EQUAL)
     private Long tenementId;
+    @Query(type = Query.Type.EQUAL)
+    private Integer isAudit;
 }

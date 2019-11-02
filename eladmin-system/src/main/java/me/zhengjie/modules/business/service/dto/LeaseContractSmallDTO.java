@@ -21,7 +21,6 @@ public class LeaseContractSmallDTO implements Serializable {
     // 合同编号
     private String contractNo;
 
-
     // 合同名称
     private String contractName;
 

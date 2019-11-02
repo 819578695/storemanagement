@@ -126,6 +126,10 @@ public class LeaseContract implements Serializable {
     @Column(name = "create_time")
     private Timestamp createTime;
 
+    //审核状态
+    @Column(name ="is_audit")
+    private Integer isAudit;
+
     public void copy(LeaseContract source){
         BeanUtil.copyProperties(source,this, CopyOptions.create().setIgnoreNullValue(true));
     }

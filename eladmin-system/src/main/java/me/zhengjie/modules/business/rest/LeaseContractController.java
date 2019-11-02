@@ -80,4 +80,13 @@ public class LeaseContractController {
         leaseContractService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @Log("审核LeaseContract")
+    @ApiOperation(value = "审核LeaseContract")
+    @PostMapping(value = "/contractVertify")
+    @PreAuthorize("hasAnyRole('ADMIN','LEASECONTRACT_ALL','LEASECONTRACT_VERTIFY')")
+    public ResponseEntity vertify( @RequestBody Long[] vertifys, @RequestParam Integer  status){
+        leaseContractService.vertify(vertifys,status);
+        return new ResponseEntity(HttpStatus.OK);
+    }
 }

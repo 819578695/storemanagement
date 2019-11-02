@@ -166,6 +166,7 @@ public class LeaseContractServiceImpl implements LeaseContractService {
 
         }
         leaseContract.copy(resources);
+        leaseContract.setIsAudit(0);
         leaseContractRepository.save(leaseContract);
     }
 
@@ -221,5 +222,32 @@ public class LeaseContractServiceImpl implements LeaseContractService {
             }
         }
         return leaseContractList;
+    }
+
+    //审核
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void vertify(Long[] vertifys, Integer status) {
+        if (vertifys.length>0){
+            for (Long id : vertifys) {
+                LeaseContract contract = leaseContractRepository.findById(id).get();
+                /* 状态为审核中才能审核*/
+                if (contract.getIsAudit()==0){
+                    //审核未通过
+                    if (status==1){
+                        contract.setIsAudit(1);
+                        leaseContractRepository.updateByVertify1(contract.getId());
+                    }
+                    //审核通过并且类型
+                    if (status==2){
+                        contract.setIsAudit(2);
+                        leaseContractRepository.updateByVertify2(contract.getId());
+                    }
+                }
+                else{
+                    throw new BadRequestException("请勿重复审核");
+                }
+            }
+        }
     }
 }

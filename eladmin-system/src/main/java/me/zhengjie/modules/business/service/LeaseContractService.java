@@ -73,8 +73,10 @@ public interface LeaseContractService {
     //@CacheEvict(allEntries = true)
     Object findTask();
 
-
-
-
-
+    /**
+     * 审核
+     * @param vertifys
+     * @return
+     */
+    void vertify(Long[] vertifys,Integer  status);
 }
