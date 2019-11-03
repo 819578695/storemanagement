@@ -1,7 +1,9 @@
 package me.zhengjie.modules.business.service.impl;
 
+import me.zhengjie.exception.BadRequestException;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
+import me.zhengjie.modules.business.domain.LeaseContract;
 import me.zhengjie.modules.business.domain.ParkCost;
 import me.zhengjie.modules.business.domain.RentContract;
 import me.zhengjie.modules.business.repository.ParkCostRepository;
@@ -99,7 +101,7 @@ public class RentContractServiceImpl implements RentContractService {
 
     @Override
     public Object findByDeptId(Long deptId) {
-        return rentContractMapper.toDto(deptId==1?rentContractRepository.findAll():rentContractRepository.findByDeptId(deptId));
+        return rentContractMapper.toDto(deptId==1?rentContractRepository.findAllByAudit():rentContractRepository.findByDeptId(deptId));
     }
 
     @Override
@@ -134,6 +136,7 @@ public class RentContractServiceImpl implements RentContractService {
         ValidationUtil.isNull( optionalRentContract,"RentContract","id",resources.getId());
         RentContract rentContract = optionalRentContract.get();
         rentContract.copy(resources);
+        rentContract.setIsAudit(0);
         rentContractRepository.save(rentContract);
     }
 
@@ -152,6 +155,32 @@ public class RentContractServiceImpl implements RentContractService {
                 e.printStackTrace();
             }
         return null;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void vertify(Long[] vertifys, Integer status) {
+        if (vertifys.length>0){
+            for (Long id : vertifys) {
+                RentContract rentContract = rentContractRepository.findById(id).get();
+                /* 状态为审核中才能审核*/
+                if (rentContract.getIsAudit()==0){
+                    //审核未通过
+                    if (status==1){
+                        rentContract.setIsAudit(1);
+                        rentContractRepository.updateByVertify1(rentContract.getId());
+                    }
+                    //审核通过并且类型
+                    if (status==2){
+                        rentContract.setIsAudit(2);
+                        rentContractRepository.updateByVertify2(rentContract.getId());
+                    }
+                }
+                else{
+                    throw new BadRequestException("请勿重复审核");
+                }
+            }
+        }
     }
 
 }

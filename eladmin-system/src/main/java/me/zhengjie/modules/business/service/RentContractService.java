@@ -76,4 +76,11 @@ public interface RentContractService {
      * @throws IOException
      */
     String uploadFile(MultipartHttpServletRequest multipartRequest,String contractNo) throws Exception;
+
+    /**
+     * 审核
+     * @param vertifys
+     * @return
+     */
+    void vertify(Long[] vertifys,Integer  status);
 }

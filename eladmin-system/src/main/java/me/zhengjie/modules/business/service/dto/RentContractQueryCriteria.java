@@ -18,4 +18,6 @@ public class RentContractQueryCriteria{
 
     @Query(type = Query.Type.INNER_LIKE)
     private String contractNo;
+    @Query(type = Query.Type.EQUAL)
+    private Integer isAudit;
 }
