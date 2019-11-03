@@ -31,7 +31,7 @@ public interface LeaseContractRepository extends JpaRepository<LeaseContract, Lo
     String findByNewcontractNo(Long deptId);
 
     //下拉框选择合同
-    @Query(value = "select new me.zhengjie.modules.business.service.dto.LeaseContractSmallDTO(l.id,l.contractNo,l.contractName,l.remarks,l.startDate,l.endDate,l.rentFreeStartTime,l.rentFreeEndTime,t.id,t.linkman,s.id,s.housenumber) from LeaseContract l left join Archivesmouthsmanagement s on l.archivesmouthsmanagement.id=s.id left join Tenantinformation t on l.tenantinformation.id=t.id where l.dept.id=?1")
+    @Query(value = "select new me.zhengjie.modules.business.service.dto.LeaseContractSmallDTO(l.id,l.contractNo,l.contractName,l.remarks,l.startDate,l.endDate,l.rentFreeStartTime,l.rentFreeEndTime,t.id,t.linkman,s.id,s.housenumber) from LeaseContract l left join Archivesmouthsmanagement s on l.archivesmouthsmanagement.id=s.id left join Tenantinformation t on l.tenantinformation.id=t.id where l.isAudit = 2 and l.dept.id=?1 ")
     List<LeaseContractSmallDTO> findbyleaseContractSmall(Long deptId);
 
     /*审核未通过*/
