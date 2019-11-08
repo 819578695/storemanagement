@@ -3,6 +3,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.rest;
 import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveUpLoadDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import me.zhengjie.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import io.swagger.annotations.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import java.util.List;
 
 
 @Api(tags = "Tenantinformation管理")
@@ -111,6 +114,13 @@ public class ArchivesmouthsmanagementController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
+    @Log("档口信息批量上传")
+    @ApiOperation(value = "档口信息批量上传")
+    @PostMapping(value = "/batchUpload")
+    public ResponseEntity batchUpload(@RequestBody List<ArchiveUpLoadDto> resource){
+        archivesmouthsmanagementService.batchUpload(resource);
+        return new ResponseEntity(HttpStatus.OK);
+    }
     /*@GetMapping(value = "/index")
     public ResponseModel index(String iv, String encryptedData, String code) {
         if (StringUtils.isEmpty(encryptedData) || StringUtils.isEmpty(iv)|| StringUtils.isEmpty(code)) {

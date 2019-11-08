@@ -1,4 +1,4 @@
-package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat;
+package me.zhengjie.modules.basic_management.wechat;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

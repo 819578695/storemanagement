@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service;
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveUpLoadDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import org.springframework.data.domain.Pageable;
@@ -85,4 +86,10 @@ public interface ArchivesmouthsmanagementService {
      * @param deptId
      */
     Object queryOccupancyRate(Long deptId);
+
+    /**
+     * 文件批量上传
+     * @param resource
+     */
+    void batchUpload(List<ArchiveUpLoadDto> resource);
 }

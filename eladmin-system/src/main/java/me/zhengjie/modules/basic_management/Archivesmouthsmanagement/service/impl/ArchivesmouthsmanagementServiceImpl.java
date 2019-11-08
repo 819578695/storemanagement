@@ -5,6 +5,7 @@ import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Arch
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository.ArchivesmouthsmanagementRepository;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveDto;
+import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveUpLoadDto;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.mapper.ArchiveMapper;
@@ -14,8 +15,12 @@ import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.repository.BasicsParkRepository;
 import me.zhengjie.modules.business.repository.LeaseContractRepository;
 import me.zhengjie.modules.finance.repository.MarginRepository;
+import me.zhengjie.modules.system.domain.Dept;
+import me.zhengjie.modules.system.domain.Dict;
+import me.zhengjie.modules.system.domain.DictDetail;
 import me.zhengjie.modules.system.repository.DeptRepository;
 import me.zhengjie.modules.system.repository.DictDetailRepository;
+import me.zhengjie.modules.system.repository.DictRepository;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.PageUtil;
 import me.zhengjie.utils.QueryHelp;
@@ -30,6 +35,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.xml.crypto.Data;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Service
@@ -49,6 +56,8 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
 
     @Autowired
     private DictDetailRepository dictDetailRepository;
+    @Autowired
+    private DictRepository dictRepository;
 
     @Autowired
     private DeptRepository deptRepository;
@@ -199,6 +208,50 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
             rate = archivesmouthsmanagementRepository.findByOccupancyRateAll();
         }
         return rate+"%";
+    }
+
+    //批量上传
+    @Override
+    public void batchUpload(List<ArchiveUpLoadDto> resource) {
+        List<Archivesmouthsmanagement> archivesmouthsmanagements = batchUploadDispose(resource);
+        for (Archivesmouthsmanagement archivesmouthsmanagement : archivesmouthsmanagements) {
+            create(archivesmouthsmanagement);
+        }
+    }
+
+    //上传后数据处理
+    public List<Archivesmouthsmanagement> batchUploadDispose(List<ArchiveUpLoadDto> resource){
+        //查询对应租用类型
+        List<DictDetail> stallType = dictDetailRepository.findAllByDictId(dictRepository.findByName("stall_type").getId());
+        List<Archivesmouthsmanagement> list = new ArrayList<>();
+        for (ArchiveUpLoadDto archiveUpLoadDto : resource) {
+            Archivesmouthsmanagement archivesmouthsmanagement = new Archivesmouthsmanagement();
+            //查找对应档口类型是否存在
+            String stall = archiveUpLoadDto.getStall();
+            //用于此档口类似是否存在
+            boolean is = false;
+            for (DictDetail dictDetail : stallType) {
+                if (stall.equals(dictDetail.getLabel())){
+                    is = true;
+                    archivesmouthsmanagement.setDictDetail(dictDetail);
+                    break;
+                }
+                is =false;
+            }
+            if (!is){ throw new BadRequestException("系统内无Excel内的档口类型,请联系管理员添加");}
+            //设置当前创建时间
+            archivesmouthsmanagement.setStalldate(new Timestamp(System.currentTimeMillis()));
+            archivesmouthsmanagement.setHousenumber(archiveUpLoadDto.getHousenumber());
+            archivesmouthsmanagement.setAcreage(archiveUpLoadDto.getAcreage());
+            archivesmouthsmanagement.setEarnest(archiveUpLoadDto.getEarnest());
+            archivesmouthsmanagement.setContractmoney(archiveUpLoadDto.getContractmoney());
+            archivesmouthsmanagement.setContacts(archiveUpLoadDto.getContacts());
+            Dept dept = new Dept();
+            dept.setId(archiveUpLoadDto.getDeptId());
+            archivesmouthsmanagement.setDept(dept);
+            list.add(archivesmouthsmanagement);
+        }
+        return list;
     }
 
 }

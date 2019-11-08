@@ -2,6 +2,7 @@ package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.repository
 
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.domain.Archivesmouthsmanagement;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchiveTreeDto;
+import me.zhengjie.modules.basic_management.wechat.service.dto.WechatStallDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -31,7 +32,7 @@ public interface ArchivesmouthsmanagementRepository extends JpaRepository<Archiv
     List<Archivesmouthsmanagement> tenantinformationSmallDto(Long deptId);
 
     //微信接口 查询最低级信息
-    @Query(value = "select new me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.WechatStallDto(bs.housenumber, bs.acreage , d.label ,bs.picturetoview) from Archivesmouthsmanagement bs left join DictDetail d on d.id = bs.dictDetail.id where bs.id =?1")
+    @Query(value = "select new me.zhengjie.modules.basic_management.wechat.service.dto.WechatStallDto(bs.housenumber, bs.acreage , d.label ,bs.picturetoview) from Archivesmouthsmanagement bs left join DictDetail d on d.id = bs.dictDetail.id where bs.id =?1")
     List wechatStall (Long id);
 
     //判断在一个公司下 档口号是否存在

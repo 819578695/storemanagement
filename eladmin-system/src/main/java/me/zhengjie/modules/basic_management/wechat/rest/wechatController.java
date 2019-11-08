@@ -1,4 +1,4 @@
-package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.rest;
+package me.zhengjie.modules.basic_management.wechat.rest;
 
 import cn.hutool.core.codec.Base64;
 import com.alibaba.fastjson.JSON;
@@ -8,10 +8,14 @@ import me.zhengjie.aop.log.Log;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.ArchivesmouthsmanagementService;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementDTO;
 import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto.ArchivesmouthsmanagementQueryCriteria;
-import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.UserUtil;
-import me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat.Wxpoid;
+import me.zhengjie.modules.basic_management.wechat.UserUtil;
+import me.zhengjie.modules.basic_management.wechat.Wxpoid;
 import me.zhengjie.modules.basic_management.client.domain.BasicsClient;
 import me.zhengjie.modules.basic_management.client.service.BasicsClientService;
+import me.zhengjie.modules.basic_management.wechat.domain.NeedStall;
+import me.zhengjie.modules.basic_management.wechat.domain.PublicWarehouse;
+import me.zhengjie.modules.basic_management.wechat.service.NeedStallService;
+import me.zhengjie.modules.basic_management.wechat.service.PublicWarehouseService;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import org.apache.commons.lang.StringUtils;
@@ -42,6 +46,10 @@ public class wechatController {
     private BasicsClientService basicsClientService;
     @Autowired
     private DeptService deptService;
+    @Autowired
+    private NeedStallService needStallService;
+    @Autowired
+    private PublicWarehouseService publicWarehouseService;
 
     @Log("微信小程序")
     @ApiOperation(value = "微信小程序查询")
@@ -95,6 +103,22 @@ public class wechatController {
     @DeleteMapping(value = "/wechatdelete/{id}")
     public ResponseEntity createdelete(@PathVariable Integer id){
         basicsClientService.delete(id);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("微信发布档口需求")
+    @ApiOperation(value = "微信发布档口需求")
+    @PostMapping(value = "/createNeedStall")
+    public ResponseEntity createNeedStall(@Validated NeedStall resources){
+        needStallService.create(resources);
+        return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @Log("微信发布仓库")
+    @ApiOperation(value = "微信发布仓库")
+    @PostMapping(value = "/createPWarehouse")
+    public ResponseEntity createPWarehouse(@Validated PublicWarehouse resources){
+        publicWarehouseService.crite(resources);
         return new ResponseEntity(HttpStatus.OK);
     }
 

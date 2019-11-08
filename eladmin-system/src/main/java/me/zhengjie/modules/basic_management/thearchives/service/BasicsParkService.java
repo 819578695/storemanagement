@@ -1,15 +1,10 @@
 package me.zhengjie.modules.basic_management.thearchives.service;
 
-import me.zhengjie.domain.Picture;
 import me.zhengjie.modules.basic_management.thearchives.domain.BasicsPark;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkContractDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkDTO;
 import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
-//import org.springframework.cache.annotation.CacheConfig;
-//import org.springframework.cache.annotation.CacheEvict;
-//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.io.IOException;

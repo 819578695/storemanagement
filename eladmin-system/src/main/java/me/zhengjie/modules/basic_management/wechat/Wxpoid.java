@@ -1,4 +1,4 @@
-package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat;
+package me.zhengjie.modules.basic_management.wechat;
 
 /**
  * Created by Administrator on 2019/3/11.

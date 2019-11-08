@@ -1,4 +1,4 @@
-package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.service.dto;
+package me.zhengjie.modules.basic_management.wechat.service.dto;
 
 import lombok.Data;
 

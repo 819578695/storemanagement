@@ -1,4 +1,4 @@
-package me.zhengjie.modules.basic_management.Archivesmouthsmanagement.wechat;
+package me.zhengjie.modules.basic_management.wechat;
 
 public class Constant {
     public static final String SMALL_APPID = "success";
