@@ -16,6 +16,10 @@ import me.zhengjie.modules.basic_management.wechat.domain.NeedStall;
 import me.zhengjie.modules.basic_management.wechat.domain.PublicWarehouse;
 import me.zhengjie.modules.basic_management.wechat.service.NeedStallService;
 import me.zhengjie.modules.basic_management.wechat.service.PublicWarehouseService;
+import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallDto;
+import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallQueryCriteria;
+import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseDto;
+import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseQueryCriteria;
 import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import org.apache.commons.lang.StringUtils;
@@ -94,7 +98,7 @@ public class wechatController {
     @Log("微信新增")
     @ApiOperation(value = "微信新增")
     @PostMapping(value = "/wechatadd")
-    public ResponseEntity create(@Validated @RequestBody BasicsClient resources){
+    public ResponseEntity create(@Validated @RequestParam BasicsClient resources){
         return new ResponseEntity(basicsClientService.create(resources), HttpStatus.CREATED);
     }
 
@@ -109,17 +113,29 @@ public class wechatController {
     @Log("微信发布档口需求")
     @ApiOperation(value = "微信发布档口需求")
     @PostMapping(value = "/createNeedStall")
-    public ResponseEntity createNeedStall(@Validated NeedStall resources){
-        needStallService.create(resources);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity createNeedStall( @RequestBody NeedStall resources){
+        return new ResponseEntity(needStallService.create(resources),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "查询所有档口需求")
+    @GetMapping(value = "/queryByNeedAll")
+    public Map queryByNeedAll(NeedStallQueryCriteria criteria){
+        Map map = needStallService.queryByNeedAll(criteria);
+        return map;
     }
 
     @Log("微信发布仓库")
     @ApiOperation(value = "微信发布仓库")
     @PostMapping(value = "/createPWarehouse")
-    public ResponseEntity createPWarehouse(@Validated PublicWarehouse resources){
-        publicWarehouseService.crite(resources);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity createPWarehouse(@RequestBody PublicWarehouse resources){
+        return new ResponseEntity(publicWarehouseService.crite(resources),HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "查询所有发布仓库")
+    @GetMapping(value = "/queryByPWarehouseAll")
+    public Map queryByPWarehouse(PublicWarehouseQueryCriteria criteria){
+        Map map = publicWarehouseService.queryByPWarehouseAll(criteria);
+        return map;
     }
 
     @RequestMapping("/deciphering")

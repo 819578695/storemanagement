@@ -25,4 +25,7 @@ public class PublicWarehouseDto {
 
     //客户电话
     private String phone;
+
+    //客户openId
+    private String openId;
 }

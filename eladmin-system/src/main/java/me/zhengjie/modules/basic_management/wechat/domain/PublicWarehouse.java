@@ -38,4 +38,8 @@ public class PublicWarehouse {
     //客户电话
     @Column(name = "phone")
     private String phone;
+
+    //客户openId
+    @Column(name = "open_id")
+    private String openId;
 }

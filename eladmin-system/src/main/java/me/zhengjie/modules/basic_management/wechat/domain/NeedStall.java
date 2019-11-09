@@ -3,7 +3,7 @@ package me.zhengjie.modules.basic_management.wechat.domain;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * 小程序客户发布档口需求
@@ -42,4 +42,7 @@ public class NeedStall {
     @Column(name = "phone")
     private String phone;
 
+    //客户唯一标识
+    @Column(name = "open_id")
+    private String openId;
 }

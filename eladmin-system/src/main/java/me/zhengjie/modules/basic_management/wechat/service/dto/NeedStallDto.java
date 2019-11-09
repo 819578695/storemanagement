@@ -27,4 +27,7 @@ public class NeedStallDto {
 
     //客户电话
     private String phone;
+
+    //微信唯一标识
+    private String openId;
 }

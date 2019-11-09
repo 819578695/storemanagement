@@ -6,11 +6,18 @@ import me.zhengjie.modules.basic_management.wechat.domain.NeedStall;
 import me.zhengjie.modules.basic_management.wechat.repository.NeedStallRepository;
 import me.zhengjie.modules.basic_management.wechat.service.NeedStallService;
 import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallDto;
+import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallQueryCriteria;
 import me.zhengjie.modules.basic_management.wechat.service.mapper.NeedStallMapper;
+import me.zhengjie.modules.system.service.dto.DeptDTO;
+import me.zhengjie.utils.QueryHelp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author Mingkun_Niu
@@ -32,5 +39,13 @@ public class NeedStallServiceImpl implements NeedStallService {
         resources.setId(snowflake.nextId());
         NeedStall save = needStallRepository.save(resources);
         return needStallMapper.toDto(save);
+    }
+
+    @Override
+    public Map queryByNeedAll(NeedStallQueryCriteria criteria) {
+        Map map = new HashMap();
+        List<NeedStallDto> list = needStallMapper.toDto(needStallRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        map.put("list",list);
+        return map;
     }
 }
