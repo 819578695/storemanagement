@@ -44,8 +44,9 @@ public class NeedStallServiceImpl implements NeedStallService {
     @Override
     public Map queryByNeedAll(NeedStallQueryCriteria criteria) {
         Map map = new HashMap();
-        List<NeedStallDto> list = needStallMapper.toDto(needStallRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
+        List<NeedStallDto> list = needStallMapper.toDto(needStallRepository.findAll((root, criteriaquery, criteriabuilder) -> QueryHelp.getPredicate(root,criteria,criteriabuilder)));
         map.put("list",list);
+        map.put("count",list.size());
         return map;
     }
 }

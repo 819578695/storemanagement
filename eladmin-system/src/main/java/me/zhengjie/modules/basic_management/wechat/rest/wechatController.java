@@ -28,6 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -136,6 +137,16 @@ public class wechatController {
     public Map queryByPWarehouse(PublicWarehouseQueryCriteria criteria){
         Map map = publicWarehouseService.queryByPWarehouseAll(criteria);
         return map;
+    }
+
+    @ApiOperation(value = "发布仓库图片上传")
+    @GetMapping(value = "upImage")
+    public ResponseEntity upImage(MultipartHttpServletRequest multipartRequest, @PathVariable String contractNo) throws Exception{
+        String path = publicWarehouseService.uploadPictureExamine(multipartRequest,contractNo);
+        if (!me.zhengjie.utils.StringUtils.isEmpty(path)) {
+            return new ResponseEntity(path,HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping("/deciphering")

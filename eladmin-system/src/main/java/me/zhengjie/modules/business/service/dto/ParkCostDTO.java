@@ -82,4 +82,7 @@ public class ParkCostDTO implements Serializable {
 
     // 备注
     private String costRemarks;
+
+    //收款日期
+    private Timestamp paymentTime;
 }

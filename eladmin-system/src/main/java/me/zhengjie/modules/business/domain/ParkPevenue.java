@@ -134,6 +134,10 @@ public class ParkPevenue implements Serializable {
     @Column(name = "end_time")
     private Timestamp endTime;
 
+    //收款时间
+    @Column(name = "payment_time")
+    private Timestamp paymentTime;
+
     // 租户信息
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "tenement_id")

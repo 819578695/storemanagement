@@ -9,11 +9,14 @@ import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallDto;
 import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseDto;
 import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseQueryCriteria;
 import me.zhengjie.modules.basic_management.wechat.service.mapper.PublicWarehouseMapper;
+import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.QueryHelp;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,11 @@ public class PublicWarehouseServiceImpl implements PublicWarehouseService {
     @Autowired
     @SuppressWarnings("all")
     private PublicWarehouseMapper publicWarehouseMapper;
+
+    @Value("${httpUrl}")
+    private String httpUrl; //服务器文件地址
+    @Value("${filePath}")
+    private String filePath; //文件路径
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -42,6 +50,19 @@ public class PublicWarehouseServiceImpl implements PublicWarehouseService {
         Map map = new HashMap();
         List<PublicWarehouseDto> list = publicWarehouseMapper.toDto(publicWarehouseRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
         map.put("list",list);
+        map.put("count",list.size());
         return map;
+    }
+
+    @Override
+    public String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
+        //上传文件
+        String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/wechat/upImage",contractNo );
+        try {
+            return imgUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

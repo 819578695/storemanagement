@@ -121,7 +121,8 @@ public class ParkPevenueDTO implements Serializable {
     // 备注
     private String pevenueaRemarks;
 
-
+    //收款时间
+    private Timestamp paymentTime;
 
 
 }
