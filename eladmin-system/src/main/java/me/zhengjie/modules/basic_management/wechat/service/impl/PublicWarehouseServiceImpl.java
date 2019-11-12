@@ -5,19 +5,23 @@ import cn.hutool.core.util.IdUtil;
 import me.zhengjie.modules.basic_management.wechat.domain.PublicWarehouse;
 import me.zhengjie.modules.basic_management.wechat.repository.PublicWarehouseRepository;
 import me.zhengjie.modules.basic_management.wechat.service.PublicWarehouseService;
-import me.zhengjie.modules.basic_management.wechat.service.dto.NeedStallDto;
 import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseDto;
 import me.zhengjie.modules.basic_management.wechat.service.dto.PublicWarehouseQueryCriteria;
 import me.zhengjie.modules.basic_management.wechat.service.mapper.PublicWarehouseMapper;
 import me.zhengjie.utils.FileUtil;
 import me.zhengjie.utils.QueryHelp;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sun.security.util.KeyUtil;
 
+import java.io.*;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,11 +59,10 @@ public class PublicWarehouseServiceImpl implements PublicWarehouseService {
     }
 
     @Override
-    public String uploadPictureExamine(MultipartHttpServletRequest multipartRequest, String contractNo) throws Exception {
-        //上传文件
-        String imgUrl = FileUtil.uploadUtil(multipartRequest, httpUrl, filePath, "upfile", "/wechat/upImage",contractNo );
+    public String upImage(MultipartFile file) throws Exception {
+        String upfile = FileUtil.upImage(file, httpUrl,filePath, "/wechat");
         try {
-            return imgUrl;
+            return upfile;
         } catch (Exception e) {
             e.printStackTrace();
         }

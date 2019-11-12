@@ -5,8 +5,10 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.text.DecimalFormat;
+import java.util.UUID;
 
 /**
  * File工具类，扩展 hutool 工具包
@@ -35,14 +37,15 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     /**
      * MultipartFile转File
+     *
      * @param multipartFile
      * @return
      */
-    public static File toFile(MultipartFile multipartFile){
+    public static File toFile(MultipartFile multipartFile) {
         // 获取文件名
         String fileName = multipartFile.getOriginalFilename();
         // 获取文件后缀
-        String prefix="."+getExtensionName(fileName);
+        String prefix = "." + getExtensionName(fileName);
         File file = null;
         try {
             // 用uuid作为文件名，防止生成的临时文件重复
@@ -57,6 +60,7 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     /**
      * 删除
+     *
      * @param files
      */
     public static void deleteFile(File... files) {
@@ -69,13 +73,14 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     /**
      * 获取文件扩展名
+     *
      * @param filename
      * @return
      */
     public static String getExtensionName(String filename) {
         if ((filename != null) && (filename.length() > 0)) {
             int dot = filename.lastIndexOf('.');
-            if ((dot >-1) && (dot < (filename.length() - 1))) {
+            if ((dot > -1) && (dot < (filename.length() - 1))) {
                 return filename.substring(dot + 1);
             }
         }
@@ -84,13 +89,14 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     /**
      * Java文件操作 获取不带扩展名的文件名
+     *
      * @param filename
      * @return
      */
     public static String getFileNameNoEx(String filename) {
         if ((filename != null) && (filename.length() > 0)) {
             int dot = filename.lastIndexOf('.');
-            if ((dot >-1) && (dot < (filename.length()))) {
+            if ((dot > -1) && (dot < (filename.length()))) {
                 return filename.substring(0, dot);
             }
         }
@@ -99,10 +105,11 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
 
     /**
      * 文件大小转换
+     *
      * @param size
      * @return
      */
-    public static String getSize(int size){
+    public static String getSize(int size) {
         String resultSize = "";
         if (size / GB >= 1) {
             //如果当前Byte的值大于等于1GB
@@ -118,18 +125,20 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         }
         return resultSize;
     }
+
     /**
      * 文件上传
+     *
      * @param multipartRequest
-     * @param httpUrl 服务器文件地址
-     * @param filePath 文件根路径
-     * @param fileAttrName 文件属性名
-     * @param folderName 文件夹名称(分层级例如:"/user/image",null或""代表默认目录)
-     * @param contractNo 编号(不带@后缀)
+     * @param httpUrl          服务器文件地址
+     * @param filePath         文件根路径
+     * @param fileAttrName     文件属性名
+     * @param folderName       文件夹名称(分层级例如:"/user/image",null或""代表默认目录)
+     * @param contractNo       编号(不带@后缀)
      * @return String http地址
      */
     public static String uploadUtil(MultipartHttpServletRequest multipartRequest, String httpUrl, String filePath,
-                                    String fileAttrName, String folderName, String contractNo){
+                                    String fileAttrName, String folderName, String contractNo) {
         filePath = (filePath == null) ? "/" : filePath;
         /* 通过MultipartHttpServletRequest来获得MultipartFile对象 */
         MultipartFile multipartFile = multipartRequest.getFile(fileAttrName);
@@ -138,10 +147,54 @@ public class FileUtil extends cn.hutool.core.io.FileUtil {
         /* 获得文件的后缀名 */
         String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
         /* 对文件重命名，设定为当前系统时间的毫秒数加邮箱名 */
-        String newFileName = System.currentTimeMillis() + ((contractNo == null)?"":"."+contractNo) +suffix;
+        String newFileName = System.currentTimeMillis() + ((contractNo == null) ? "" : "." + contractNo) + suffix;
         if (!StringUtils.isEmpty(folderName)) {
             filePath += folderName;
-        }else{
+        } else {
+            folderName = "";
+        }
+        File folder = new File(filePath);
+        if (!folder.exists()) {
+            //　mkdirs(): 创建多层目录
+            folder.mkdirs();
+        }
+        File file = new File(filePath + File.separator + newFileName);
+        try {
+            /* 文件不存在就创建文件 */
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            /* 进行上传文件 */
+            InputStream input = multipartFile.getInputStream();
+            OutputStream output = new FileOutputStream(file);
+            IOUtils.copy(input, output);
+            String url = httpUrl + folderName + "/" + newFileName;
+            /* 关闭输入流和输出流 */
+            input.close();
+            output.close();
+            return url;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+    public static String upImage(MultipartFile multipartFile, String httpUrl, String filePath,String folderName) {
+        filePath = (filePath == null) ? "/" : filePath;
+        /* 通过MultipartHttpServletRequest来获得MultipartFile对象 */
+//        MultipartFile multipartFile = multipartRequest.getFile(fileAttrName);
+        /* 获得原始文件的名字 */
+        String originalFileName = multipartFile.getOriginalFilename();
+        /* 获得文件的后缀名 */
+        String suffix = originalFileName.substring(originalFileName.lastIndexOf("."));
+        /* 对文件重命名，设定为当前系统时间的毫秒数加邮箱名 */
+        String newFileName = System.currentTimeMillis() + suffix;
+        if (!StringUtils.isEmpty(folderName)) {
+            filePath += folderName;
+        } else {
             folderName = "";
         }
         File folder = new File(filePath);

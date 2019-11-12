@@ -24,16 +24,19 @@ import me.zhengjie.modules.system.service.DeptService;
 import me.zhengjie.modules.system.service.dto.DeptQueryCriteria;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 import java.io.IOException;
 import java.security.spec.AlgorithmParameterSpec;
 import java.util.HashMap;
@@ -140,13 +143,10 @@ public class wechatController {
     }
 
     @ApiOperation(value = "发布仓库图片上传")
-    @GetMapping(value = "upImage")
-    public ResponseEntity upImage(MultipartHttpServletRequest multipartRequest, @PathVariable String contractNo) throws Exception{
-        String path = publicWarehouseService.uploadPictureExamine(multipartRequest,contractNo);
-        if (!me.zhengjie.utils.StringUtils.isEmpty(path)) {
-            return new ResponseEntity(path,HttpStatus.OK);
-        }
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    @PostMapping(value = "/upImage")
+    public ResponseEntity upImage(MultipartFile file) throws Exception{
+        String path = publicWarehouseService.upImage(file);
+        return new ResponseEntity(path,HttpStatus.OK);
     }
 
     @RequestMapping("/deciphering")
