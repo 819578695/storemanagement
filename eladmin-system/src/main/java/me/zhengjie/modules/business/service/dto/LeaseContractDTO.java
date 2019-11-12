@@ -94,5 +94,6 @@ public class LeaseContractDTO implements Serializable {
     //审核状态
     private int isAudit;
 
-
+    //档口面积
+    private String acreage;
 }

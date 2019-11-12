@@ -28,6 +28,7 @@ public interface LeaseContractMapper extends EntityMapper<LeaseContractDTO, Leas
             @Mapping(source = "leaseContract.createTime",target = "createTime"),
             @Mapping(source = "archivesmouthsmanagement.id",target = "stallId"),
             @Mapping(source = "archivesmouthsmanagement.housenumber",target = "houseNumber"),
+            @Mapping(source = "archivesmouthsmanagement.acreage",target = "acreage"),
             @Mapping(source = "tenantinformation.id",target = "tenementId"),
             @Mapping(source = "tenantinformation.linkman",target = "tenementName"),
             @Mapping(source = "dept.name",target = "deptName"),
