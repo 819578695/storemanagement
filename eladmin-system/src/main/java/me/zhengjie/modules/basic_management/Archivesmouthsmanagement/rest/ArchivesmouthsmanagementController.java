@@ -39,7 +39,7 @@ public class ArchivesmouthsmanagementController {
     @GetMapping("/getarchivesmouthsmanagementAll")
     @PreAuthorize("hasAnyRole('ADMIN','ARCHIVESMOUTHSMANAGEMENT_ALL','ARCHIVESMOUTHSMANAGEMENT_SELECT')")
     public ResponseEntity getarchivesmouthsmanagementAll(ArchivesmouthsmanagementQueryCriteria criteria){
-        return new ResponseEntity(archivesmouthsmanagementService.queryAll(criteria), HttpStatus.OK);
+        return new ResponseEntity(archivesmouthsmanagementService.getarchivesmouthsmanagementAll(criteria), HttpStatus.OK);
     }
 
 //    @Log("查询Archivesmouthsmanagement")

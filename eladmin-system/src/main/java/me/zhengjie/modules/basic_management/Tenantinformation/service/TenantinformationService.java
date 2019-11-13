@@ -32,6 +32,13 @@ public interface TenantinformationService {
     //@Cacheable(keyGenerator = "keyGenerator")
     public Object queryAll(TenantinformationQueryCriteria criteria);
 
+    /**
+     * 全部导出
+     * @param criteria
+     * @return
+     */
+    Object gettenantinformationAll(TenantinformationQueryCriteria criteria);
+
     List<ParticularsDTO> queryParticulars(Long id);
 
     Object findByDeptId(Long deptId);

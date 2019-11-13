@@ -6,6 +6,7 @@ import me.zhengjie.modules.basic_management.Tenantinformation.repository.Tenanti
 import me.zhengjie.modules.basic_management.Tenantinformation.service.TenantinformationService;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.ParticularsDTO;
 import me.zhengjie.modules.basic_management.Tenantinformation.service.dto.TenantinformationQueryCriteria;
+import me.zhengjie.modules.basic_management.thearchives.service.dto.BasicsParkQueryCriteria;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,6 +93,13 @@ public class TenantinformationController {
     public ResponseEntity delete(@PathVariable Long id){
         tenantinformationService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+//全部导出
+    @ApiOperation(value = "查询BasicsPark")
+    @GetMapping(value = "/gettenantinformationAll")
+    @PreAuthorize("hasAnyRole('ADMIN','TENANTINFORMATION_ALL','TENANTINFORMATION_SELECT')")
+    public ResponseEntity gettenantinformationAll(TenantinformationQueryCriteria criteria){
+        return new ResponseEntity(tenantinformationService.gettenantinformationAll(criteria),HttpStatus.OK);
     }
 
 }

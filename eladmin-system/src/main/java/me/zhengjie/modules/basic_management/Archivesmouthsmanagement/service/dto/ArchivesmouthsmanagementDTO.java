@@ -29,7 +29,7 @@ public class ArchivesmouthsmanagementDTO implements Serializable {
     //租用类型
     private Long stalltype;
 
-    //档口名称
+    //档口类型
     private String stalltypeName;
 
     //图片查看

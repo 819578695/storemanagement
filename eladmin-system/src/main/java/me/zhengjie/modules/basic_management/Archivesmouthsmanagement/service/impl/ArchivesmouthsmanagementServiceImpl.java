@@ -143,6 +143,17 @@ public class ArchivesmouthsmanagementServiceImpl implements Archivesmouthsmanage
     }
 
     @Override
+    public Object getarchivesmouthsmanagementAll(ArchivesmouthsmanagementQueryCriteria criteria) {
+        List basicsStalls = new ArrayList();
+        List<Archivesmouthsmanagement> all = archivesmouthsmanagementRepository.findAll();
+        for (Archivesmouthsmanagement basicsStall : all) {
+            ArchivesmouthsmanagementDTO dto = archivesmouthsmanagementMapper.toDto(basicsStall, deptRepository.findById(basicsStall.getDept().getId()).get(), dictDetailRepository.findById(basicsStall.getDictDetail().getId()).get());
+        basicsStalls.add(dto);
+        }
+        return basicsStalls;
+    }
+
+    @Override
     @Transactional(rollbackFor = Exception.class)
     public ArchivesmouthsmanagementDTO create(Archivesmouthsmanagement resources) {
         Object o = archivesmouthsmanagementRepository.HousenumberExistDeptId(resources.getHousenumber(), resources.getDept().getId());

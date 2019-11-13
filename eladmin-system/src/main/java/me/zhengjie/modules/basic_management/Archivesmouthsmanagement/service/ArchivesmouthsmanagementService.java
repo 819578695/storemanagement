@@ -39,7 +39,7 @@ public interface ArchivesmouthsmanagementService {
     Object findByDeptId(Long deptId);
     Object findByDeptIdAndTenementNameIsNull(Long deptId);
     Object findByDeptIdAndTenementNameIsNotNull(Long deptId);
-
+    Object getarchivesmouthsmanagementAll(ArchivesmouthsmanagementQueryCriteria criteria);
 
 
     /**

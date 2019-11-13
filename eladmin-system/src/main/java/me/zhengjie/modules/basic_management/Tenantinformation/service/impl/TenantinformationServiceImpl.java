@@ -116,6 +116,17 @@ public class TenantinformationServiceImpl implements TenantinformationService {
     public Object queryAll(TenantinformationQueryCriteria criteria){
         return tenantinformationMapper.toDto(tenantinformationRepository.findAll((root, criteriaQuery, criteriaBuilder) -> QueryHelp.getPredicate(root,criteria,criteriaBuilder)));
     }
+
+    @Override
+    public Object gettenantinformationAll(TenantinformationQueryCriteria criteria) {
+        List<Tenantinformation> tenantinformationList = tenantinformationRepository.findAll();
+        List<TenantinformationDTO> tenantinformationDTOS = new ArrayList<>();
+        for (Tenantinformation tenantinformation : tenantinformationList) {
+            tenantinformationDTOS.add(tenantinformationMapper.toDto(tenantinformation,tenantinformation.getDept()==null?null:deptRepository.findById(tenantinformation.getDept().getId()).get(),tenantinformation.getLeaseContract()==null?null:LeaseContractRepository.findById(tenantinformation.getLeaseContract().getId()).get()));
+        }
+        return tenantinformationDTOS;
+    }
+
     @Override
     public Object findByDeptId(Long deptId) {
         return tenantinformationMapper.toDto(deptId==1?tenantinformationRepository.findAll():tenantinformationRepository.findByDeptId(deptId));
